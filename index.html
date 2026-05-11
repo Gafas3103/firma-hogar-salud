@@ -71,7 +71,7 @@ const periodo = params.get('periodo') || '';
 const fecha = params.get('fecha') || '';
 const labor = params.get('labor') || '';
 const ciudad = params.get('ciudad') || 'Barranquilla';
-const WEBHOOK_FIRMA = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1';
+const WEBHOOK_FIRMA = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
 
 document.getElementById('nombreTrabajador').textContent = nombre;
 document.getElementById('cargando').style.display = 'none';
