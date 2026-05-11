@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Firma tu Contrato - Hogar Salud IPS</title>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.5/dist/signature_pad.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f1f5f9;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#00bcd4,#0097a7);color:#fff;padding:20px;text-align:center}
+.hdr h1{font-size:20px}.hdr p{font-size:12px;opacity:.85;margin-top:4px}
+.box{max-width:760px;margin:20px auto;padding:0 16px 40px}
+.card{background:#fff;border-radius:12px;padding:24px;margin-bottom:16px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.contrato{font-family:"Times New Roman",serif;font-size:12.5px;line-height:1.8;text-align:justify;color:#111}
+.contrato h2{text-align:center;margin-bottom:16px;font-size:14px;text-transform:uppercase;letter-spacing:.5px}
+.contrato table{width:100%;border-collapse:collapse;margin-bottom:16px}
+.contrato td{border:1px solid #aaa;padding:6px 10px;font-size:12px}
+.contrato td:first-child{font-weight:bold;background:#f9f9f9;width:42%}
+.contrato p{margin-bottom:10px}
+canvas{border:2px dashed #00bcd4;border-radius:8px;display:block;width:100%;height:160px;touch-action:none;background:#fafafa;cursor:crosshair}
+.btn-clear{background:#f1f5f9;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px}
+.btn-sign{background:linear-gradient(135deg,#00bcd4,#0097a7);color:#fff;border:none;padding:14px;border-radius:10px;cursor:pointer;font-size:16px;font-weight:bold;width:100%;margin-top:14px}
+.btn-sign:disabled{opacity:.4;cursor:not-allowed}
+.alerta{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px 14px;font-size:13px;color:#92400e;margin-bottom:14px}
+#exito{display:none;background:#dcfce7;border:1px solid #86efac;border-radius:12px;padding:32px;text-align:center;color:#166534}
+#exito h2{font-size:22px;margin-bottom:10px}
+#cargando{text-align:center;padding:40px;color:#00bcd4;font-size:16px}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <h1>Hogar Salud IPS SAS</h1>
+  <p>Firma Digital de Contrato - Proceso 100% en linea</p>
+</div>
+<div class="box">
+  <div id="cargando">Cargando tu contrato...</div>
+  <div id="contenido" style="display:none">
+    <div class="card">
+      <h2 style="color:#1e293b;font-size:17px;margin-bottom:8px">Hola, <strong id="nombreTrabajador"></strong></h2>
+      <p style="color:#64748b;font-size:13px;line-height:1.6">Por favor lee tu contrato completo antes de firmar. Al presionar el boton confirmas que leiste, entendiste y aceptas todos los terminos.</p>
+    </div>
+    <div class="card">
+      <div class="contrato" id="textoContrato"></div>
+    </div>
+    <div class="card" id="carta-firma">
+      <div class="alerta">Al firmar confirmas que has leido y aceptas todos los terminos del contrato con Hogar Salud IPS SAS.</div>
+      <p style="font-size:13px;font-weight:bold;color:#1e293b;margin-bottom:8px">Dibuja tu firma aqui:</p>
+      <canvas id="cv"></canvas>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <button class="btn-clear" id="btnBorrar">Borrar y repetir</button>
+        <span style="font-size:11px;color:#94a3b8">Valido en celular y computador</span>
+      </div>
+      <button class="btn-sign" id="btnFirmar" disabled>Acepto y Firmo el Contrato</button>
+    </div>
+    <div id="exito">
+      <h2>Contrato Firmado!</h2>
+      <p>Tu firma quedo registrada en el sistema de Hogar Salud IPS.<br><br>Puedes cerrar esta ventana.</p>
+    </div>
+  </div>
+</div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const token = params.get('token') || '';
+const nombre = params.get('nombre') || 'Trabajador';
+const cargo = params.get('cargo') || '';
+const cedula = params.get('cedula') || '';
+const tipo = params.get('tipo') || 'Obra o Labor';
+const salario = params.get('salario') || '';
+const periodo = params.get('periodo') || '';
+const fecha = params.get('fecha') || '';
+const labor = params.get('labor') || '';
+const ciudad = params.get('ciudad') || 'Barranquilla';
+const WEBHOOK_FIRMA = 'https://n8nhogarito.azurewebsites.net/webhook/guardar-firma';
+
+document.getElementById('nombreTrabajador').textContent = nombre;
+document.getElementById('cargando').style.display = 'none';
+document.getElementById('contenido').style.display = 'block';
+
+function generarContrato() {
+  if (tipo === 'Prestación de Servicios (OPS)') {
+    return `
+      <h2>CONVENIO DE ADSCRIPCION PARA ASISTENCIA EN SALUD A DOMICILIO</h2>
+      <table>
+        <tr><td>ADSCRIBIENTE:</td><td>HOGARSALUD IPS SAS — NIT 900.369.003-1</td></tr>
+        <tr><td>REPRESENTANTE LEGAL:</td><td>ALVARO JOSE MERCADO CASIJ</td></tr>
+        <tr><td>NOMBRE DEL ADSCRITO:</td><td>${nombre}</td></tr>
+        <tr><td>IDENTIFICACION:</td><td>${cedula}</td></tr>
+        <tr><td>ESPECIALIDAD:</td><td>${cargo}</td></tr>
+        <tr><td>REMUNERACION:</td><td>${salario || 'CONFORME A TARIFAS'}</td></tr>
+        <tr><td>PERIODOS DE PAGO:</td><td>${periodo || '1 vez al mes (mes vencido)'}</td></tr>
+        <tr><td>FECHA DE CONTRATO:</td><td>${fecha}</td></tr>
+        <tr><td>LUGAR DE LABORES:</td><td>${ciudad}</td></tr>
+      </table>
+      <p><strong>Clausula Primera.</strong> LA ADSCRIBIENTE como I.P.S. de reconocida capacidad cuenta con las condiciones necesarias para la prestacion de servicios de salud domiciliaria. Por su parte EL ADSCRITO es un profesional en el area de la salud interesado en aprovechar las posibilidades de la adscribiente para su ejercicio profesional.</p>
+      <p><strong>Clausula Segunda.</strong> LA ADSCRIBIENTE se compromete a facilitar los medios para la prestacion de servicios de atencion domiciliaria. El adscrito solo prestara personalmente el servicio cuando sea requerido.</p>
+      <p><strong>Clausula Quinta.</strong> LA ADSCRIBIENTE pagara los valores por concepto de la atencion prestada por EL ADSCRITO segun las cuentas de cobro debidamente presentadas de acuerdo con las tarifas convenidas.</p>
+      <p><strong>Clausula Septima.</strong> La duracion del convenio estara supeditada a la existencia de necesidades operativas. Podra ser terminado en cualquier momento de manera unilateral mediante comunicacion escrita.</p>
+      <p><strong>Clausula Decima.</strong> Entre LA ADSCRIBIENTE y EL ADSCRITO no se establece relacion alguna de caracter laboral.</p>
+      <p style="margin-top:16px">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>
+    `;
+  } else if (tipo === 'Aprendizaje') {
+    return `
+      <h2>CONTRATO LABORAL DE APRENDIZAJE ESPECIAL A TERMINO FIJO — ETAPA PRACTICA</h2>
+      <table>
+        <tr><td>NOMBRE DEL EMPLEADOR:</td><td>HOGAR SALUD S.A.S — NIT 900369003-1</td></tr>
+        <tr><td>REPRESENTANTE LEGAL:</td><td>ALVARO JOSE MERCADO CASIJ</td></tr>
+        <tr><td>NOMBRE DEL APRENDIZ:</td><td>${nombre}</td></tr>
+        <tr><td>DOCUMENTO DE IDENTIDAD:</td><td>${cedula}</td></tr>
+        <tr><td>CARGO CONTRATADO:</td><td>${cargo}</td></tr>
+        <tr><td>AUXILIO ECONOMICO:</td><td>${salario || '1 S.M.M.L.V + Auxilio de Transporte'}</td></tr>
+        <tr><td>PERIODO DE PAGO:</td><td>${periodo || 'Mensual'}</td></tr>
+        <tr><td>FECHA DE INICIACION:</td><td>${fecha}</td></tr>
+      </table>
+      <p><strong>Clausula Primera.</strong> EL APRENDIZ bajo la completa direccion y subordinacion del EMPLEADOR desempenara en forma exclusiva todas las ocupaciones inherentes al cargo de ${cargo}. La duracion del contrato es de 06 meses correspondiente a la etapa practica segun la ley 2466 del 2025.</p>
+      <p><strong>Clausula Segunda.</strong> Los primeros 60 dias se entendera como periodo de prueba. EL EMPLEADOR podra dar por terminado el contrato con previo aval del SENA.</p>
+      <p><strong>Clausula Cuarta.</strong> EL EMPLEADOR pagara al APRENDIZ el equivalente de ${salario}, consignados ${periodo} a la cuenta bancaria suministrada por EL APRENDIZ.</p>
+      <p><strong>Clausula Septima.</strong> EL APRENDIZ se obliga a laborar la jornada legal de 44 horas semanales segun la ley 2101 del 2021.</p>
+      <p><strong>Clausula Novena.</strong> EL APRENDIZ mantendra en absoluta reserva toda informacion no publica del EMPLEADOR.</p>
+      <p style="margin-top:16px">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>
+    `;
+  } else {
+    return `
+      <h2>CONTRATO DE TRABAJO DURACION POR LA OBRA O LABOR CONTRATADA</h2>
+      <table>
+        <tr><td>NOMBRE DEL EMPLEADOR:</td><td>HOGARSALUD IPS SOCIEDAD POR ACCIONES SIMPLIFICADAS</td></tr>
+        <tr><td>DIRECCION:</td><td>Carrera 56 # 72-129, Barranquilla</td></tr>
+        <tr><td>NIT:</td><td>900.369.003-1</td></tr>
+        <tr><td>NOMBRE DEL EMPLEADO:</td><td>${nombre}</td></tr>
+        <tr><td>CEDULA DE CIUDADANIA:</td><td>${cedula}</td></tr>
+        <tr><td>CARGO U OFICIO:</td><td>${cargo}</td></tr>
+        <tr><td>SALARIO:</td><td>${salario}</td></tr>
+        <tr><td>PERIODOS DE PAGO:</td><td>${periodo}</td></tr>
+        <tr><td>FECHA DE INICIACION:</td><td>${fecha}</td></tr>
+        <tr><td>CIUDAD:</td><td>${ciudad}</td></tr>
+        <tr><td>LABOR CONTRATADA:</td><td>${labor}</td></tr>
+      </table>
+      <p><strong>Primera.</strong> El empleador contrata los servicios personales del trabajador y este se obliga a poner al servicio del empleador toda su capacidad normal de trabajo en forma exclusiva en el desempeno de las funciones propias del oficio mencionado y las labores anexas del mismo.</p>
+      <p><strong>Segunda.</strong> El empleador paga al trabajador el salario indicado pagadero en las oportunidades senaladas. Dentro de este pago se encuentra incluida la remuneracion de los descansos dominicales y festivos del Codigo Sustantivo del Trabajo.</p>
+      <p><strong>Tercera.</strong> Todo trabajo suplementario o en horas extras y todo trabajo en domingo o festivo se remunerara conforme a la Ley asi como los correspondientes recargos nocturnos.</p>
+      <p><strong>Cuarta.</strong> El trabajador se obliga a laborar la jornada ordinaria en los turnos y horas senaladas por el empleador.</p>
+      <p><strong>Quinta.</strong> El presente contrato se celebra por el tiempo que dure la realizacion de la obra o labor contratada.</p>
+      <p><strong>Novena.</strong> Los primeros dos meses se consideran periodo de prueba.</p>
+      <p><strong>Decima.</strong> Este contrato sera interpretado de buena fe en consonancia con el Codigo Sustantivo del Trabajo.</p>
+      <p style="margin-top:16px">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>
+    `;
+  }
+}
+
+document.getElementById('textoContrato').innerHTML = generarContrato();
+
+const cv = document.getElementById('cv');
+const pad = new SignaturePad(cv, { minWidth:1.5, maxWidth:3, penColor:'#0f172a' });
+function resize() {
+  const r = window.devicePixelRatio || 1;
+  cv.width = cv.offsetWidth * r;
+  cv.height = 160 * r;
+  cv.getContext('2d').scale(r, r);
+  pad.clear();
+}
+window.addEventListener('resize', resize);
+resize();
+pad.addEventListener('endStroke', () => {
+  document.getElementById('btnFirmar').disabled = pad.isEmpty();
+});
+document.getElementById('btnBorrar').onclick = () => {
+  pad.clear();
+  document.getElementById('btnFirmar').disabled = true;
+};
+document.getElementById('btnFirmar').onclick = async function() {
+  if (pad.isEmpty()) return;
+  this.disabled = true;
+  this.textContent = 'Guardando firma...';
+  try {
+    const res = await fetch(WEBHOOK_FIRMA, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: token,
+        firma: pad.toDataURL('image/png'),
+        ts: new Date().toISOString()
+      })
+    });
+    if (res.ok) {
+      document.getElementById('carta-firma').style.display = 'none';
+      document.getElementById('exito').style.display = 'block';
+      window.scrollTo({ top:0, behavior:'smooth' });
+    } else {
+      alert('Error al guardar. Intentalo de nuevo.');
+      this.disabled = false;
+      this.textContent = 'Acepto y Firmo el Contrato';
+    }
+  } catch(e) {
+    alert('Sin conexion. Verifica tu internet.');
+    this.disabled = false;
+    this.textContent = 'Acepto y Firmo el Contrato';
+  }
+};
+</script>
+</body>
+</html>
