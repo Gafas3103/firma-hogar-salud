@@ -502,6 +502,22 @@
     </div>
   </div>
 
+  <!-- APROBADO POR RRHH -->
+  <div class="result-card" id="aprobadoCard" style="display:none;background:linear-gradient(135deg,#fefce8,#fef9c3);border:2px solid #fde047;">
+    <div class="result-icon" style="background:#fef9c3;">🎉</div>
+    <h2 style="color:#713f12;">¡Contrato Aprobado!</h2>
+    <p style="color:#713f12;">Tu contrato ha sido revisado, firmado y aprobado por el área de Recursos Humanos de Hogar Salud IPS SAS. Este documento tiene plena validez legal.</p>
+    <div class="result-steps" style="margin-top:20px;">
+      <div class="result-step" style="color:#713f12;"><div class="step-num" style="background:#fde68a;color:#713f12;">✓</div> Firmaste el contrato digitalmente</div>
+      <div class="result-step" style="color:#713f12;"><div class="step-num" style="background:#fde68a;color:#713f12;">✓</div> RRHH aprobó y firmó el contrato</div>
+      <div class="result-step" style="color:#713f12;"><div class="step-num" style="background:#fde68a;color:#713f12;">✓</div> Documento con validez legal — Guarda este correo</div>
+    </div>
+    <div style="margin-top:24px;background:rgba(255,255,255,0.6);border-radius:10px;padding:16px;font-size:13px;color:#713f12;line-height:1.6;">
+      Si necesitas una copia del contrato, comunícate con el área de Recursos Humanos.<br>
+      <strong>Hogar Salud IPS SAS · NIT 900.369.003-1 · Barranquilla</strong>
+    </div>
+  </div>
+
 </div>
 
 <!-- FOOTER -->
@@ -522,6 +538,7 @@ const periodo = params.get('periodo') || '';
 const fecha   = params.get('fecha')  || '';
 const labor   = params.get('labor')  || '';
 const ciudad  = params.get('ciudad') || 'Barranquilla';
+const estado  = params.get('estado') || ''; // ✅ NUEVO: detecta si viene de email de aprobado
 
 const WEBHOOK = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
 
@@ -612,6 +629,16 @@ function generarContrato() {
 }
 
 document.getElementById('textoContrato').innerHTML = generarContrato();
+
+// ── VERIFICAR SI VIENE DE EMAIL DE APROBADO ──
+if (estado === 'aprobado') {
+  document.getElementById('greetingCard').style.display  = 'none';
+  document.getElementById('contratoCard').style.display  = 'none';
+  document.getElementById('sigLabel').style.display      = 'none';
+  document.getElementById('sigCard').style.display       = 'none';
+  document.getElementById('aprobadoCard').style.display  = 'block';
+  document.getElementById('progressFill').style.width    = '100%';
+}
 
 // ── VERIFICAR SI YA FIRMÓ ──
 const yaFirmo = (token && (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE)));
