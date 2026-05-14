@@ -10,12 +10,18 @@
     --gray: #64748b; --border: #e2e8f0;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; min-height: 100vh; color: var(--dark); }
-  
-  /* Header Styles */
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; min-height: 100vh; }
   .header {
     background: linear-gradient(135deg, #0097a7 0%, #00bcd4 50%, #26c6da 100%);
     padding: 0; position: relative; overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px; background: rgba(255,255,255,0.08); border-radius: 50%;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: -40px; left: -40px;
+    width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;
   }
   .header-inner {
     max-width: 780px; margin: 0 auto; padding: 32px 24px;
@@ -27,58 +33,137 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 20px; font-weight: 900; color: #fff; flex-shrink: 0;
   }
-  .header-text h1 { color: #fff; font-size: 22px; font-weight: 800; }
+  .header-text h1 { color: #fff; font-size: 22px; font-weight: 800; margin-bottom: 2px; }
   .header-text p { color: rgba(255,255,255,0.8); font-size: 13px; }
-  
+  .header-badge {
+    margin-left: auto; background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3); color: #fff;
+    padding: 6px 14px; border-radius: 20px; font-size: 12px;
+    font-weight: 600; white-space: nowrap; flex-shrink: 0;
+  }
   .progress-bar { background: rgba(0,0,0,0.15); height: 4px; }
   .progress-fill { background: #fff; height: 100%; width: 33%; transition: width 0.5s ease; }
-
-  /* Main Layout */
   .main { max-width: 780px; margin: 0 auto; padding: 28px 16px 60px; }
   .card {
     background: #fff; border-radius: 16px; margin-bottom: 20px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04); overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
   }
-
-  .greeting { padding: 24px 28px; border-left: 4px solid var(--cyan); display: flex; gap: 16px; align-items: center; }
-  .greeting-avatar { width: 48px; height: 48px; background: #e0f9fb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-
-  /* Contrato */
-  .contract-body { padding: 32px; font-family: 'Times New Roman', serif; font-size: 13px; line-height: 1.6; text-align: justify; height: 400px; overflow-y: auto; border-top: 1px solid var(--border); }
-  .contract-body h2 { text-align: center; margin-bottom: 20px; font-size: 15px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-  td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
-  td:first-child { background: #f9fafb; font-weight: bold; width: 35%; }
-
-  /* Área de Firma (Upload) */
-  .sig-container { padding: 28px; }
+  .greeting {
+    padding: 24px 28px; display: flex; align-items: center;
+    gap: 16px; border-left: 4px solid var(--cyan);
+  }
+  .greeting-avatar {
+    width: 48px; height: 48px; background: linear-gradient(135deg, #e0f9fb, #b2ebf2);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 22px; flex-shrink: 0;
+  }
+  .greeting h2 { font-size: 17px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+  .greeting p { font-size: 13px; color: var(--gray); line-height: 1.5; }
+  .section-label {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    font-size: 12px; font-weight: 700; color: var(--gray);
+    text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .contract-header {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-bottom: 1px solid var(--border); padding: 16px 24px;
+    display: flex; align-items: center; gap: 10px;
+    border-radius: 16px 16px 0 0;
+  }
+  .contract-header-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--cyan), var(--teal));
+    border-radius: 8px; display: flex; align-items: center;
+    justify-content: center; color: #fff; font-size: 16px;
+  }
+  .contract-header h3 { font-size: 14px; font-weight: 700; color: var(--dark); }
+  .contract-header p { font-size: 12px; color: var(--gray); }
+  .contract-body {
+    padding: 28px 32px; font-family: 'Times New Roman', serif;
+    font-size: 12.5px; line-height: 1.85; color: #1a1a1a; text-align: justify;
+  }
+  .contract-body h2 {
+    text-align: center; font-size: 13.5px; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; color: #000;
+  }
+  .contract-body table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; }
+  .contract-body td { border: 1px solid #bbb; padding: 6px 10px; }
+  .contract-body td:first-child { font-weight: bold; background: #f5f5f5; width: 40%; color: #333; }
+  .contract-body p { margin-bottom: 12px; }
+  /* ── FIRMA UPLOAD ── */
+  .sig-card { padding: 28px; }
+  .sig-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
+  .sig-subtitle { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
+  .warning-box {
+    background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px;
+    padding: 14px 16px; font-size: 13px; color: #92400e; margin-bottom: 24px;
+    display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;
+  }
   .upload-area {
     border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px 20px;
     text-align: center; cursor: pointer; transition: all 0.2s;
     background: #fafbfc; position: relative;
   }
   .upload-area:hover { border-color: var(--cyan); background: #f0fdff; }
-  .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-  
-  .preview-area { display: none; text-align: center; border: 2px solid var(--cyan); border-radius: 12px; padding: 20px; background: #f0fdff; }
-  .preview-area img { max-height: 150px; max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-
-  .warning-box { background: #fff7ed; border: 1px solid #fed7aa; padding: 15px; border-radius: 10px; font-size: 13px; color: #9a3412; margin-bottom: 20px; display: flex; gap: 10px; }
-
-  .btn-sign {
-    width: 100%; padding: 16px; background: linear-gradient(135deg, var(--cyan), var(--teal));
-    color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
-    cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(0,188,212,0.3);
-    display: flex; align-items: center; justify-content: center; gap: 10px;
+  .upload-area.has-file { border-color: var(--cyan); border-style: solid; background: #f0fdff; }
+  .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-icon { font-size: 40px; display: block; margin-bottom: 10px; }
+  .upload-text { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+  .upload-hint { font-size: 12px; color: var(--gray); }
+  .preview-area {
+    display: none; border: 2px solid var(--cyan); border-radius: 12px;
+    padding: 16px; text-align: center; background: #f0fdff;
   }
-  .btn-sign:disabled { background: #cbd5e1; box-shadow: none; cursor: not-allowed; }
-
-  .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .preview-area img { max-height: 120px; max-width: 100%; object-fit: contain; border-radius: 6px; }
+  .preview-label { font-size: 13px; color: var(--teal); font-weight: 700; margin-top: 10px; }
+  .btn-change {
+    margin-top: 8px; background: none; border: 1px solid var(--border);
+    color: var(--gray); padding: 6px 14px; border-radius: 8px;
+    cursor: pointer; font-size: 12px; font-weight: 600;
+  }
+  .btn-sign {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; margin-top: 20px; padding: 16px;
+    background: linear-gradient(135deg, var(--cyan), var(--teal));
+    color: #fff; border: none; border-radius: 12px; font-size: 16px;
+    font-weight: 700; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(0,150,167,0.3);
+  }
+  .btn-sign:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,150,167,0.4); }
+  .btn-sign:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; background: #94a3b8; }
+  /* ── RESULTS ── */
+  .result-card {
+    display: none; border-radius: 16px; padding: 48px 32px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px;
+  }
+  .result-card.success { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 2px solid #86efac; }
+  .result-card.already { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 2px solid #93c5fd; }
+  .result-icon { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; }
+  .result-card.success .result-icon { background: #dcfce7; }
+  .result-card.already .result-icon { background: #dbeafe; }
+  .result-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
+  .result-card.success h2 { color: #166534; }
+  .result-card.already h2 { color: #1e40af; }
+  .result-card p { font-size: 14px; line-height: 1.7; }
+  .result-card.success p { color: #166534; }
+  .result-card.already p { color: #1e3a8a; }
+  .result-steps { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; text-align: left; }
+  .result-step { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.6); border-radius: 10px; padding: 12px 16px; font-size: 13px; font-weight: 600; }
+  .result-step.success { color: #166534; }
+  .result-step.already { color: #1e40af; }
+  .step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
+  .result-card.success .step-num { background: #bbf7d0; color: #166534; }
+  .result-card.already .step-num { background: #bfdbfe; color: #1e40af; }
+  .footer { text-align: center; padding: 20px; font-size: 11px; color: #94a3b8; line-height: 1.6; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Resultados */
-  .result-card { display: none; padding: 40px; text-align: center; }
-  .success { color: #15803d; background: #f0fdf4; border: 2px solid #bbf7d0; }
+  .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @media (max-width: 480px) {
+    .header-inner { flex-wrap: wrap; }
+    .header-badge { margin-left: 0; }
+    .contract-body { padding: 20px 16px; }
+    .sig-card { padding: 20px 16px; }
+  }
 </style>
 </head>
 <body>
@@ -87,166 +172,288 @@
   <div class="header-inner">
     <div class="header-logo">HS</div>
     <div class="header-text">
-      <h1>Hogar Salud IPS</h1>
-      <p>Gestión de Contratación Digital</p>
+      <h1>Hogar Salud IPS SAS</h1>
+      <p>Contratación Digital · Cero Papel · 100% en línea</p>
     </div>
+    <div class="header-badge">🔒 Firma Segura</div>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 </div>
 
 <div class="main">
+
   <div class="card greeting" id="greetingCard">
     <div class="greeting-avatar">👤</div>
     <div>
-      <h2>Hola, <span id="nombreTrabajador">...</span></h2>
-      <p>Por favor revisa tu contrato y adjunta una foto de tu firma para finalizar.</p>
+      <h2>Hola, <span id="nombreTrabajador">Trabajador</span> 👋</h2>
+      <p>Tu contrato está listo. Léelo con atención, luego sube una foto o imagen de tu firma para completar el proceso.</p>
     </div>
   </div>
 
-  <div class="card">
-    <div style="padding: 15px 25px; font-weight: bold; font-size: 14px; background: #f8fafc;">📄 Documento Contractual</div>
-    <div class="contract-body" id="textoContrato">
-      <!-- Se genera vía JS -->
+  <div class="section-label">📄 Tu Contrato</div>
+  <div class="card" id="contratoCard">
+    <div class="contract-header">
+      <div class="contract-header-icon">📋</div>
+      <div>
+        <h3 id="tipoContratoLabel">Contrato de Trabajo</h3>
+        <p>Hogar Salud IPS SAS · NIT 900.369.003-1</p>
+      </div>
     </div>
+    <div class="contract-body" id="textoContrato"></div>
   </div>
 
+  <div class="section-label" id="sigLabel">🖊️ Tu Firma</div>
   <div class="card" id="sigCard">
-    <div class="sig-container">
-      <h3 style="margin-bottom: 15px;">🖊️ Tu Firma</h3>
-      
+    <div class="sig-card">
+      <div class="sig-title">📎 Sube una imagen de tu firma</div>
+      <div class="sig-subtitle">Toma una foto de tu firma en papel blanco, o sube una imagen escaneada. Formatos: JPG, PNG.</div>
+
       <div class="warning-box">
-        <span>⚠️</span>
-        <p>Asegúrate de que la firma sea legible, sobre <b>papel blanco</b> y con buena iluminación. Esto tiene validez legal.</p>
+        <span style="font-size:16px;flex-shrink:0;margin-top:1px;">⚠️</span>
+        <span>Al enviar tu firma confirmas que eres <strong id="nombreAlerta">el trabajador</strong>, que leíste el contrato completo y aceptas todos sus términos con plena validez legal.</span>
       </div>
 
-      <!-- Dropzone / Clickzone -->
+      <!-- Área de carga -->
       <div class="upload-area" id="uploadArea">
-        <input type="file" id="fileInput" accept="image/*" capture="environment">
-        <div style="font-size: 40px; margin-bottom: 10px;">📷</div>
-        <p><b>Toca aquí para tomar foto o subir firma</b></p>
-        <p style="font-size: 12px; color: var(--gray);">PNG, JPG (Máx. 5MB)</p>
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/jpg,image/webp" />
+        <span class="upload-icon">📷</span>
+        <div class="upload-text">Toca aquí para subir tu firma</div>
+        <div class="upload-hint">JPG o PNG · Máximo 5MB · Fondo blanco recomendado</div>
       </div>
 
-      <!-- Preview -->
+      <!-- Preview de la imagen -->
       <div class="preview-area" id="previewArea">
-        <p style="font-size: 12px; color: var(--teal); font-weight: bold; margin-bottom: 10px;">VISTA PREVIA DE TU FIRMA:</p>
-        <img id="previewImg" src="" alt="Firma">
-        <button id="btnCambiar" style="display:block; margin: 15px auto 0; background: none; border: 1px solid var(--gray); padding: 5px 15px; border-radius: 5px; cursor: pointer;">Cambiar imagen</button>
+        <img id="previewImg" src="" alt="Tu firma" />
+        <div class="preview-label">✅ Firma cargada correctamente</div>
+        <button class="btn-change" id="btnCambiar">Cambiar imagen</button>
       </div>
 
-      <button class="btn-sign" id="btnFirmar" disabled style="margin-top: 25px;">
-        <span id="btnText">Firmar Contrato Ahora</span>
-        <div id="btnSpinner" class="spinner" style="display:none;"></div>
+      <button class="btn-sign" id="btnFirmar" disabled>
+        <span id="btnTexto">✅ &nbsp; Enviar Firma y Firmar Contrato</span>
+        <span id="btnSpinner" style="display:none" class="spinner"></span>
       </button>
     </div>
   </div>
 
-  <div class="card result-card success" id="exitoCard">
-    <div style="font-size: 50px; margin-bottom: 15px;">✅</div>
-    <h2>¡Contrato Firmado!</h2>
-    <p>Tu firma ha sido procesada correctamente. Recibirás una copia en tu correo pronto.</p>
+  <!-- ÉXITO -->
+  <div class="result-card success" id="exitoCard">
+    <div class="result-icon">✅</div>
+    <h2>¡Firma Enviada!</h2>
+    <p>Tu firma quedó registrada exitosamente en el sistema de Hogar Salud IPS. El área de Recursos Humanos revisará y aprobará tu contrato.</p>
+    <div class="result-steps">
+      <div class="result-step success"><div class="step-num">✓</div> Enviaste tu firma digitalmente</div>
+      <div class="result-step success"><div class="step-num">2</div> RRHH revisará y aprobará tu contrato</div>
+      <div class="result-step success"><div class="step-num">3</div> Recibirás el documento final por correo</div>
+    </div>
   </div>
+
+  <!-- YA FIRMADO -->
+  <div class="result-card already" id="yaFirmadoCard">
+    <div class="result-icon">📋</div>
+    <h2>Ya firmaste este contrato</h2>
+    <p>Tu firma ya fue registrada anteriormente. No es necesario enviarla de nuevo.</p>
+    <div class="result-steps">
+      <div class="result-step already"><div class="step-num">✓</div> Tu firma fue registrada correctamente</div>
+      <div class="result-step already"><div class="step-num">2</div> RRHH está revisando tu contrato</div>
+      <div class="result-step already"><div class="step-num">3</div> Recibirás el documento aprobado por correo</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla<br>
+  Este portal es seguro y oficial. Tu firma tiene validez legal.
 </div>
 
 <script>
-// --- CONFIGURACIÓN Y PARÁMETROS ---
-const params = new URLSearchParams(window.location.search);
-const config = {
-  token: params.get('token') || 'test',
-  nombre: params.get('nombre') || 'Trabajador',
-  cedula: params.get('cedula') || '',
-  cargo: params.get('cargo') || '',
-  webhook: 'TU_URL_DE_POWER_AUTOMATE_AQUÍ' 
+const params  = new URLSearchParams(window.location.search);
+const token   = params.get('token')   || '';
+const nombre  = params.get('nombre')  || 'Trabajador';
+const cargo   = params.get('cargo')   || '';
+const cedula  = params.get('cedula')  || '';
+const tipo    = params.get('tipo')    || 'Obra o Labor';
+const salario = params.get('salario') || '';
+const periodo = params.get('periodo') || '';
+const fecha   = params.get('fecha')   || '';
+const labor   = params.get('labor')   || '';
+const ciudad  = params.get('ciudad')  || 'Barranquilla';
+
+const WEBHOOK = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
+const CLAVE = 'hs_firmado_' + token;
+
+document.getElementById('nombreTrabajador').textContent = nombre;
+document.getElementById('nombreAlerta').textContent = nombre;
+
+const tipoLabels = {
+  'Obra o Labor': 'Contrato de Trabajo — Obra o Labor',
+  'Prestación de Servicios (OPS)': 'Convenio de Adscripción — OPS',
+  'Prestacion de Servicios (OPS)': 'Convenio de Adscripción — OPS',
+  'Aprendizaje': 'Contrato de Aprendizaje',
 };
+document.getElementById('tipoContratoLabel').textContent = tipoLabels[tipo] || 'Contrato de Trabajo';
 
-document.getElementById('nombreTrabajador').textContent = config.nombre;
+function generarContrato() {
+  const t = tipo.toLowerCase();
+  if (t.includes('ops') || t.includes('servicios')) {
+    return `<h2>Convenio de Adscripción para Asistencia en Salud a Domicilio</h2>
+      <table>
+        <tr><td>ADSCRIBIENTE:</td><td>HOGARSALUD IPS SAS — NIT 900.369.003-1</td></tr>
+        <tr><td>REPRESENTANTE LEGAL:</td><td>ALVARO JOSE MERCADO CASIJ — C.C. 72.343.183</td></tr>
+        <tr><td>NOMBRE DEL ADSCRITO:</td><td>${nombre}</td></tr>
+        <tr><td>IDENTIFICACION:</td><td>${cedula}</td></tr>
+        <tr><td>ESPECIALIDAD:</td><td>${cargo}</td></tr>
+        <tr><td>REMUNERACION:</td><td>${salario || 'CONFORME A TARIFAS'}</td></tr>
+        <tr><td>PERIODOS DE PAGO:</td><td>${periodo || '1 vez al mes (mes vencido)'}</td></tr>
+        <tr><td>FECHA DE CONTRATO:</td><td>${fecha}</td></tr>
+        <tr><td>LUGAR DE LABORES:</td><td>${ciudad}</td></tr>
+      </table>
+      <p><strong>Clausula Primera.</strong> LA ADSCRIBIENTE como I.P.S. de reconocida capacidad cuenta con las condiciones necesarias para la prestacion de servicios de salud domiciliaria. EL ADSCRITO es un profesional en el area de la salud interesado en aprovechar las posibilidades para su ejercicio profesional.</p>
+      <p><strong>Clausula Segunda.</strong> LA ADSCRIBIENTE facilita los medios para la prestacion de servicios de atencion domiciliaria. El adscrito solo prestara el servicio cuando sea requerido.</p>
+      <p><strong>Clausula Quinta.</strong> LA ADSCRIBIENTE pagara los valores segun las cuentas de cobro presentadas conforme a las tarifas convenidas.</p>
+      <p><strong>Clausula Septima.</strong> Podra ser terminado en cualquier momento de manera unilateral mediante comunicacion escrita.</p>
+      <p><strong>Clausula Decima.</strong> Entre LA ADSCRIBIENTE y EL ADSCRITO no se establece relacion alguna de caracter laboral.</p>
+      <p style="margin-top:20px;font-style:italic">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>`;
+  } else if (t.includes('aprendizaje')) {
+    return `<h2>Contrato Laboral de Aprendizaje Especial a Termino Fijo — Etapa Practica</h2>
+      <table>
+        <tr><td>NOMBRE DEL EMPLEADOR:</td><td>HOGAR SALUD S.A.S — NIT 900369003-1</td></tr>
+        <tr><td>REPRESENTANTE LEGAL:</td><td>ALVARO JOSE MERCADO CASIJ</td></tr>
+        <tr><td>NOMBRE DEL APRENDIZ:</td><td>${nombre}</td></tr>
+        <tr><td>DOCUMENTO DE IDENTIDAD:</td><td>${cedula}</td></tr>
+        <tr><td>CARGO CONTRATADO:</td><td>${cargo}</td></tr>
+        <tr><td>AUXILIO ECONOMICO:</td><td>${salario || '1 S.M.M.L.V + Auxilio de Transporte'}</td></tr>
+        <tr><td>PERIODO DE PAGO:</td><td>${periodo || 'Mensual'}</td></tr>
+        <tr><td>FECHA DE INICIACION:</td><td>${fecha}</td></tr>
+      </table>
+      <p><strong>Clausula Primera.</strong> EL APRENDIZ desempenara en forma exclusiva las ocupaciones del cargo de <strong>${cargo}</strong>, segun ley 2466 del 2025. Duracion: 06 meses etapa practica.</p>
+      <p><strong>Clausula Segunda.</strong> Los primeros 60 dias se consideran periodo de prueba con aval del SENA.</p>
+      <p><strong>Clausula Cuarta.</strong> EL EMPLEADOR pagara <strong>${salario}</strong> en periodos de <strong>${periodo}</strong> a la cuenta bancaria del APRENDIZ.</p>
+      <p><strong>Clausula Septima.</strong> EL APRENDIZ laborara 44 horas semanales segun ley 2101 del 2021.</p>
+      <p style="margin-top:20px;font-style:italic">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>`;
+  } else {
+    return `<h2>Contrato de Trabajo — Duracion por la Obra o Labor Contratada</h2>
+      <table>
+        <tr><td>NOMBRE DEL EMPLEADOR:</td><td>HOGARSALUD IPS SOCIEDAD POR ACCIONES SIMPLIFICADAS</td></tr>
+        <tr><td>DIRECCION:</td><td>Carrera 56 # 72-129, Barranquilla</td></tr>
+        <tr><td>NIT:</td><td>900.369.003-1</td></tr>
+        <tr><td>REPRESENTANTE LEGAL:</td><td>ALVARO JOSE MERCADO CASIJ</td></tr>
+        <tr><td>NOMBRE DEL EMPLEADO:</td><td>${nombre}</td></tr>
+        <tr><td>CEDULA DE CIUDADANIA:</td><td>${cedula}</td></tr>
+        <tr><td>CARGO U OFICIO:</td><td>${cargo}</td></tr>
+        <tr><td>SALARIO:</td><td>${salario}</td></tr>
+        <tr><td>PERIODOS DE PAGO:</td><td>${periodo}</td></tr>
+        <tr><td>FECHA DE INICIACION:</td><td>${fecha}</td></tr>
+        <tr><td>CIUDAD:</td><td>${ciudad}</td></tr>
+        <tr><td>LABOR CONTRATADA:</td><td>${labor}</td></tr>
+      </table>
+      <p><strong>Primera.</strong> El empleador contrata los servicios personales del trabajador quien se obliga a laborar en forma exclusiva en el desempeno de las funciones propias del oficio mencionado.</p>
+      <p><strong>Segunda.</strong> El empleador pagara el salario indicado en las oportunidades senaladas, incluida la remuneracion de descansos dominicales y festivos del Codigo Sustantivo del Trabajo.</p>
+      <p><strong>Tercera.</strong> Todo trabajo en horas extras y en domingos o festivos se remunerara conforme a la Ley.</p>
+      <p><strong>Cuarta.</strong> El trabajador laborara la jornada ordinaria en los turnos senalados por el empleador.</p>
+      <p><strong>Quinta.</strong> El contrato dura mientras se realice la obra o labor contratada.</p>
+      <p><strong>Novena.</strong> Los primeros dos meses se consideran periodo de prueba.</p>
+      <p><strong>Decima.</strong> Este contrato se interpreta de buena fe segun el Codigo Sustantivo del Trabajo.</p>
+      <p style="margin-top:20px;font-style:italic">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>`;
+  }
+}
 
-// --- GENERACIÓN DINÁMICA DE CONTRATO (Simplificada) ---
-document.getElementById('textoContrato').innerHTML = `
-  <h2>CONTRATO DE TRABAJO</h2>
-  <table>
-    <tr><td>TRABAJADOR:</td><td>${config.nombre}</td></tr>
-    <tr><td>IDENTIFICACIÓN:</td><td>${config.cedula}</td></tr>
-    <tr><td>CARGO:</td><td>${config.cargo}</td></tr>
-    <tr><td>EMPRESA:</td><td>HOGAR SALUD IPS SAS</td></tr>
-  </table>
-  <p>Por medio del presente documento, las partes aceptan los términos y condiciones...</p>
-  <p><i>(Resto del texto legal que ya tienes en tu código)</i></p>
-`;
+document.getElementById('textoContrato').innerHTML = generarContrato();
 
-// --- LÓGICA DE CARGA DE IMAGEN ---
-let imagenFirmaBase64 = null;
-const fileInput = document.getElementById('fileInput');
-const uploadArea = document.getElementById('uploadArea');
+// Verificar si ya firmó
+if (token && (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE))) {
+  document.getElementById('greetingCard').style.display  = 'none';
+  document.getElementById('contratoCard').style.display  = 'none';
+  document.getElementById('sigLabel').style.display      = 'none';
+  document.getElementById('sigCard').style.display       = 'none';
+  document.getElementById('yaFirmadoCard').style.display = 'block';
+  document.getElementById('progressFill').style.width    = '100%';
+}
+
+// ── UPLOAD DE IMAGEN ──
+let firmaBase64 = null;
+
+const fileInput   = document.getElementById('fileInput');
+const uploadArea  = document.getElementById('uploadArea');
 const previewArea = document.getElementById('previewArea');
-const previewImg = document.getElementById('previewImg');
-const btnFirmar = document.getElementById('btnFirmar');
+const previewImg  = document.getElementById('previewImg');
+const btnFirmar   = document.getElementById('btnFirmar');
 
-fileInput.addEventListener('change', function(e) {
-  const file = e.target.files[0];
+function cargarArchivo(file) {
   if (!file) return;
-
-  // Validar tamaño (5MB)
   if (file.size > 5 * 1024 * 1024) {
-    alert("La imagen es demasiado pesada. Intenta con una de menos de 5MB.");
+    alert('La imagen es muy grande. Máximo 5MB.');
     return;
   }
-
   const reader = new FileReader();
-  reader.onload = function(event) {
-    imagenFirmaBase64 = event.target.result;
-    previewImg.src = imagenFirmaBase64;
-    
-    // UI Swapping
-    uploadArea.style.display = 'none';
+  reader.onload = (e) => {
+    firmaBase64 = e.target.result;
+    previewImg.src = firmaBase64;
+    uploadArea.style.display  = 'none';
     previewArea.style.display = 'block';
     btnFirmar.disabled = false;
     document.getElementById('progressFill').style.width = '66%';
   };
   reader.readAsDataURL(file);
+}
+
+fileInput.addEventListener('change', (e) => cargarArchivo(e.target.files[0]));
+
+// Drag and drop
+uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('has-file'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('has-file'));
+uploadArea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadArea.classList.remove('has-file');
+  cargarArchivo(e.dataTransfer.files[0]);
 });
 
 document.getElementById('btnCambiar').onclick = () => {
-  fileInput.value = "";
-  uploadArea.style.display = 'block';
-  previewArea.style.display = 'none';
+  firmaBase64 = null;
   btnFirmar.disabled = true;
+  previewArea.style.display = 'none';
+  uploadArea.style.display  = 'block';
+  fileInput.value = '';
+  document.getElementById('progressFill').style.width = '33%';
 };
 
-// --- ENVÍO AL WEBHOOK ---
-btnFirmar.onclick = async () => {
-  btnFirmar.disabled = true;
-  document.getElementById('btnText').style.display = 'none';
-  document.getElementById('btnSpinner').style.display = 'block';
-
+// ── ENVIAR FIRMA ──
+btnFirmar.onclick = async function () {
+  if (!firmaBase64) return;
+  if (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE)) {
+    document.getElementById('sigCard').style.display       = 'none';
+    document.getElementById('yaFirmadoCard').style.display = 'block';
+    return;
+  }
+  document.getElementById('btnTexto').style.display   = 'none';
+  document.getElementById('btnSpinner').style.display = 'flex';
+  this.disabled = true;
   try {
-    const response = await fetch(config.webhook, {
+    const res = await fetch(WEBHOOK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: config.token,
-        nombre: config.nombre,
-        firma: imagenFirmaBase64, // Enviamos el Base64 puro
-        fecha: new Date().toISOString()
-      })
+      body: JSON.stringify({ token, firma: firmaBase64, ts: new Date().toISOString() })
     });
-
-    if (response.ok) {
-      document.getElementById('sigCard').style.display = 'none';
+    if (res.ok) {
+      try { sessionStorage.setItem(CLAVE, '1'); } catch(e) {}
+      try { localStorage.setItem(CLAVE, '1'); }  catch(e) {}
       document.getElementById('greetingCard').style.display = 'none';
-      document.getElementById('exitoCard').style.display = 'block';
-      document.getElementById('progressFill').style.width = '100%';
-    } else {
-      throw new Error("Error en servidor");
-    }
-  } catch (error) {
-    alert("Hubo un problema al enviar la firma. Por favor intenta de nuevo.");
-    btnFirmar.disabled = false;
-    document.getElementById('btnText').style.display = 'block';
+      document.getElementById('contratoCard').style.display = 'none';
+      document.getElementById('sigLabel').style.display     = 'none';
+      document.getElementById('sigCard').style.display      = 'none';
+      document.getElementById('exitoCard').style.display    = 'block';
+      document.getElementById('progressFill').style.width   = '100%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else { throw new Error('HTTP ' + res.status); }
+  } catch(e) {
+    alert('Error al enviar la firma. Verifica tu conexión e inténtalo de nuevo.');
+    document.getElementById('btnTexto').style.display   = 'flex';
     document.getElementById('btnSpinner').style.display = 'none';
+    this.disabled = false;
   }
 };
-</script>
 
+document.getElementById('progressFill').style.width = '33%';
+</script>
 </body>
 </html>
