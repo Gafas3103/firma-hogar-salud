@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contrato Aprobado — Hogar Salud IPS</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; min-height: 100vh; }
+  .header {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 60%, #166534 100%);
+    padding: 0; position: relative; overflow: hidden;
+  }
+  .header::before {
+    content: ''; position: absolute; top: -60px; right: -60px;
+    width: 200px; height: 200px; background: rgba(255,255,255,0.08); border-radius: 50%;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: -40px; left: -40px;
+    width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;
+  }
+  .header-inner {
+    max-width: 680px; margin: 0 auto; padding: 36px 24px;
+    position: relative; z-index: 1; display: flex; align-items: center; gap: 20px;
+  }
+  .header-logo {
+    width: 52px; height: 52px; background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.4); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 900; color: #fff; flex-shrink: 0;
+  }
+  .header-text h1 { color: #fff; font-size: 22px; font-weight: 800; margin-bottom: 2px; }
+  .header-text p { color: rgba(255,255,255,0.8); font-size: 13px; }
+  .header-badge {
+    margin-left: auto; background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.4); color: #fff;
+    padding: 6px 16px; border-radius: 20px; font-size: 13px;
+    font-weight: 700; white-space: nowrap; flex-shrink: 0;
+  }
+  .main { max-width: 680px; margin: 0 auto; padding: 32px 16px 60px; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 2px solid #86efac; border-radius: 20px;
+    padding: 48px 32px; text-align: center; margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(22,163,74,0.15);
+  }
+  .hero-icon {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; margin: 0 auto 20px;
+    box-shadow: 0 8px 24px rgba(22,163,74,0.3);
+  }
+  .hero h2 { font-size: 28px; font-weight: 900; color: #166534; margin-bottom: 10px; }
+  .hero p { font-size: 15px; color: #166534; line-height: 1.7; max-width: 480px; margin: 0 auto; }
+
+  /* Info card */
+  .info-card {
+    background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    margin-bottom: 20px;
+  }
+  .info-card-header {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-bottom: 1px solid #e2e8f0; padding: 14px 20px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 700; color: #334155;
+  }
+  .info-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; border-bottom: 1px solid #f1f5f9; gap: 12px;
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { font-size: 13px; color: #64748b; flex-shrink: 0; }
+  .info-value { font-size: 13px; font-weight: 700; color: #1e293b; text-align: right; }
+
+  /* Steps */
+  .steps { background: #fff; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04); }
+  .steps h3 { font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 16px; }
+  .step-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 16px; border-radius: 10px;
+    background: #f0fdf4; margin-bottom: 8px;
+  }
+  .step-item:last-child { margin-bottom: 0; }
+  .step-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff; display: flex; align-items: center;
+    justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0;
+  }
+  .step-text { font-size: 13px; font-weight: 600; color: #166534; }
+
+  /* Note */
+  .note {
+    background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px;
+    padding: 16px 20px; font-size: 13px; color: #92400e; line-height: 1.6;
+    margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start;
+  }
+
+  .footer { text-align: center; padding: 20px; font-size: 11px; color: #94a3b8; line-height: 1.6; }
+  @media (max-width: 480px) { .header-inner { flex-wrap: wrap; } .header-badge { margin-left: 0; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-logo">HS</div>
+    <div class="header-text">
+      <h1>Hogar Salud IPS SAS</h1>
+      <p>Contratación Digital · Cero Papel · 100% en línea</p>
+    </div>
+    <div class="header-badge">✅ Aprobado</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-icon">🎉</div>
+    <h2>¡Contrato Aprobado!</h2>
+    <p>Tu contrato ha sido revisado, firmado por ambas partes y aprobado por el área de Recursos Humanos de <strong>Hogar Salud IPS SAS</strong>. Este documento tiene plena validez legal.</p>
+  </div>
+
+  <!-- INFO DEL CONTRATO -->
+  <div class="info-card">
+    <div class="info-card-header">📋 Información del Contrato</div>
+    <div class="info-row">
+      <span class="info-label">Trabajador</span>
+      <span class="info-value" id="infoNombre">—</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Documento</span>
+      <span class="info-value" id="infoCedula">—</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Cargo</span>
+      <span class="info-value" id="infoCargo">—</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Tipo de contrato</span>
+      <span class="info-value" id="infoTipo">—</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Fecha de inicio</span>
+      <span class="info-value" id="infoFecha">—</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Empresa</span>
+      <span class="info-value">Hogar Salud IPS SAS</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">NIT</span>
+      <span class="info-value">900.369.003-1</span>
+    </div>
+  </div>
+
+  <!-- PASOS -->
+  <div class="steps">
+    <h3>Estado del proceso</h3>
+    <div class="step-item">
+      <div class="step-icon">✓</div>
+      <div class="step-text">Contrato generado y enviado al trabajador</div>
+    </div>
+    <div class="step-item">
+      <div class="step-icon">✓</div>
+      <div class="step-text">Firma del trabajador recibida y registrada</div>
+    </div>
+    <div class="step-item">
+      <div class="step-icon">✓</div>
+      <div class="step-text">Aprobado y firmado por Recursos Humanos</div>
+    </div>
+    <div class="step-item">
+      <div class="step-icon">✓</div>
+      <div class="step-text">Contrato vigente con plena validez legal</div>
+    </div>
+  </div>
+
+  <!-- NOTA -->
+  <div class="note">
+    <span style="font-size:20px;flex-shrink:0;">💡</span>
+    <span>Guarda este correo como constancia de tu contrato aprobado. Si necesitas una copia física o tienes alguna duda, comunícate con el área de Recursos Humanos de Hogar Salud IPS SAS.</span>
+  </div>
+
+</div>
+
+<div class="footer">
+  Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla<br>
+  Este portal es seguro y oficial. Tu contrato tiene plena validez legal.
+</div>
+
+<script>
+const p = new URLSearchParams(window.location.search);
+const set = (id, val) => { if (val) document.getElementById(id).textContent = val; };
+set('infoNombre', p.get('nombre'));
+set('infoCedula', p.get('cedula'));
+set('infoCargo',  p.get('cargo'));
+set('infoFecha',  p.get('fecha'));
+const tipoLabels = {
+  'Obra o Labor': 'Obra o Labor (Directo)',
+  'Prestación de Servicios (OPS)': 'OPS / Adscripción (Indirecto)',
+  'Prestacion de Servicios (OPS)': 'OPS / Adscripción (Indirecto)',
+  'Aprendizaje': 'Contrato de Aprendizaje',
+};
+const tipo = p.get('tipo') || '';
+set('infoTipo', tipoLabels[tipo] || tipo);
+</script>
+</body>
+</html>
