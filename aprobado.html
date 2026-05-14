@@ -5,209 +5,101 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Contrato Aprobado — Hogar Salud IPS</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; min-height: 100vh; }
-  .header {
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 60%, #166534 100%);
-    padding: 0; position: relative; overflow: hidden;
-  }
-  .header::before {
-    content: ''; position: absolute; top: -60px; right: -60px;
-    width: 200px; height: 200px; background: rgba(255,255,255,0.08); border-radius: 50%;
-  }
-  .header::after {
-    content: ''; position: absolute; bottom: -40px; left: -40px;
-    width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;
-  }
-  .header-inner {
-    max-width: 680px; margin: 0 auto; padding: 36px 24px;
-    position: relative; z-index: 1; display: flex; align-items: center; gap: 20px;
-  }
-  .header-logo {
-    width: 52px; height: 52px; background: rgba(255,255,255,0.2);
-    border: 2px solid rgba(255,255,255,0.4); border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 900; color: #fff; flex-shrink: 0;
-  }
-  .header-text h1 { color: #fff; font-size: 22px; font-weight: 800; margin-bottom: 2px; }
-  .header-text p { color: rgba(255,255,255,0.8); font-size: 13px; }
-  .header-badge {
-    margin-left: auto; background: rgba(255,255,255,0.2);
-    border: 1px solid rgba(255,255,255,0.4); color: #fff;
-    padding: 6px 16px; border-radius: 20px; font-size: 13px;
-    font-weight: 700; white-space: nowrap; flex-shrink: 0;
-  }
-  .main { max-width: 680px; margin: 0 auto; padding: 32px 16px 60px; }
-
-  /* Hero */
-  .hero {
-    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
-    border: 2px solid #86efac; border-radius: 20px;
-    padding: 48px 32px; text-align: center; margin-bottom: 24px;
-    box-shadow: 0 4px 20px rgba(22,163,74,0.15);
-  }
-  .hero-icon {
-    width: 90px; height: 90px; border-radius: 50%;
-    background: linear-gradient(135deg, #16a34a, #15803d);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 40px; margin: 0 auto 20px;
-    box-shadow: 0 8px 24px rgba(22,163,74,0.3);
-  }
-  .hero h2 { font-size: 28px; font-weight: 900; color: #166534; margin-bottom: 10px; }
-  .hero p { font-size: 15px; color: #166534; line-height: 1.7; max-width: 480px; margin: 0 auto; }
-
-  /* Info card */
-  .info-card {
-    background: #fff; border-radius: 16px; overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-    margin-bottom: 20px;
-  }
-  .info-card-header {
-    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-    border-bottom: 1px solid #e2e8f0; padding: 14px 20px;
-    display: flex; align-items: center; gap: 10px;
-    font-size: 13px; font-weight: 700; color: #334155;
-  }
-  .info-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 20px; border-bottom: 1px solid #f1f5f9; gap: 12px;
-  }
-  .info-row:last-child { border-bottom: none; }
-  .info-label { font-size: 13px; color: #64748b; flex-shrink: 0; }
-  .info-value { font-size: 13px; font-weight: 700; color: #1e293b; text-align: right; }
-
-  /* Steps */
-  .steps { background: #fff; border-radius: 16px; padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04); }
-  .steps h3 { font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 16px; }
-  .step-item {
-    display: flex; align-items: center; gap: 14px;
-    padding: 12px 16px; border-radius: 10px;
-    background: #f0fdf4; margin-bottom: 8px;
-  }
-  .step-item:last-child { margin-bottom: 0; }
-  .step-icon {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: linear-gradient(135deg, #16a34a, #15803d);
-    color: #fff; display: flex; align-items: center;
-    justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0;
-  }
-  .step-text { font-size: 13px; font-weight: 600; color: #166534; }
-
-  /* Note */
-  .note {
-    background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px;
-    padding: 16px 20px; font-size: 13px; color: #92400e; line-height: 1.6;
-    margin-bottom: 20px; display: flex; gap: 12px; align-items: flex-start;
-  }
-
-  .footer { text-align: center; padding: 20px; font-size: 11px; color: #94a3b8; line-height: 1.6; }
-  @media (max-width: 480px) { .header-inner { flex-wrap: wrap; } .header-badge { margin-left: 0; } }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh}
+  .hdr{background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:22px 24px;display:flex;align-items:center;gap:14px}
+  .hdr-logo{width:42px;height:42px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
+  .hdr h1{color:#fff;font-size:17px;font-weight:700;margin-bottom:2px}
+  .hdr p{color:rgba(255,255,255,0.7);font-size:12px}
+  .hdr-tag{margin-left:auto;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.9);padding:5px 12px;border-radius:4px;font-size:11px;font-weight:600;white-space:nowrap;letter-spacing:.3px;flex-shrink:0}
+  .main{max-width:660px;margin:0 auto;padding:28px 16px 60px}
+  .status{background:#fff;border-radius:8px;border:1px solid #e2e8f0;border-left:4px solid #16a34a;padding:18px 22px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+  .s-icon{width:40px;height:40px;background:#dcfce7;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .s-title{font-size:15px;font-weight:700;color:#166534;margin-bottom:2px}
+  .s-sub{font-size:13px;color:#64748b}
+  .card{background:#fff;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:18px}
+  .card-hdr{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:11px 18px;font-size:11px;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:.5px}
+  .row{display:flex;justify-content:space-between;padding:11px 18px;border-bottom:1px solid #f8fafc;gap:10px}
+  .row:last-child{border-bottom:none}
+  .rl{font-size:13px;color:#64748b;flex-shrink:0}
+  .rv{font-size:13px;font-weight:600;color:#1e293b;text-align:right}
+  .rv.ok{color:#16a34a}
+  .process{padding:16px 18px}
+  .pstep{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px solid #f8fafc}
+  .pstep:last-child{border-bottom:none}
+  .pn{width:24px;height:24px;border-radius:50%;background:#16a34a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+  .pt{font-size:13px;color:#334155;font-weight:600}
+  .pt span{font-size:12px;color:#64748b;font-weight:400;display:block;margin-top:1px}
+  .note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:13px 16px;font-size:13px;color:#92400e;line-height:1.6;margin-bottom:18px;display:flex;gap:12px}
+  footer{text-align:center;padding:20px 16px;font-size:11px;color:#94a3b8;line-height:1.7;border-top:1px solid #e2e8f0;background:#fff}
+  @media(max-width:480px){.hdr{flex-wrap:wrap}.hdr-tag{margin-left:0}}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <div class="header-inner">
-    <div class="header-logo">HS</div>
-    <div class="header-text">
-      <h1>Hogar Salud IPS SAS</h1>
-      <p>Contratación Digital · Cero Papel · 100% en línea</p>
-    </div>
-    <div class="header-badge">✅ Aprobado</div>
+<div class="hdr">
+  <div class="hdr-logo">HS</div>
+  <div>
+    <h1>Hogar Salud IPS SAS</h1>
+    <p id="tipoSub">Contrato de Trabajo</p>
   </div>
+  <div class="hdr-tag">CONTRATO APROBADO</div>
 </div>
 
 <div class="main">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-icon">🎉</div>
-    <h2>¡Contrato Aprobado!</h2>
-    <p>Tu contrato ha sido revisado, firmado por ambas partes y aprobado por el área de Recursos Humanos de <strong>Hogar Salud IPS SAS</strong>. Este documento tiene plena validez legal.</p>
-  </div>
-
-  <!-- INFO DEL CONTRATO -->
-  <div class="info-card">
-    <div class="info-card-header">📋 Información del Contrato</div>
-    <div class="info-row">
-      <span class="info-label">Trabajador</span>
-      <span class="info-value" id="infoNombre">—</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Documento</span>
-      <span class="info-value" id="infoCedula">—</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Cargo</span>
-      <span class="info-value" id="infoCargo">—</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Tipo de contrato</span>
-      <span class="info-value" id="infoTipo">—</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Fecha de inicio</span>
-      <span class="info-value" id="infoFecha">—</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">Empresa</span>
-      <span class="info-value">Hogar Salud IPS SAS</span>
-    </div>
-    <div class="info-row">
-      <span class="info-label">NIT</span>
-      <span class="info-value">900.369.003-1</span>
+  <div class="status">
+    <div class="s-icon">✓</div>
+    <div>
+      <div class="s-title">Contrato Aprobado y Vigente</div>
+      <div class="s-sub">Firmado por ambas partes con plena validez legal</div>
     </div>
   </div>
 
-  <!-- PASOS -->
-  <div class="steps">
-    <h3>Estado del proceso</h3>
-    <div class="step-item">
-      <div class="step-icon">✓</div>
-      <div class="step-text">Contrato generado y enviado al trabajador</div>
-    </div>
-    <div class="step-item">
-      <div class="step-icon">✓</div>
-      <div class="step-text">Firma del trabajador recibida y registrada</div>
-    </div>
-    <div class="step-item">
-      <div class="step-icon">✓</div>
-      <div class="step-text">Aprobado y firmado por Recursos Humanos</div>
-    </div>
-    <div class="step-item">
-      <div class="step-icon">✓</div>
-      <div class="step-text">Contrato vigente con plena validez legal</div>
+  <div class="card">
+    <div class="card-hdr">Información del Contrato</div>
+    <div class="row"><span class="rl">Trabajador</span><span class="rv" id="iNombre">—</span></div>
+    <div class="row"><span class="rl">Documento de identidad</span><span class="rv" id="iCedula">—</span></div>
+    <div class="row"><span class="rl">Cargo</span><span class="rv" id="iCargo">—</span></div>
+    <div class="row"><span class="rl">Tipo de contrato</span><span class="rv" id="iTipo">—</span></div>
+    <div class="row"><span class="rl">Fecha de inicio</span><span class="rv" id="iFecha">—</span></div>
+    <div class="row"><span class="rl">Empleador</span><span class="rv">Hogar Salud IPS SAS</span></div>
+    <div class="row"><span class="rl">NIT del empleador</span><span class="rv">900.369.003-1</span></div>
+    <div class="row"><span class="rl">Estado</span><span class="rv ok">APROBADO Y VIGENTE</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr">Estado del Proceso</div>
+    <div class="process">
+      <div class="pstep"><div class="pn">✓</div><div class="pt">Contrato generado y enviado al trabajador<span>Completado</span></div></div>
+      <div class="pstep"><div class="pn">✓</div><div class="pt">Firma del trabajador recibida y registrada<span>Completado</span></div></div>
+      <div class="pstep"><div class="pn">✓</div><div class="pt">Revisión y aprobación por Recursos Humanos<span>Aprobado por Álvaro José Mercado Casij — Hogar Salud IPS SAS</span></div></div>
+      <div class="pstep"><div class="pn">✓</div><div class="pt">Documento guardado en el sistema<span>Registrado en SharePoint — Hogar Salud IPS SAS</span></div></div>
     </div>
   </div>
 
-  <!-- NOTA -->
   <div class="note">
-    <span style="font-size:20px;flex-shrink:0;">💡</span>
-    <span>Guarda este correo como constancia de tu contrato aprobado. Si necesitas una copia física o tienes alguna duda, comunícate con el área de Recursos Humanos de Hogar Salud IPS SAS.</span>
+    <span style="font-size:16px;flex-shrink:0;margin-top:1px">📌</span>
+    <span>Conserve este correo como constancia de su contrato aprobado. Si requiere una copia del documento, comuníquese con el área de Recursos Humanos de Hogar Salud IPS SAS.</span>
   </div>
 
 </div>
 
-<div class="footer">
+<footer>
   Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla<br>
-  Este portal es seguro y oficial. Tu contrato tiene plena validez legal.
-</div>
+  Documento generado por el sistema de gestión de contratos · Hogar Salud IPS SAS
+</footer>
 
 <script>
-const p = new URLSearchParams(window.location.search);
-const set = (id, val) => { if (val) document.getElementById(id).textContent = val; };
-set('infoNombre', p.get('nombre'));
-set('infoCedula', p.get('cedula'));
-set('infoCargo',  p.get('cargo'));
-set('infoFecha',  p.get('fecha'));
-const tipoLabels = {
-  'Obra o Labor': 'Obra o Labor (Directo)',
-  'Prestación de Servicios (OPS)': 'OPS / Adscripción (Indirecto)',
-  'Prestacion de Servicios (OPS)': 'OPS / Adscripción (Indirecto)',
-  'Aprendizaje': 'Contrato de Aprendizaje',
-};
-const tipo = p.get('tipo') || '';
-set('infoTipo', tipoLabels[tipo] || tipo);
+const P=new URLSearchParams(location.search);
+const s=(id,v)=>{if(v&&document.getElementById(id))document.getElementById(id).textContent=v;};
+s('iNombre',P.get('nombre'));
+s('iCedula',P.get('cedula'));
+s('iCargo',P.get('cargo'));
+s('iFecha',P.get('fecha'));
+const tipos={'Obra o Labor':'Obra o Labor','Término Indefinido':'Término Indefinido','Aprendizaje':'Contrato de Aprendizaje','OPS':'Convenio de Adscripción (OPS)'};
+const tipo=P.get('tipo')||'';
+s('iTipo',tipos[tipo]||tipo);
+s('tipoSub',tipos[tipo]||tipo||'Contrato de Trabajo');
 </script>
 </body>
 </html>
