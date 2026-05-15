@@ -265,7 +265,7 @@ btnF.addEventListener('click', async function() {
   try {
     var res = await fetch(WEBHOOK, {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({token:token, firma:firmaB64, ts:new Date().toISOString()})
+      body: JSON.stringify({token:token, firma:firmaB64, ts:new Date().toISOString(), nombre:nombre, cedula:cedula, cargo:cargo, tipo:tipo, email:emailV, salario:salario, periodo:periodo, fecha:fecha, labor:labor, ciudad:ciudad, telefono:telefono})
     });
     if (res.ok) {
       try { sessionStorage.setItem(CLAVE,'1'); } catch(e) {}
