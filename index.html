@@ -1,1330 +1,454 @@
-@@ -1,459 +1,895 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Firma tu Contrato — Hogar Salud IPS</title>
+<title>Contrato — Hogar Salud IPS SAS</title>
 <style>
-  :root {
-    --cyan: #00bcd4; --teal: #0097a7; --dark: #0f172a;
-    --gray: #64748b; --border: #e2e8f0;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f7; min-height: 100vh; }
-  .header {
-    background: linear-gradient(135deg, #0097a7 0%, #00bcd4 50%, #26c6da 100%);
-    padding: 0; position: relative; overflow: hidden;
-  }
-  .header::before {
-    content: ''; position: absolute; top: -60px; right: -60px;
-    width: 200px; height: 200px; background: rgba(255,255,255,0.08); border-radius: 50%;
-  }
-  .header::after {
-    content: ''; position: absolute; bottom: -40px; left: -40px;
-    width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%;
-  }
-  .header-inner {
-    max-width: 780px; margin: 0 auto; padding: 32px 24px;
-    position: relative; z-index: 1; display: flex; align-items: center; gap: 20px;
-  }
-  .header-logo {
-    width: 52px; height: 52px; background: rgba(255,255,255,0.2);
-    border: 2px solid rgba(255,255,255,0.4); border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; font-weight: 900; color: #fff; flex-shrink: 0;
-  }
-  .header-text h1 { color: #fff; font-size: 22px; font-weight: 800; margin-bottom: 2px; }
-  .header-text p { color: rgba(255,255,255,0.8); font-size: 13px; }
-  .header-badge {
-    margin-left: auto; background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3); color: #fff;
-    padding: 6px 14px; border-radius: 20px; font-size: 12px;
-    font-weight: 600; white-space: nowrap; flex-shrink: 0;
-  }
-  .progress-bar { background: rgba(0,0,0,0.15); height: 4px; }
-  .progress-fill { background: #fff; height: 100%; width: 33%; transition: width 0.5s ease; }
-  .main { max-width: 780px; margin: 0 auto; padding: 28px 16px 60px; }
-  .card {
-    background: #fff; border-radius: 16px; margin-bottom: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
-  }
-  .greeting {
-    padding: 24px 28px; display: flex; align-items: center;
-    gap: 16px; border-left: 4px solid var(--cyan);
-  }
-  .greeting-avatar {
-    width: 48px; height: 48px; background: linear-gradient(135deg, #e0f9fb, #b2ebf2);
-    border-radius: 50%; display: flex; align-items: center;
-    justify-content: center; font-size: 22px; flex-shrink: 0;
-  }
-  .greeting h2 { font-size: 17px; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
-  .greeting p { font-size: 13px; color: var(--gray); line-height: 1.5; }
-  .section-label {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
-    font-size: 12px; font-weight: 700; color: var(--gray);
-    text-transform: uppercase; letter-spacing: 0.6px;
-  }
-  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .contract-header {
-    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-    border-bottom: 1px solid var(--border); padding: 16px 24px;
-    display: flex; align-items: center; gap: 10px;
-    border-radius: 16px 16px 0 0;
-  }
-  .contract-header-icon {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--cyan), var(--teal));
-    border-radius: 8px; display: flex; align-items: center;
-    justify-content: center; color: #fff; font-size: 16px;
-  }
-  .contract-header h3 { font-size: 14px; font-weight: 700; color: var(--dark); }
-  .contract-header p { font-size: 12px; color: var(--gray); }
-  .contract-body {
-    padding: 28px 32px; font-family: 'Times New Roman', serif;
-    font-size: 12.5px; line-height: 1.85; color: #1a1a1a; text-align: justify;
-  }
-  .contract-body h2 {
-    text-align: center; font-size: 13.5px; font-weight: bold;
-    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; color: #000;
-  }
-  .contract-body table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; }
-  .contract-body td { border: 1px solid #bbb; padding: 6px 10px; }
-  .contract-body td:first-child { font-weight: bold; background: #f5f5f5; width: 40%; color: #333; }
-  .contract-body p { margin-bottom: 12px; }
-  /* ── FIRMA UPLOAD ── */
-  .sig-card { padding: 28px; }
-  .sig-title { font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
-  .sig-subtitle { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
-  .warning-box {
-    background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px;
-    padding: 14px 16px; font-size: 13px; color: #92400e; margin-bottom: 24px;
-    display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;
-  }
-  .upload-area {
-    border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px 20px;
-    text-align: center; cursor: pointer; transition: all 0.2s;
-    background: #fafbfc; position: relative;
-  }
-  .upload-area:hover { border-color: var(--cyan); background: #f0fdff; }
-  .upload-area.has-file { border-color: var(--cyan); border-style: solid; background: #f0fdff; }
-  .upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .upload-icon { font-size: 40px; display: block; margin-bottom: 10px; }
-  .upload-text { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-  .upload-hint { font-size: 12px; color: var(--gray); }
-  .preview-area {
-    display: none; border: 2px solid var(--cyan); border-radius: 12px;
-    padding: 16px; text-align: center; background: #f0fdff;
-  }
-  .preview-area img { max-height: 120px; max-width: 100%; object-fit: contain; border-radius: 6px; }
-  .preview-label { font-size: 13px; color: var(--teal); font-weight: 700; margin-top: 10px; }
-  .btn-change {
-    margin-top: 8px; background: none; border: 1px solid var(--border);
-    color: var(--gray); padding: 6px 14px; border-radius: 8px;
-    cursor: pointer; font-size: 12px; font-weight: 600;
-  }
-  .btn-sign {
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    width: 100%; margin-top: 20px; padding: 16px;
-    background: linear-gradient(135deg, var(--cyan), var(--teal));
-    color: #fff; border: none; border-radius: 12px; font-size: 16px;
-    font-weight: 700; cursor: pointer; transition: all 0.2s;
-    box-shadow: 0 4px 14px rgba(0,150,167,0.3);
-  }
-  .btn-sign:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,150,167,0.4); }
-  .btn-sign:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; background: #94a3b8; }
-  /* ── RESULTS ── */
-  .result-card {
-    display: none; border-radius: 16px; padding: 48px 32px; text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px;
-  }
-  .result-card.success { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 2px solid #86efac; }
-  .result-card.already { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 2px solid #93c5fd; }
-  .result-icon { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; }
-  .result-card.success .result-icon { background: #dcfce7; }
-  .result-card.already .result-icon { background: #dbeafe; }
-  .result-card h2 { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
-  .result-card.success h2 { color: #166534; }
-  .result-card.already h2 { color: #1e40af; }
-  .result-card p { font-size: 14px; line-height: 1.7; }
-  .result-card.success p { color: #166534; }
-  .result-card.already p { color: #1e3a8a; }
-  .result-steps { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; text-align: left; }
-  .result-step { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.6); border-radius: 10px; padding: 12px 16px; font-size: 13px; font-weight: 600; }
-  .result-step.success { color: #166534; }
-  .result-step.already { color: #1e40af; }
-  .step-num { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
-  .result-card.success .step-num { background: #bbf7d0; color: #166534; }
-  .result-card.already .step-num { background: #bfdbfe; color: #1e40af; }
-  .footer { text-align: center; padding: 20px; font-size: 11px; color: #94a3b8; line-height: 1.6; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
-  @media (max-width: 480px) {
-    .header-inner { flex-wrap: wrap; }
-    .header-badge { margin-left: 0; }
-    .contract-body { padding: 20px 16px; }
-    .sig-card { padding: 20px 16px; }
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh}
+.hdr{background:linear-gradient(135deg,#0f2d5a,#1e40af);padding:18px 24px;display:flex;align-items:center;gap:14px}
+.hdr-logo{width:42px;height:42px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
+.hdr h1{color:#fff;font-size:17px;font-weight:700;margin-bottom:2px}
+.hdr p{color:rgba(255,255,255,0.7);font-size:12px}
+.main{max-width:820px;margin:0 auto;padding:24px 16px 60px}
+.card{background:#fff;border-radius:10px;border:1px solid #e2e8f0;overflow:hidden;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.ct-hdr{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:13px 20px;display:flex;align-items:center;gap:10px}
+.ct-icon{width:32px;height:32px;background:linear-gradient(135deg,#1e40af,#0f2d5a);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;flex-shrink:0}
+.ct-hdr h3{font-size:13px;font-weight:700;color:#0f172a}
+.ct-hdr p{font-size:11px;color:#64748b}
+.ct-body{padding:28px 36px;font-family:'Times New Roman',serif;font-size:12px;line-height:1.85;color:#000;text-align:justify}
+.ct-body h2{text-align:center;font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px}
+.ct-body table{width:100%;border-collapse:collapse;margin-bottom:18px}
+.ct-body td{border:1px solid #888;padding:5px 8px;font-size:11.5px}
+.ct-body td.lf{font-weight:bold;width:40%}
+.ct-body .pc{margin-bottom:11px}
+.sig-card{padding:24px}
+.warn{background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;padding:13px 15px;font-size:13px;color:#92400e;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.upload-zone{border:2px dashed #cbd5e1;border-radius:10px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfc;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:#1e40af;background:#eff6ff}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.prev-zone{display:none;border:2px solid #1e40af;border-radius:10px;padding:14px;text-align:center;background:#eff6ff}
+.prev-zone img{max-height:90px;max-width:100%;object-fit:contain;border-radius:6px}
+.prev-label{font-size:13px;color:#1e40af;font-weight:700;margin-top:8px}
+.btn-change{margin-top:7px;background:none;border:1px solid #e2e8f0;color:#64748b;padding:5px 12px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600}
+.btn-sign{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:18px;padding:15px;background:linear-gradient(135deg,#1e40af,#0f2d5a);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(30,64,175,.3)}
+.btn-sign:hover:not(:disabled){transform:translateY(-2px)}
+.btn-sign:disabled{opacity:.45;cursor:not-allowed;transform:none;background:#94a3b8}
+.result{display:none;border-radius:10px;padding:44px 28px;text-align:center;margin-bottom:18px}
+.result.ok{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #86efac}
+.result.dup{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd}
+.result h2{font-size:20px;font-weight:800;margin-bottom:10px}
+.result.ok h2{color:#166534} .result.dup h2{color:#1e40af}
+.result p{font-size:13px;line-height:1.7}
+.result.ok p{color:#166534} .result.dup p{color:#1e3a8a}
+.steps{display:flex;flex-direction:column;gap:8px;margin-top:14px;text-align:left}
+.stp{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.6);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600}
+.result.ok .stp{color:#166534} .result.dup .stp{color:#1e40af}
+.sn{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.result.ok .sn{background:#bbf7d0;color:#166534} .result.dup .sn{background:#bfdbfe;color:#1e40af}
+footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1.6}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@media(max-width:480px){.ct-body{padding:18px 14px}.sig-card{padding:18px 14px}}
 </style>
 </head>
 <body>
-
-<div class="header">
-  <div class="header-inner">
-    <div class="header-logo">HS</div>
-    <div class="header-text">
-      <h1>Hogar Salud IPS SAS</h1>
-      <p>Contratación Digital · Cero Papel · 100% en línea</p>
-    </div>
-    <div class="header-badge">🔒 Firma Segura</div>
+<div class="hdr">
+  <div class="hdr-logo">HS</div>
+  <div>
+    <h1>Hogar Salud IPS SAS</h1>
+    <p id="tipoSub">Contrato de Trabajo</p>
   </div>
-  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 </div>
-import React, { useState, useEffect, useCallback } from 'react';
-
 <div class="main">
-/* ─────────────────────────────────────────────
-   COLORES & CONSTANTES
-───────────────────────────────────────────── */
-const C = {
-  cyan:'#00bcd4', teal:'#0097a7', dark:'#1e293b', gray:'#64748b',
-  light:'#f8fafc', border:'#e2e8f0', grad:'linear-gradient(135deg,#00bcd4,#0097a7)',
-  green:'#16a34a', greenBg:'#dcfce7', yellow:'#b45309', yellowBg:'#fef9c3',
-  red:'#dc2626', redBg:'#fee2e2', orange:'#c2410c', orangeBg:'#ffedd5',
-  purple:'#7e22ce', purpleBg:'#f3e8ff', blue:'#0369a1', blueBg:'#e0f2fe',
-};
-
-  <div class="card greeting" id="greetingCard">
-    <div class="greeting-avatar">👤</div>
-    <div>
-      <h2>Hola, <span id="nombreTrabajador">Trabajador</span> 👋</h2>
-      <p>Tu contrato está listo. Léelo con atención, luego sube una foto o imagen de tu firma para completar el proceso.</p>
-    </div>
-  </div>
-// ── Power Automate URLs ──
-const PA_ENVIAR_CONTRATO   = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/b0593235e0db43c8b0c59732d1fe79a0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=v-yliFrnRzwncz9cKNbN7Dok1mGPaTUGNMkGJKrjOEI';
-const PA_RECHAZAR          = 'REEMPLAZA_URL_RECHAZAR';
-
-  <div class="section-label">📄 Tu Contrato</div>
-  <div class="card" id="contratoCard">
-    <div class="contract-header">
-      <div class="contract-header-icon">📋</div>
+  <div class="card" id="ctCard">
+    <div class="ct-hdr">
+      <div class="ct-icon">&#x1F4CB;</div>
       <div>
-        <h3 id="tipoContratoLabel">Contrato de Trabajo</h3>
-        <p>Hogar Salud IPS SAS · NIT 900.369.003-1</p>
+        <h3 id="tipoLabel">Contrato de Trabajo</h3>
+        <p>Hogar Salud IPS SAS &bull; NIT 900.369.003-1</p>
       </div>
     </div>
-    <div class="contract-body" id="textoContrato"></div>
+    <div class="ct-body" id="ctBody"></div>
   </div>
-const HDRS = {
-  'Accept':'application/json','Content-Type':'application/json',
-  'OData-MaxVersion':'4.0','OData-Version':'4.0',
-  'Prefer':'odata.include-annotations="*"',
-}; 
-
-  <div class="section-label" id="sigLabel">🖊️ Tu Firma</div>
   <div class="card" id="sigCard">
     <div class="sig-card">
-      <div class="sig-title">📎 Sube una imagen de tu firma</div>
-      <div class="sig-subtitle">Toma una foto de tu firma en papel blanco, o sube una imagen escaneada. Formatos: JPG, PNG.</div>
-// ── Tipos de contrato (sin Directo/Indirecto) ──
-const TIPOS = [
-  { value:'Obra o Labor',       label:'Obra o Labor',         origen:'directo'   },
-  { value:'Término Indefinido', label:'Término Indefinido',   origen:'directo'   },
-  { value:'Aprendizaje',        label:'Aprendizaje',          origen:'directo'   },
-  { value:'OPS',                label:'OPS / Adscripción',    origen:'indirecto' },
-];
-
-      <div class="warning-box">
-        <span style="font-size:16px;flex-shrink:0;margin-top:1px;">⚠️</span>
-        <span>Al enviar tu firma confirmas que eres <strong id="nombreAlerta">el trabajador</strong>, que leíste el contrato completo y aceptas todos sus términos con plena validez legal.</span>
+      <div style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:6px">&#x1F4CE; Sube tu firma</div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:18px">Toma una foto de tu firma sobre papel blanco. Al enviarla confirmas que aceptas todos los terminos del contrato.</div>
+      <div class="warn">
+        <span style="font-size:16px;flex-shrink:0">&#x26A0;&#xFE0F;</span>
+        <span>Al firmar confirmas que eres <strong id="nomAlerta">el trabajador</strong> y aceptas el contrato con plena validez legal.</span>
       </div>
-const ESTADO_META = {
-  'Sin Contrato':    { bg:'#f1f5f9',  color:C.gray,   label:'Sin Contrato'    },
-  'Pendiente Firma': { bg:C.yellowBg, color:C.yellow, label:'Pendiente Firma' },
-  'Firma Recibida':  { bg:C.orangeBg, color:C.orange, label:'Firma Recibida'  },
-  'Aprobado':        { bg:C.greenBg,  color:C.green,  label:'Aprobado ✓'      },
-  'Rechazado':       { bg:C.redBg,    color:C.red,    label:'Rechazado'       },
-};
-
-      <!-- Área de carga -->
-      <div class="upload-area" id="uploadArea">
-        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/jpg,image/webp" />
-        <span class="upload-icon">📷</span>
-        <div class="upload-text">Toca aquí para subir tu firma</div>
-        <div class="upload-hint">JPG o PNG · Máximo 5MB · Fondo blanco recomendado</div>
+      <div class="upload-zone" id="upZone">
+        <input type="file" id="fileIn" accept="image/jpeg,image/png,image/jpg,image/webp">
+        <span style="font-size:36px;display:block;margin-bottom:10px">&#x1F4F7;</span>
+        <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px">Toca aqui para subir tu firma</div>
+        <div style="font-size:12px;color:#64748b">Foto de tu firma en papel blanco &bull; JPG o PNG &bull; Max 5MB</div>
       </div>
-const TIPO_COLOR = {
-  'Obra o Labor':       { color:C.blue,   bg:C.blueBg,   border:'#bae6fd' },
-  'Término Indefinido': { color:'#0f766e',bg:'#ccfbf1',  border:'#99f6e4' },
-  'Aprendizaje':        { color:C.green,  bg:C.greenBg,  border:'#bbf7d0' },
-  'OPS':                { color:C.purple, bg:C.purpleBg, border:'#e9d5ff' },
-};
-
-      <!-- Preview de la imagen -->
-      <div class="preview-area" id="previewArea">
-        <img id="previewImg" src="" alt="Tu firma" />
-        <div class="preview-label">✅ Firma cargada correctamente</div>
+      <div class="prev-zone" id="prevZone">
+        <img id="prevImg" src="" alt="Tu firma">
+        <div class="prev-label">&#x2705; Imagen cargada correctamente</div>
         <button class="btn-change" id="btnCambiar">Cambiar imagen</button>
       </div>
-/* ─────────────────────────────────────────────
-   HELPERS
-───────────────────────────────────────────── */
-const fmtDate = d => {
-  if (!d) return '';
-  const s = d.split('T')[0];
-  const [y,m,day] = s.split('-');
-  const M = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  return `${parseInt(day)} de ${M[parseInt(m)-1]} de ${y}`;
-};
-const fmtInput = d => d ? d.split('T')[0] : '';
-
-/* ─────────────────────────────────────────────
-   ICONOS SVG
-───────────────────────────────────────────── */
-const Ico = {
-  Search: <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>,
-  Plus:   <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/></svg>,
-  Eye:    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>,
-  Send:   <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>,
-  Close:  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>,
-  Print:  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>,
-  Refresh:<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>,
-  X:      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>,
-};
-
       <button class="btn-sign" id="btnFirmar" disabled>
-        <span id="btnTexto">✅ &nbsp; Enviar Firma y Firmar Contrato</span>
-        <span id="btnSpinner" style="display:none" class="spinner"></span>
+        <span id="btnTxt">&#x2705;&nbsp; Enviar Firma y Firmar Contrato</span>
+        <span id="btnSpin" style="display:none" class="spinner"></span>
       </button>
-const NAV = [
-  {name:'Dashboard', ico:<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>},
-  {name:'Usuarios',  ico:<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>},
-  {name:'Expediente Maestro', ico:<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>},
-  {name:'Contratos', ico:<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>},
-  {name:'Certificaciones', ico:<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>},
-  {name:'Configuración', ico:<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>},
-];
-
-/* ─────────────────────────────────────────────
-   PLANTILLAS EXACTAS (Word)
-───────────────────────────────────────────── */
-
-// Fila de tabla compartida
-const TR = ({l,v,i}) => (
-  <tr>
-    <td style={{border:'1px solid #888',padding:'5px 8px',fontWeight:'bold',width:'40%',background:i%2===0?'#f2f2f2':'#fff',fontSize:'11.5px'}}>{l}</td>
-    <td style={{border:'1px solid #888',padding:'5px 8px',background:i%2===0?'#f2f2f2':'#fff',fontSize:'11.5px'}}>{v||''}</td>
-  </tr>
-);
-
-// Línea de firma — imagen encima de la línea
-const FirmaLine = ({nombre,cargo,cedula,nit,firma,rol}) => (
-  <div style={{flex:1,textAlign:'center',minWidth:'180px'}}>
-    {firma
-      ? <img src={firma} alt="firma" style={{height:'52px',maxWidth:'180px',objectFit:'contain',display:'block',margin:'0 auto 4px'}}/>
-      : <div style={{height:'52px'}}/>
-    }
-    <div style={{borderTop:'1px solid #000',paddingTop:'6px',fontSize:'11.5px'}}>
-      <strong>{nombre}</strong><br/>
-      {nit && <span>NIT. {nit}<br/></span>}
-      {cedula && <span>CC. {cedula}<br/></span>}
-      {cargo && <span>{cargo}<br/></span>}
-      <em>{rol}</em>
     </div>
   </div>
-);
-
-  <!-- ÉXITO -->
-  <div class="result-card success" id="exitoCard">
-    <div class="result-icon">✅</div>
-    <h2>¡Firma Enviada!</h2>
-    <p>Tu firma quedó registrada exitosamente en el sistema de Hogar Salud IPS. El área de Recursos Humanos revisará y aprobará tu contrato.</p>
-    <div class="result-steps">
-      <div class="result-step success"><div class="step-num">✓</div> Enviaste tu firma digitalmente</div>
-      <div class="result-step success"><div class="step-num">2</div> RRHH revisará y aprobará tu contrato</div>
-      <div class="result-step success"><div class="step-num">3</div> Recibirás el documento final por correo</div>
-/* ── PLANTILLA 1: OBRA O LABOR ── */
-const PlantillaObraLabor = ({c, firmaRRHH, firmaTrabajador}) => {
-  const campos = [
-    ['NOMBRE DEL EMPLEADOR:','HOGARSALUD IPS SOCIEDAD POR ACCIONES SIMPLIFICADAS'],
-    ['DIRECCIÓN:','Carrera 56 # 72-129'],
-    ['NOMBRE DEL EMPLEADO:',c.nombreCompleto?.toUpperCase()],
-    ['CÉDULA DE CIUDADANÍA:',`CC. ${c.cedula}`],
-    ['DIRECCIÓN:',c.direccion],
-    ['TELÉFONO / CELULAR:',c.telefono],
-    ['EMAIL:',c.email],
-    ['LUGAR, FECHA DE NACIMIENTO:',c.fechaNacimiento],
-    ['CARGO U OFICIO QUE DESEMPEÑARÁ EL TRABAJADOR:',c.cargo?.toUpperCase()],
-    ['SALARIO:',`$${c.salario}`],
-    ['FECHA DE INICIACIÓN DE LABORES:',fmtDate(c.fechaIngreso)?.toUpperCase()],
-    ['CIUDAD DONDE SE HA CONTRATADO EL TRABAJADOR:',c.ciudad?.toUpperCase()||'BARRANQUILLA - ATLÁNTICO'],
-    ['PERIODOS DE PAGO:',c.periodoPago?.toUpperCase()],
-    ['LABOR CONTRATADA:',c.laborContratada],
-  ];
-  return (
-    <div style={{fontFamily:'"Times New Roman",serif',fontSize:'12px',color:'#000',lineHeight:'1.8',textAlign:'justify'}}>
-      <h3 style={{textAlign:'center',fontSize:'13px',fontWeight:'bold',margin:'0 0 6px',textTransform:'uppercase',letterSpacing:'0.5px'}}>CONTRATO DE TRABAJO DURACIÓN POR LA</h3>
-      <h3 style={{textAlign:'center',fontSize:'13px',fontWeight:'bold',margin:'0 0 20px',textTransform:'uppercase',letterSpacing:'0.5px'}}>OBRA O LABOR CONTRATADA</h3>
-      <table style={{width:'100%',borderCollapse:'collapse',marginBottom:'20px'}}><tbody>{campos.map(([l,v],i)=><TR key={i} l={l} v={v} i={i}/>)}</tbody></table>
-      <p>Entre el empleador y el trabajador, de las condiciones ya dichas identificados como aparece al pie de sus correspondientes firmas se ha celebrado el presente contrato individual de trabajo, regido además por las siguientes cláusulas:</p>
-      <p><strong>Primera.</strong> El empleador contrata los servicios personales del trabajador y este se obliga: a) A poner al servicio del empleador toda su capacidad normal de trabajo, en forma exclusiva en el desempeño de las funciones propias del oficio mencionado y las labores anexas y complementarias del mismo, de conformidad con las órdenes e instrucciones que le imparta el empleador o sus representantes, y b) A no prestar directa ni indirectamente servicios laborales a otros empleadores, ni a trabajar por cuenta propia en el mismo oficio, durante la vigencia de este contrato.</p>
-      <p><strong>Segunda.</strong> El empleador paga al trabajador por la prestación de sus servicios el salario indicado, pagadero en las oportunidades también señaladas arriba. Dentro de este pago se encuentra incluida la remuneración de los descansos dominicales y festivos de que tratan los capítulos I y II del título VII del Código Sustantivo del Trabajo. Se aclara y se conviene que en los casos en los que el trabajador devengue comisiones o cualquier otra modalidad de salario variable, el 82.5% de dichos ingresos, constituye remuneración ordinaria y el 17.5% restante está designado a remunerar el descanso en los días dominicales y festivos.</p>
-      <p><strong>Tercera.</strong> Todo trabajo suplementario o en horas extras y todo trabajo en domingo o festivo en los que legalmente debe concederse el descanso, se remunerará conforme a la Ley, así como los correspondientes recargos nocturnos. Para el reconocimiento y pago del trabajo suplementario, dominical o festivo el empleador o sus representantes deben autorizarlo previamente por escrito.</p>
-      <p><strong>Cuarta.</strong> El trabajador se obliga a laborar la jornada ordinaria en los turnos y dentro de las horas señaladas por el empleador, pudiendo hacer éste ajustes o cambios de horario cuando lo estime conveniente. Por el acuerdo expreso o tácito de las partes, podrán repartirse las horas jornada ordinaria de la forma prevista en el artículo 164 del Código Sustantivo del Trabajo, modificado por el artículo 23 de la Ley 50 de 1990.</p>
-      <p><strong>Quinta.</strong> El presente contrato se celebra por el tiempo que dure la realización de la obra (o labor contratada), según se determinó anteriormente.</p>
-      <p><strong>Sexta.</strong> Son justas causas para dar por terminado unilateralmente este contrato por cualquiera de las partes, las enumeradas en el artículo 7º del decreto 2351 de 1965; y, además, por parte del empleado, las faltas que para el efecto se califiquen como graves en el espacio reservado para las cláusulas adicionales en el presente contrato.</p>
-      <p><strong>Séptima.</strong> Las invenciones o descubrimientos realizados por el trabajador contratado para investigar pertenecen al empleador, de conformidad con el artículo 539 del Código de Comercio, así como el artículo 20 y concordantes de la ley 23 de 1982 sobre derechos de autor.</p>
-      <p><strong>Octava.</strong> Las partes podrán convenir que el trabajo se preste en lugar distinto al inicialmente contratado, siempre que tales traslados no desmejoren las condiciones laborales o de remuneración del trabajador, o impliquen perjuicios para él. Los gastos que se originen con el traslado serán cubiertos por el empleador de conformidad con el numeral 8º del artículo 57 del Código Sustantivo del Trabajo.</p>
-      <p><strong>Novena.</strong> Acuerdan las partes que los primeros dos meses de ejecución del presente contrato se consideran como período de prueba. Significa lo anterior que durante este lapso el empleador y/o trabajador pueden darlo por terminado unilateralmente.</p>
-      <p><strong>Décima.</strong> Este contrato ha sido redactado estrictamente de acuerdo con la ley y la jurisprudencia y será interpretado de buena fe y en consonancia con el Código Sustantivo del Trabajo cuyo objeto, definido en su artículo 1º, es lograr la justicia en las relaciones entre empleadores y trabajadores dentro de un espíritu de coordinación económica y equilibrio social.</p>
-      <p><strong>Undécima.</strong> El presente contrato reemplaza en su integridad y deja sin efecto alguno cualquiera otro contrato verbal o escrito celebrado por las partes con anterioridad. Las modificaciones que se acuerden al presente contrato se anotarán a continuación de su texto.</p>
-      <p style={{marginTop:'14px'}}>Para constancia se firma en dos o más ejemplares del mismo tenor y valor, en {c.ciudad||'Barranquilla'} a los {fmtDate(c.fechaIngreso)}.</p>
-      <div style={{display:'flex',justifyContent:'space-between',marginTop:'56px',gap:'40px',flexWrap:'wrap'}}>
-        <FirmaLine nombre="ALVARO JOSE MERCADO CASIJ" nit="900369003-1" cargo="HOGARSALUD IPS" firma={firmaRRHH} rol="EL EMPLEADOR"/>
-        <FirmaLine nombre={c.nombreCompleto?.toUpperCase()} cedula={c.cedula} cargo={c.cargo?.toUpperCase()} firma={firmaTrabajador} rol="EL TRABAJADOR"/>
-      </div>
-    </div>
-  );
-};
-
-/* ── PLANTILLA 2: TÉRMINO INDEFINIDO ── */
-const PlantillaIndefinido = ({c, firmaRRHH, firmaTrabajador}) => {
-  const campos = [
-    ['NOMBRE DEL EMPLEADOR:','HOGARSALUD IPS SOCIEDAD POR ACCIONES SIMPLIFICADAS'],
-    ['DIRECCIÓN:','CRA. 56 #72-104 BARRIO EL PRADO'],
-    ['NOMBRE DEL EMPLEADO:',c.nombreCompleto?.toUpperCase()],
-    ['CÉDULA DE CIUDADANÍA:',`${c.cedula} DE ${(c.ciudad||'BARRANQUILLA').toUpperCase()}`],
-    ['DIRECCIÓN EMPLEADO:',c.direccion],
-    ['TELÉFONO / CELULAR:',c.telefono],
-    ['EMAIL:',c.email],
-    ['LUGAR, FECHA DE NACIMIENTO:',c.fechaNacimiento],
-    ['CARGO U OFICIO QUE DESEMPEÑARÁ EL TRABAJADOR:',c.cargo?.toUpperCase()],
-    ['SALARIO:',`$${c.salario}`],
-    ['HORARIO DE:',c.horario||'7AM A 12M - 2PM A 5PM L A V - SÁBADOS DE 8AM A 12PM O DE 9AM A 1PM'],
-    ['FECHA DE INICIACIÓN DE LABORES:',fmtDate(c.fechaIngreso)?.toUpperCase()],
-    ['CIUDAD DONDE SE HA CONTRATADO EL TRABAJADOR:',c.ciudad?.toUpperCase()||'BARRANQUILLA - ATLÁNTICO'],
-    ['PERIODOS DE PAGO:',c.periodoPago||'Mensual'],
-    ['LABOR CONTRATADA:',c.laborContratada||`Las consignadas en el presente contrato, las del manual de competencias y las inherentes al cargo de ${c.cargo?.toUpperCase()}`],
-  ];
-  return (
-    <div style={{fontFamily:'"Times New Roman",serif',fontSize:'12px',color:'#000',lineHeight:'1.8',textAlign:'justify'}}>
-      <h3 style={{textAlign:'center',fontSize:'13px',fontWeight:'bold',margin:'0 0 20px',textTransform:'uppercase',letterSpacing:'0.5px'}}>CONTRATO DE TRABAJO LABORAL A TÉRMINO INDEFINIDO</h3>
-      <table style={{width:'100%',borderCollapse:'collapse',marginBottom:'20px'}}><tbody>{campos.map(([l,v],i)=><TR key={i} l={l} v={v} i={i}/>)}</tbody></table>
-      <p>Entre el Empleador y el Trabajador, de las condiciones ya dichas, identificados, como aparece al pie de sus firmas, se ha celebrado el presente Contrato Individual de Trabajo, regido además por las siguientes cláusulas:</p>
-      <p><strong>CLAUSULA PRIMERA — OBJETO:</strong> El Empleador contrata los servicios personales del Trabajador y éste se obliga: a) A poner al servicio del Empleador toda su capacidad normal de trabajo, en forma exclusiva en el desempeño de las funciones propias del oficio mencionado y en las labores anexas y complementadas del mismo, de conformidad con las órdenes e instrucciones que le imparta El Empleador directamente o a través de sus representantes. b) A guardar absoluta reserva sobre los hechos, documentos, informaciones y en general, sobre todos los asuntos y materias que lleguen a su conocimiento por causa o con ocasión de su contrato de trabajo. Parágrafo Primero: Hace parte integral del presente contrato las funciones detalladas en el manual de competencias del presente cargo.</p>
-      <p><strong>CLAUSULA SEGUNDA — REMUNERACIÓN:</strong> El Empleador pagará al Trabajador por la prestación de sus servicios el salario indicado, pagadero en las oportunidades como lo indica el cuadro introductorio. El Trabajador autoriza al Empleador para que la retribución, así como cualquier otro beneficio originado en la existencia y/o terminación del contrato sean consignadas o trasladadas a cuenta que desde ya el Trabajador autoriza al Empleador para que sea abierta a su nombre en una institución financiera.</p>
-      <p><strong>CLAUSULA TERCERA — TRABAJO NOCTURNO, SUPLEMENTARIO, DOMINICAL Y/O FESTIVO:</strong> Para el reconocimiento y pago del trabajo suplementario, nocturno, dominical o festivo, El Empleador o sus representantes deberán haberlo autorizado previamente y por escrito. Tratándose de trabajadores de Dirección, confianza y Manejo, no habrá pago a horas Extras. El Empleador fijará las jornadas laborales de acuerdo a las necesidades del servicio pudiendo variarlas durante la ejecución del presente contrato.</p>
-      <p><strong>CLAUSULA CUARTA — JORNADA DE TRABAJO:</strong> El Trabajador se obliga a laborar la jornada máxima legal en aplicación a la reducción gradual horaria consignada en el artículo 3 inciso tres de la ley 2101 del 2021. Horario laboral: De lunes a viernes, de 7:00 a.m. a 12:00 m., con un receso de dos (2) horas para el almuerzo, y de 2:00 p.m. a 5:00 p.m.; y los sábados, de 8:00 a.m. a 12:00 m. o en su defecto de 9:00 am a 1:00 m.</p>
-      <p><strong>CLAUSULA QUINTA — PERIODO DE PRUEBA:</strong> Los primeros 60 días del presente contrato se consideran como período de prueba al tenor del art. 78 del Código Sustantivo del Trabajo y, por consiguiente, cualquiera de las partes podrá terminar el contrato unilateralmente, en cualquier momento, durante dicho término.</p>
-      <p><strong>CLAUSULA SEXTA — ACUERDO DE CONFIDENCIALIDAD:</strong> El trabajador mantendrá la confidencialidad de banco de información de HOGAR SALUD IPS en los siguientes aspectos: información de propiedad intelectual, datos y registros financieros, información de clientes y proveedores, datos de colaboradores, e información operativa y logística. No divulgará, compartirá, distribuirá, revelará o utilizará de ninguna manera la información confidencial de la Empresa para beneficio propio o de terceros, ni para cualquier otro propósito que no esté relacionado directamente con el cumplimiento de sus responsabilidades.</p>
-      <p><strong>CLAUSULA SÉPTIMA — DURACIÓN:</strong> La duración del contrato será indefinida, mientras subsistan las causas que le dieron origen y la materia del trabajo.</p>
-      <p><strong>CLAUSULA OCTAVA — OBLIGACIONES DEL TRABAJADOR:</strong> a. Las establecidas en la Ley Laboral, reglamento interno de trabajo y el cumplimiento de las instrucciones emitidas por el Empleador. b. Suscribir el acuerdo de Confidencialidad determinado por El Empleador. c. No ejercer actos de Competencia desleal frente al Empleador. d. Respetar los sitios de trabajo asignados por El Empleador. e. Tener una excelente presentación personal. f. Cumplir con los horarios estipulados por El Empleador.</p>
-      <p><strong>CLAUSULA NOVENA — TERMINACIÓN UNILATERAL:</strong> Son justas causas para dar por terminado unilateralmente este contrato, por cualquiera de las partes, las que establece la Ley, el reglamento interno de trabajo, el presente contrato y/o las circulares que establezcan conductas no previstas. Se califican expresamente como <em>faltas graves</em>: la violación a las normas de uso de sistemas, la utilización para fines distintos de las bases de datos, desatender las actividades de capacitación, la mala atención a clientes, y violar el acuerdo de confidencialidad.</p>
-      <p><strong>CLAUSULA DÉCIMA — DESIGNACIÓN DE FONDO DE PENSIONES:</strong> El Trabajador manifiesta al Empleador que se encuentra afiliado al fondo de pensiones: <strong>{c.fondoPensiones||'_______________'}</strong> para efectos de realizar los respectivos aportes obligatorios a pensiones.</p>
-      <p><strong>CLAUSULA DÉCIMA PRIMERA — EFECTOS:</strong> El presente contrato reemplaza en su integridad y deja sin efecto cualquiera otro contrato, verbal o escrito, celebrado entre las partes con anterioridad.</p>
-      <p style={{marginTop:'14px'}}>Para constancia, se firma en la ciudad de {c.ciudad||'Barranquilla'} el día {fmtDate(c.fechaIngreso)}.</p>
-      <div style={{display:'flex',justifyContent:'space-between',marginTop:'56px',gap:'40px',flexWrap:'wrap'}}>
-        <FirmaLine nombre="ALVARO JOSE MERCADO CASIJ" nit="900369003-1" cargo="HOGARSALUD IPS" firma={firmaRRHH} rol="EL EMPLEADOR"/>
-        <FirmaLine nombre={c.nombreCompleto?.toUpperCase()} cedula={c.cedula} cargo={c.cargo?.toUpperCase()} firma={firmaTrabajador} rol="EL TRABAJADOR"/>
-      </div>
-    </div>
-  );
-};
-
-/* ── PLANTILLA 3: APRENDIZAJE ── */
-const PlantillaAprendizaje = ({c, firmaRRHH, firmaTrabajador}) => (
-  <div style={{fontFamily:'"Times New Roman",serif',fontSize:'12px',color:'#000',lineHeight:'1.8',textAlign:'justify'}}>
-    <h3 style={{textAlign:'center',fontSize:'13px',fontWeight:'bold',margin:'0 0 20px',textTransform:'uppercase'}}>
-      CONTRATO LABORAL DE APRENDIZAJE ESPECIAL A TÉRMINO FIJO ETAPA PRÁCTICA
-    </h3>
-    <table style={{width:'100%',borderCollapse:'collapse',marginBottom:'20px'}}>
-      <tbody>
-        {[
-          ['NOMBRE DEL EMPLEADOR:','HOGAR SALUD S.A.S'],
-          ['DOMICILIO DEL EMPLEADOR:','Carrera 56 # 72-129 en Barranquilla'],
-          ['REPRESENTADA LEGALMENTE POR:','ÁLVARO JOSÉ MERCADO CASIJ'],
-          ['NIT DE LA EMPRESA:','900369003-1'],
-          ['NOMBRE DEL APRENDIZ E INSTITUCIÓN DE FORMACIÓN:',`${c.nombreCompleto?.toUpperCase()} ${c.institucionEducativa||''}`],
-          ['CORREO ELECTRÓNICO:',c.email],
-          ['DOCUMENTO DE IDENTIDAD:',c.cedula],
-          ['FECHA DE NACIMIENTO:',c.fechaNacimiento||''],
-          ['DOMICILIO TRABAJADOR:',c.direccion],
-          ['CARGO PARA EL CUAL ES CONTRATADO EL APRENDIZ:',c.cargo?.toUpperCase()],
-          ['CIUDAD / PAÍS DONDE PRESTARÁ SUS SERVICIOS:',`${c.ciudad||'Barranquilla'} / Colombia`],
-          ['AUXILIO ECONÓMICO:',c.salario||'1 S.M.M.L.V + Auxilio de Transporte'],
-          ['PERIODO DE PAGO:',c.periodoPago||'Mensual'],
-          ['FECHA DE INICIACIÓN DE LABORES:',fmtDate(c.fechaIngreso)],
-          ['FECHA DE TERMINACIÓN:',c.fechaFin?fmtDate(c.fechaFin):''],
-        ].map(([l,v],i)=><TR key={i} l={l} v={v} i={i}/>)}
-      </tbody>
-    </table>
-    <p><strong>CLÁUSULA PRIMERA — OBJETO Y DURACIÓN:</strong> EL APRENDIZ bajo la completa dirección y subordinación del EMPLEADOR respecto a las funciones de aprendizaje, además de los elementos particulares descritos en los literales a, b, c, y d consignados en el artículo 21 de la ley 2466 del 2025, desempeñará en forma exclusiva todas las ocupaciones inherentes y complementarias al cargo denominado <strong>{c.cargo?.toUpperCase()}</strong>. Las partes acuerdan que la duración del contrato es de 06 meses correspondiente a la etapa práctica de acuerdo con las fechas estipuladas en el cuadro introductorio.</p>
-    <p><strong>CLÁUSULA SEGUNDA — PERIODO DE PRUEBA:</strong> Entre las partes acuerdan que los primeros 60 días de ejecución del contrato de aprendizaje en la etapa productiva se entenderán como periodo de prueba. EL EMPLEADOR podrá dar por terminado el contrato al interior de dicho periodo sin que exista obligación indemnizatoria en favor de EL APRENDIZ, y con previo aval del Servicio Nacional de Aprendizaje SENA.</p>
-    <p><strong>CLÁUSULA CUARTA — AUXILIO ECONÓMICO:</strong> EL EMPLEADOR pagará al APRENDIZ en la etapa productiva el equivalente de <strong>{c.salario||'1 S.M.L.M.V + Auxilio de Transporte'}</strong>, los cuales se consignarán los días 30 de cada mes a la cuenta bancaria de ahorros suministrada por EL APRENDIZ. Parágrafo 1: A dichos montos aplican los descuentos y retenciones de ley.</p>
-    <p><strong>CLÁUSULA SÉPTIMA — JORNADA LABORAL:</strong> EL APRENDIZ se obliga a laborar la jornada legal de 44 horas semanales en los turnos y dentro de las horas señaladas por el EMPLEADOR en aplicación al artículo 3 de la ley 2101 del 2021, teniendo éste último la potestad de hacer ajustes o cambios de horario cuando a su parecer le sea beneficioso.</p>
-    <p><strong>CLÁUSULA NOVENA — CONFIDENCIALIDAD Y USO DE SISTEMAS:</strong> EL APRENDIZ mantendrá en absoluta reserva y confidencialidad toda información no pública que llegue a su conocimiento relacionada con los asuntos y negocios del EMPLEADOR y sus clientes, contratistas y contratantes, información corporativa de HOGAR SALUD S.A.S y sociedades relacionadas, informes financieros, base de datos, listas de proveedores, planes y estrategias de mercado.</p>
-    <p><strong>CLÁUSULA DÉCIMA PRIMERA — TERMINACIÓN POR MUTUO ACUERDO:</strong> El presente contrato laboral se podrá dar por terminado por mutuo acuerdo por escrito entre las partes en cualquier momento de su ejecución, sin que exista la obligación de pagarle al EL APRENDIZ indemnización o compensación alguna.</p>
-    <p><strong>CLÁUSULA DÉCIMA NOVENA — LEY APLICABLE:</strong> Éste contrato estará sujeto a la ley colombiana y deberá ser interpretado de buena fe por las partes.</p>
-    <p style={{marginTop:'14px'}}>Para constancia, se firma en la ciudad de {c.ciudad||'Barranquilla'} el día {fmtDate(c.fechaIngreso)}.</p>
-    <div style={{display:'flex',justifyContent:'space-between',marginTop:'56px',gap:'40px',flexWrap:'wrap'}}>
-      <FirmaLine nombre="ÁLVARO JOSÉ MERCADO CASIJ" nit="900369003-1" cargo="HOGAR SALUD S.A.S" firma={firmaRRHH} rol="EL EMPLEADOR"/>
-      <FirmaLine nombre={c.nombreCompleto?.toUpperCase()} cedula={c.cedula} cargo={c.cargo?.toUpperCase()} firma={firmaTrabajador} rol="EL APRENDIZ"/>
+  <div class="result ok" id="okCard">
+    <div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">&#x2705;</div>
+    <h2>Firma Enviada!</h2>
+    <p>Tu firma quedo registrada en el sistema de Hogar Salud IPS. Recursos Humanos revisara y aprobara tu contrato.</p>
+    <div class="steps">
+      <div class="stp ok"><div class="sn">&#x2713;</div>Enviaste tu firma digitalmente</div>
+      <div class="stp ok"><div class="sn">2</div>RRHH revisara y aprobara tu contrato</div>
+      <div class="stp ok"><div class="sn">3</div>Recibiras el documento aprobado por correo</div>
     </div>
   </div>
-);
-
-  <!-- YA FIRMADO -->
-  <div class="result-card already" id="yaFirmadoCard">
-    <div class="result-icon">📋</div>
+  <div class="result dup" id="dupCard">
+    <div style="width:64px;height:64px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">&#x1F4CB;</div>
     <h2>Ya firmaste este contrato</h2>
-    <p>Tu firma ya fue registrada anteriormente. No es necesario enviarla de nuevo.</p>
-    <div class="result-steps">
-      <div class="result-step already"><div class="step-num">✓</div> Tu firma fue registrada correctamente</div>
-      <div class="result-step already"><div class="step-num">2</div> RRHH está revisando tu contrato</div>
-      <div class="result-step already"><div class="step-num">3</div> Recibirás el documento aprobado por correo</div>
-/* ── PLANTILLA 4: OPS / ADSCRIPCIÓN ── */
-const PlantillaOPS = ({c, firmaRRHH, firmaTrabajador}) => (
-  <div style={{fontFamily:'"Times New Roman",serif',fontSize:'12px',color:'#000',lineHeight:'1.8',textAlign:'justify'}}>
-    <h3 style={{textAlign:'center',fontSize:'13px',fontWeight:'bold',margin:'0 0 4px',textTransform:'uppercase'}}>CONVENIO DE ADSCRIPCIÓN PARA ASISTENCIA EN SALUD</h3>
-    <h3 style={{textAlign:'center',fontSize:'13px',fontWeight:'bold',margin:'0 0 20px',textTransform:'uppercase'}}>DE PACIENTES A DOMICILIO</h3>
-    <p style={{margin:'0 0 4px'}}><strong>DATOS DEL ADSCRIBIENTE:</strong></p>
-    <p style={{margin:'0 0 2px'}}>NOMBRE: "HOGARSALUD IPS SAS"</p>
-    <p style={{margin:'0 0 2px'}}>NIT.: 900.369.003-1</p>
-    <p style={{margin:'0 0 2px'}}>DOMICILIO: Carrera 56 # 72-129</p>
-    <p style={{margin:'0 0 18px'}}>NOMBRE REPRESENTANTE LEGAL: ALVARO JOSE MERCADO CASIJ &nbsp;&nbsp;&nbsp; IDENTIFICACIÓN: C.C. 72.343.183 de Barranquilla</p>
-    <p style={{margin:'0 0 6px'}}><strong>DATOS DEL ADSCRITO:</strong></p>
-    <table style={{width:'100%',borderCollapse:'collapse',marginBottom:'20px'}}>
-      <tbody>
-        {[
-          ['NOMBRE:',c.nombreCompleto?.toUpperCase()],
-          ['IDENTIFICACIÓN:',c.cedula],
-          ['TELÉFONO DE CONTACTO:',c.telefono],
-          ['DIRECCIÓN:',c.direccion],
-          ['EMAIL:',c.email],
-          ['ESPECIALIDAD:',c.cargo?.toUpperCase()],
-          ['REMUNERACIÓN:',c.salario||'CONFORME A TARIFAS'],
-          ['PERIODOS DE PAGO:',c.periodoPago||'1 Vez al mes previa presentación Cuenta de Cobro (mes vencido)'],
-          ['FECHA DE CONTRATO:',fmtDate(c.fechaIngreso)?.toUpperCase()],
-          ['LUGAR DE LABORES:',c.ciudad||'Atlántico / Barranquilla'],
-        ].map(([l,v],i)=><TR key={i} l={l} v={v} i={i}/>)}
-      </tbody>
-    </table>
-    <p style={{margin:'0 0 12px'}}><strong>ANEXO 1 — NORMATIVIDAD</strong></p>
-    <p>Las partes antes descritas, hemos acordado celebrar el presente Convenio de Adscripción que se regirá por las cláusulas que se mencionan a continuación:</p>
-    <p><strong>Cláusula Primera — Causa y antecedentes del contrato:</strong> LA ADSCRIBIENTE como I.P.S. de reconocida capacidad en el medio, cuenta con las condiciones necesarias para la prestación de servicios de salud domiciliaria a favor de particulares, mediante contratación directa o por medio de entidades públicas o privadas de Seguridad Social, Medicina Prepagada, Cajas de Compensación y aseguradoras. Por su parte EL ADSCRITO, es un profesional en el área de la salud, en la especialidad o tecnología que se señala en el recuadro de este contrato, interesado en aprovechar las posibilidades de la adscribiente, para su ejercicio profesional, contribuyendo a la vez al mejoramiento e implementación de la misma, coparticipando en las labores de desarrollo de su objeto, así como también derivar ingresos económicos que constituyen la remuneración proveniente del contrato, de acuerdo al número de pacientes atendidos.</p>
-    <p><strong>Segunda — Objeto:</strong> LA ADSCRIBIENTE se compromete a facilitar los medios de que dispone para la prestación de servicios de atención domiciliaria, destinando al adscrito, de acuerdo con los requerimientos generales del servicio, a la prestación de servicios de atención médica y paramédica en procedimientos de aplicación domiciliaria. El adscrito solo prestará personalmente el servicio cuando sea requerido y la remuneración procederá de acuerdo con las atenciones efectiva y realmente prestadas. <em>PARÁGRAFO: EL ADSCRITO podrá aceptar o rechazar libremente los servicios ofrecidos, sin que ello genere sanción o consecuencia alguna.</em></p>
-    <p><strong>Cláusula Quinta — Valor de los Servicios:</strong> LA ADSCRIBIENTE pagará los valores a ella pagados por las entidades y particulares que requieran sus servicios, por concepto de la atención prestada por EL ADSCRITO, el valor que corresponda a la suma de las cuentas de cobro debidamente presentadas por este de acuerdo con el valor señalado en las tarifas que constan en documento que forma parte del presente documento.</p>
-    <p><strong>Cláusula Sexta — Forma de pago:</strong> Para la efectivización del pago, se seguirá el siguiente procedimiento: a) El adscrito presentará a la adscribiente después de haber finalizado las órdenes de servicios realizadas durante el mes, una cuenta y liquidación por cada orden de servicio, que contendrá el nombre del paciente, la orden de servicio firmada, el número de sesiones, valor unitario y total en el período liquidado. b) La adscribiente efectuará la correspondiente auditoría dentro de los 5 días siguientes a la presentación de la cuenta.</p>
-    <p><strong>Cláusula Séptima — Duración del Convenio:</strong> La duración del presente convenio estará supeditada a la existencia de necesidades operativas y asistenciales por parte de LA ADSCRIBIENTE, relacionadas con la prestación de servicios domiciliarios de salud. El presente convenio se mantendrá vigente mientras subsistan dichas condiciones y podrá ser terminado en cualquier momento, de manera unilateral por cualquiera de las partes, sin necesidad de invocar causa alguna, mediante comunicación escrita.</p>
-    <p><strong>Cláusula Décima — Inexistencia de Relación Laboral:</strong> Entre LA ADSCRIBIENTE y su personal y EL ADSCRITO no se establece relación alguna de carácter laboral.</p>
-    <p><strong>Cláusula Décima Primera — Independencia del adscrito:</strong> EL ADSCRITO actuará por su propia cuenta, con absoluta libertad, autonomía técnica y administrativa y no estará sometido a subordinación con LA ADSCRIBIENTE.</p>
-    <p><strong>Cláusula Décima Sexta — Integralidad:</strong> El presente contrato regula en su integridad las relaciones jurídicas entre las partes y, en consecuencia, deja sin efecto cualquier otro convenio o estipulación acordada con anterioridad.</p>
-    <div style={{display:'flex',justifyContent:'space-between',marginTop:'56px',gap:'40px',flexWrap:'wrap'}}>
-      <FirmaLine nombre="HOGARSALUD IPS SAS" nit="900.369.003-1" cargo="LA ADSCRIBIENTE" firma={firmaRRHH} rol=""/>
-      <FirmaLine nombre={c.nombreCompleto?.toUpperCase()} cedula={c.cedula} cargo={c.cargo?.toUpperCase()} firma={firmaTrabajador} rol="EL ADSCRITO"/>
+    <p>Tu firma ya fue registrada anteriormente. No es necesario volver a enviarla.</p>
+    <div class="steps">
+      <div class="stp dup"><div class="sn">&#x2713;</div>Tu firma fue registrada correctamente</div>
+      <div class="stp dup"><div class="sn">2</div>RRHH esta revisando tu contrato</div>
+      <div class="stp dup"><div class="sn">3</div>Recibiras el documento aprobado por correo</div>
     </div>
   </div>
-);
-
 </div>
-
-<div class="footer">
-  Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla<br>
-  Este portal es seguro y oficial. Tu firma tiene validez legal.
-</div>
+<footer>Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla</footer>
 
 <script>
-const params  = new URLSearchParams(window.location.search);
-const token   = params.get('token')   || '';
-const nombre  = params.get('nombre')  || 'Trabajador';
-const cargo   = params.get('cargo')   || '';
-const cedula  = params.get('cedula')  || '';
-const tipo    = params.get('tipo')    || 'Obra o Labor';
-const salario = params.get('salario') || '';
-const periodo = params.get('periodo') || '';
-const fecha   = params.get('fecha')   || '';
-const labor   = params.get('labor')   || '';
-const ciudad  = params.get('ciudad')  || 'Barranquilla';
+// ── PARÁMETROS ──
+var P = new URLSearchParams(location.search);
+var token    = P.get('token')    || '';
+var nombre   = P.get('nombre')   || 'Trabajador';
+var cargo    = P.get('cargo')    || '';
+var cedula   = P.get('cedula')   || '';
+var tipo     = P.get('tipo')     || 'Obra o Labor';
+var salario  = P.get('salario')  || '';
+var periodo  = P.get('periodo')  || 'Mensual';
+var fecha    = P.get('fecha')    || '';
+var labor    = P.get('labor')    || '';
+var ciudad   = P.get('ciudad')   || 'Barranquilla';
+var telefono = P.get('telefono') || '';
+var emailV   = P.get('email')    || '';
+var direccion= P.get('direccion')|| '';
+var nacimiento=P.get('nacimiento')|| '';
 
-const WEBHOOK = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
-const CLAVE = 'hs_firmado_' + token;
+var WEBHOOK = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
+var CLAVE = 'hs_firmado_' + token;
 
-document.getElementById('nombreTrabajador').textContent = nombre;
-document.getElementById('nombreAlerta').textContent = nombre;
-
-const tipoLabels = {
-  'Obra o Labor': 'Contrato de Trabajo — Obra o Labor',
-  'Prestación de Servicios (OPS)': 'Convenio de Adscripción — OPS',
-  'Prestacion de Servicios (OPS)': 'Convenio de Adscripción — OPS',
-  'Aprendizaje': 'Contrato de Aprendizaje',
-/* ─────────────────────────────────────────────
-   BADGES
-───────────────────────────────────────────── */
-const EstadoBadge = ({estado}) => {
-  const m = ESTADO_META[estado] || ESTADO_META['Sin Contrato'];
-  return <span style={{display:'inline-flex',alignItems:'center',gap:'4px',background:m.bg,color:m.color,padding:'4px 10px',borderRadius:'20px',fontSize:'11px',fontWeight:700,whiteSpace:'nowrap'}}>{m.label}</span>;
+var TIPOS = {
+  'Obra o Labor':       'Contrato de Trabajo — Obra o Labor',
+  'Termino Indefinido': 'Contrato de Trabajo a Termino Indefinido',
+  'Término Indefinido': 'Contrato de Trabajo a Termino Indefinido',
+  'Aprendizaje':        'Contrato Laboral de Aprendizaje',
+  'OPS':                'Convenio de Adscripcion OPS'
 };
-const TipoBadge = ({tipo}) => {
-  const m = TIPO_COLOR[tipo] || {color:C.gray,bg:'#f1f5f9',border:C.border};
-  return <span style={{background:m.bg,color:m.color,border:`1px solid ${m.border}`,padding:'3px 9px',borderRadius:'6px',fontSize:'11px',fontWeight:700,whiteSpace:'nowrap'}}>{tipo}</span>;
-};
-document.getElementById('tipoContratoLabel').textContent = tipoLabels[tipo] || 'Contrato de Trabajo';
+document.getElementById('tipoLabel').textContent = TIPOS[tipo] || tipo;
+document.getElementById('tipoSub').textContent   = TIPOS[tipo] || tipo;
+document.getElementById('nomAlerta').textContent = nombre;
 
-function generarContrato() {
-  const t = tipo.toLowerCase();
-  if (t.includes('ops') || t.includes('servicios')) {
-    return `<h2>Convenio de Adscripción para Asistencia en Salud a Domicilio</h2>
-      <table>
-        <tr><td>ADSCRIBIENTE:</td><td>HOGARSALUD IPS SAS — NIT 900.369.003-1</td></tr>
-        <tr><td>REPRESENTANTE LEGAL:</td><td>ALVARO JOSE MERCADO CASIJ — C.C. 72.343.183</td></tr>
-        <tr><td>NOMBRE DEL ADSCRITO:</td><td>${nombre}</td></tr>
-        <tr><td>IDENTIFICACION:</td><td>${cedula}</td></tr>
-        <tr><td>ESPECIALIDAD:</td><td>${cargo}</td></tr>
-        <tr><td>REMUNERACION:</td><td>${salario || 'CONFORME A TARIFAS'}</td></tr>
-        <tr><td>PERIODOS DE PAGO:</td><td>${periodo || '1 vez al mes (mes vencido)'}</td></tr>
-        <tr><td>FECHA DE CONTRATO:</td><td>${fecha}</td></tr>
-        <tr><td>LUGAR DE LABORES:</td><td>${ciudad}</td></tr>
-      </table>
-      <p><strong>Clausula Primera.</strong> LA ADSCRIBIENTE como I.P.S. de reconocida capacidad cuenta con las condiciones necesarias para la prestacion de servicios de salud domiciliaria. EL ADSCRITO es un profesional en el area de la salud interesado en aprovechar las posibilidades para su ejercicio profesional.</p>
-      <p><strong>Clausula Segunda.</strong> LA ADSCRIBIENTE facilita los medios para la prestacion de servicios de atencion domiciliaria. El adscrito solo prestara el servicio cuando sea requerido.</p>
-      <p><strong>Clausula Quinta.</strong> LA ADSCRIBIENTE pagara los valores segun las cuentas de cobro presentadas conforme a las tarifas convenidas.</p>
-      <p><strong>Clausula Septima.</strong> Podra ser terminado en cualquier momento de manera unilateral mediante comunicacion escrita.</p>
-      <p><strong>Clausula Decima.</strong> Entre LA ADSCRIBIENTE y EL ADSCRITO no se establece relacion alguna de caracter laboral.</p>
-      <p style="margin-top:20px;font-style:italic">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>`;
-  } else if (t.includes('aprendizaje')) {
-    return `<h2>Contrato Laboral de Aprendizaje Especial a Termino Fijo — Etapa Practica</h2>
-      <table>
-        <tr><td>NOMBRE DEL EMPLEADOR:</td><td>HOGAR SALUD S.A.S — NIT 900369003-1</td></tr>
-        <tr><td>REPRESENTANTE LEGAL:</td><td>ALVARO JOSE MERCADO CASIJ</td></tr>
-        <tr><td>NOMBRE DEL APRENDIZ:</td><td>${nombre}</td></tr>
-        <tr><td>DOCUMENTO DE IDENTIDAD:</td><td>${cedula}</td></tr>
-        <tr><td>CARGO CONTRATADO:</td><td>${cargo}</td></tr>
-        <tr><td>AUXILIO ECONOMICO:</td><td>${salario || '1 S.M.M.L.V + Auxilio de Transporte'}</td></tr>
-        <tr><td>PERIODO DE PAGO:</td><td>${periodo || 'Mensual'}</td></tr>
-        <tr><td>FECHA DE INICIACION:</td><td>${fecha}</td></tr>
-      </table>
-      <p><strong>Clausula Primera.</strong> EL APRENDIZ desempenara en forma exclusiva las ocupaciones del cargo de <strong>${cargo}</strong>, segun ley 2466 del 2025. Duracion: 06 meses etapa practica.</p>
-      <p><strong>Clausula Segunda.</strong> Los primeros 60 dias se consideran periodo de prueba con aval del SENA.</p>
-      <p><strong>Clausula Cuarta.</strong> EL EMPLEADOR pagara <strong>${salario}</strong> en periodos de <strong>${periodo}</strong> a la cuenta bancaria del APRENDIZ.</p>
-      <p><strong>Clausula Septima.</strong> EL APRENDIZ laborara 44 horas semanales segun ley 2101 del 2021.</p>
-      <p style="margin-top:20px;font-style:italic">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>`;
+// ── HELPERS ──
+function even(i){ return i%2===0 ? '#f2f2f2' : '#fff'; }
+
+function row(l, v, i) {
+  var bg = even(i);
+  return '<tr>'
+    + '<td class="lf" style="border:1px solid #888;padding:5px 8px;background:' + bg + '">' + l + '</td>'
+    + '<td style="border:1px solid #888;padding:5px 8px;background:' + bg + '">' + (v||'') + '</td>'
+    + '</tr>';
+}
+
+function tbl(rows) {
+  return '<table><tbody>' + rows.join('') + '</tbody></table>';
+}
+
+function cl(titulo, cuerpo) {
+  return '<p class="pc"><strong>' + titulo + '</strong> ' + cuerpo + '</p>';
+}
+
+function firmaBlok(nombreF, cc, empresa, nit, cargoF, imgSrc, etiqueta) {
+  var imgHtml = imgSrc
+    ? '<img src="' + imgSrc + '" style="max-height:52px;max-width:170px;object-fit:contain;display:block;margin:0 auto 0">'
+    : '<div style="height:52px"></div>';
+  return '<div style="flex:1;min-width:180px;text-align:center">'
+    + imgHtml
+    + '<div style="border-top:1px solid #000;padding-top:6px;font-size:11.5px;line-height:1.6">'
+    + '<strong>' + nombreF + '</strong><br>'
+    + (cc      ? 'C.C. ' + cc + '<br>' : '')
+    + (empresa ? empresa + '<br>' : '')
+    + (nit     ? 'Nit. ' + nit + '<br>' : '')
+    + (cargoF  ? cargoF + '<br>' : '')
+    + (etiqueta? '<em>' + etiqueta + '</em>' : '')
+    + '</div></div>';
+}
+
+function bloqFirmas(fTrab) {
+  var t = tipo.toLowerCase();
+  var izq, der;
+  if (t.indexOf('ops') >= 0) {
+    izq = firmaBlok('HOGARSALUD IPS SAS', '72.343.183', 'LA ADSCRIBIENTE', '900.369.003-1', '', '', 'ALVARO JOSE MERCADO CASIJ');
+    der = firmaBlok(nombre.toUpperCase(), cedula, '', '', cargo.toUpperCase(), fTrab||'', 'EL ADSCRITO');
+  } else if (t.indexOf('aprendizaje') >= 0) {
+    izq = firmaBlok('ÁLVARO JOSÉ MERCADO CASIJ', '72.343.183', 'HOGAR SALUD S.A.S', '900369003-1', '', '', 'EL EMPLEADOR');
+    der = firmaBlok(nombre.toUpperCase(), cedula, '', '', cargo.toUpperCase(), fTrab||'', 'EL APRENDIZ');
   } else {
-    return `<h2>Contrato de Trabajo — Duracion por la Obra o Labor Contratada</h2>
-      <table>
-        <tr><td>NOMBRE DEL EMPLEADOR:</td><td>HOGARSALUD IPS SOCIEDAD POR ACCIONES SIMPLIFICADAS</td></tr>
-        <tr><td>DIRECCION:</td><td>Carrera 56 # 72-129, Barranquilla</td></tr>
-        <tr><td>NIT:</td><td>900.369.003-1</td></tr>
-        <tr><td>REPRESENTANTE LEGAL:</td><td>ALVARO JOSE MERCADO CASIJ</td></tr>
-        <tr><td>NOMBRE DEL EMPLEADO:</td><td>${nombre}</td></tr>
-        <tr><td>CEDULA DE CIUDADANIA:</td><td>${cedula}</td></tr>
-        <tr><td>CARGO U OFICIO:</td><td>${cargo}</td></tr>
-        <tr><td>SALARIO:</td><td>${salario}</td></tr>
-        <tr><td>PERIODOS DE PAGO:</td><td>${periodo}</td></tr>
-        <tr><td>FECHA DE INICIACION:</td><td>${fecha}</td></tr>
-        <tr><td>CIUDAD:</td><td>${ciudad}</td></tr>
-        <tr><td>LABOR CONTRATADA:</td><td>${labor}</td></tr>
-      </table>
-      <p><strong>Primera.</strong> El empleador contrata los servicios personales del trabajador quien se obliga a laborar en forma exclusiva en el desempeno de las funciones propias del oficio mencionado.</p>
-      <p><strong>Segunda.</strong> El empleador pagara el salario indicado en las oportunidades senaladas, incluida la remuneracion de descansos dominicales y festivos del Codigo Sustantivo del Trabajo.</p>
-      <p><strong>Tercera.</strong> Todo trabajo en horas extras y en domingos o festivos se remunerara conforme a la Ley.</p>
-      <p><strong>Cuarta.</strong> El trabajador laborara la jornada ordinaria en los turnos senalados por el empleador.</p>
-      <p><strong>Quinta.</strong> El contrato dura mientras se realice la obra o labor contratada.</p>
-      <p><strong>Novena.</strong> Los primeros dos meses se consideran periodo de prueba.</p>
-      <p><strong>Decima.</strong> Este contrato se interpreta de buena fe segun el Codigo Sustantivo del Trabajo.</p>
-      <p style="margin-top:20px;font-style:italic">Para constancia se firma digitalmente desde el portal autorizado por Hogar Salud IPS SAS.</p>`;
+    izq = firmaBlok('ALVARO JOSE MERCADO CASIJ', '72.343.183', 'HOGARSALUD IPS', '900369003-1', '', '', 'EL EMPLEADOR');
+    der = firmaBlok(nombre.toUpperCase(), cedula, '', '', cargo.toUpperCase(), fTrab||'', 'EL TRABAJADOR');
   }
+  return '<div style="display:flex;justify-content:space-around;margin-top:60px;gap:40px;flex-wrap:wrap">' + izq + der + '</div>';
 }
 
-document.getElementById('textoContrato').innerHTML = generarContrato();
-/* ─────────────────────────────────────────────
-   COMPONENTE PRINCIPAL
-───────────────────────────────────────────── */
-export default function ContratosScreen() {
-  const [contratos,     setContratos]     = useState([]);
-  const [loading,       setLoading]       = useState(true);
-  const [busqueda,      setBusqueda]      = useState('');
-  const [filtroTipo,    setFiltroTipo]    = useState('Todos');
-  const [filtroEstado,  setFiltroEstado]  = useState('Todos');
-  const [pagina,        setPagina]        = useState(1);
-  const POR_PAG = 10;
+// ── GENERADOR DE CONTRATOS ──
+function genContrato(fTrab) {
+  var t = tipo.toLowerCase();
+  var html = '';
 
-// Verificar si ya firmó
+  // ════════════════════════════════════
+  // OPS
+  // ════════════════════════════════════
+  if (t.indexOf('ops') >= 0 || t.indexOf('adscripcion') >= 0) {
+    html += '<h2>CONVENIO DE ADSCRIPCION PARA ASISTENCIA EN SALUD</h2>';
+    html += '<h2 style="margin-bottom:20px">DE PACIENTES A DOMICILIO</h2>';
+    html += '<p class="pc"><strong>DATOS DEL ADSCRIBIENTE:</strong></p>';
+    html += '<p style="margin:0 0 2px"><strong>NOMBRE: "HOGARSALUD IPS SAS"</strong></p>';
+    html += '<p style="margin:0 0 2px"><strong>NIT.: 900.369.003-1</strong></p>';
+    html += '<p style="margin:0 0 2px"><strong>DOMICILIO: Carrera 56 # 72-129</strong></p>';
+    html += '<p style="margin:0 0 2px"><strong>NOMBRE REPRESENTANTE LEGAL: ALVARO JOSE MERCADO CASIJ</strong></p>';
+    html += '<p style="margin:0 0 18px"><strong>IDENTIFICACION: C.C. 72.343.183 de Barranquilla</strong></p>';
+    html += '<p class="pc"><strong>DATOS DEL ADSCRITO:</strong></p>';
+    html += tbl([
+      row('NOMBRE:', nombre.toUpperCase(), 0),
+      row('IDENTIFICACION:', cedula, 1),
+      row('TELEFONO DE CONTACTO:', telefono, 0),
+      row('DIRECCION:', direccion, 1),
+      row('EMAIL:', emailV, 0),
+      row('ESPECIALIDAD:', cargo.toUpperCase(), 1),
+      row('REMUNERACION:', salario || 'CONFORME A TARIFAS', 0),
+      row('PERIODOS DE PAGO:', periodo || '1 Vez al mes previa presentacion Cuenta de Cobro (mes vencido)', 1),
+      row('FECHA DE CONTRATO:', fecha, 0),
+      row('LUGAR DE LABORES:', ciudad || 'Atlantico / Barranquilla', 1)
+    ]);
+    html += '<p class="pc"><strong>ANEXO 1</strong></p>';
+    html += '<p class="pc"><strong>NORMATIVIDAD</strong></p>';
+    html += '<p class="pc">Las partes antes descritas, hemos acordado celebrar el presente Convenio de Adscripcion que se regira por las clausulas que se mencionan a continuacion:</p>';
+    html += cl('Clausula Primera. Causa y antecedentes del contrato:', 'LA ADSCRIBIENTE como I.P.S. de reconocida capacidad en el medio, cuenta con las condiciones necesarias para la prestacion de servicios de salud domiciliaria a favor de particulares, mediante contratacion directa o por medio de entidades publicas o privadas de Seguridad Social, Medicina Prepagada, Cajas de Compensacion y aseguradoras. Por su parte EL ADSCRITO, es un profesional en el area de la salud, en la especialidad o tecnologia que se senala en el recuadro de este contrato, interesado en aprovechar las posibilidades de la adscribiente, para su ejercicio profesional, contribuyendo a la vez al mejoramiento e implementacion de la misma, coparticipando en las labores de desarrollo de su objeto, asi como tambien derivar ingresos economicos que constituyen la remuneracion proveniente del contrato, de acuerdo al numero de pacientes atendidos.');
+    html += cl('Segunda. Objeto:', 'LA ADSCRIBIENTE se compromete a facilitar los medios de que dispone para la prestacion de servicios de atencion domiciliaria, destinando al adscrito, de acuerdo con los requerimientos generales del servicio, a la prestacion de servicios de atencion medica y paramedica en procedimientos de aplicacion domiciliaria, en los sitios donde sea requerido. El adscrito solo prestara personalmente el servicio cuando sea requerido y la remuneracion procedera de acuerdo con las atenciones efectiva y realmente prestadas de acuerdo con las tarifas convenidas. <strong>PARAGRAFO:</strong> EL ADSCRITO podra aceptar o rechazar libremente los servicios ofrecidos, sin que ello genere sancion o consecuencia alguna.');
+    html += cl('Clausula Tercera. Obligaciones de la adscribiente:', '1) Informar sobre la existencia de los servicios asistenciales domiciliarios de salud a los eventuales usuarios; 2) Mantener en funcionamiento sus dependencias en las horas convenidas; 3) Contar con la dotacion suficiente para la prestacion del servicio domiciliario en salud; 4) Derivar hacia el adscrito aquellos pacientes que le correspondan; 5) Remitir oportunamente las cuentas de cobro a la entidad de salud; 6) Pagar al adscrito los servicios profesionales de acuerdo a las tarifas convenidas; 7) Orientar e indicar las politicas a seguir para la prestacion de los servicios; 8) Hacer el mantenimiento preventivo de los equipos del maletin medico (Fonendoscopio, tensiometro, equipo de organos, pulsioximetro, glucometro, martillo, termometro, metro).');
+    html += cl('Clausula Cuarta. Obligaciones del ADSCRITO:', '1) Prestar el servicio en forma etica, bajo estrictos principios de Racionalidad Tecnico Cientifica, continuidad, oportunidad, eficiencia y eficacia; 2) Elaborar y llevar las anotaciones pertinentes en las historias clinicas conforme la Resolucion 1.995 de 1.999 del Ministerio de Salud; 4) Prestar el servicio personalmente, pues este contrato es Intuito Personal; 5) Afiliarse debidamente a los sistemas de seguridad social, pensiones, salud y accidentes laborales (A.R.L.); 6) Presentar las cuentas de cobro en las condiciones del presente contrato; 7) Contar con un maletin medico con los equipos requeridos; 8) Hacer el mantenimiento correctivo de los equipos de su propiedad.');
+    html += cl('Clausula Quinta. Valor de los Servicios:', 'LA ADSCRIBIENTE pagara los valores a ella pagados por las entidades y particulares que requieran sus servicios, por concepto de la atencion prestada por EL ADSCRITO, el valor que corresponda a la suma de las cuentas de cobro debidamente presentadas por este de acuerdo con las tarifas convenidas.');
+    html += cl('Clausula Sexta. Forma de pago:', 'a) El adscrito presentara a la adscribiente despues de haber finalizado las ordenes de servicios realizadas durante el mes una cuenta y liquidacion por cada orden de servicio. b) La adscribiente efectuara la correspondiente auditoria dentro de los 5 dias siguientes a la presentacion de la cuenta; c) Si no hubiere objeciones el pago se efectuara el dia 10 del mes siguiente.');
+    html += cl('Clausula Septima. Duracion del Convenio:', 'La duracion del presente convenio estara supeditada a la existencia de necesidades operativas y asistenciales por parte de LA ADSCRIBIENTE y podra ser terminado en cualquier momento, de manera unilateral por cualquiera de las partes, sin necesidad de invocar causa alguna, mediante comunicacion escrita, sin que haya lugar al reconocimiento de indemnizaciones o perjuicios de ninguna naturaleza.');
+    html += cl('Clausula Decima. Inexistencia de Relacion Laboral:', 'Entre LA ADSCRIBIENTE y su personal y EL ADSCRITO no se establece relacion alguna de caracter laboral.');
+    html += cl('Clausula Decima Primera. Independencia del adscrito:', 'EL ADSCRITO actuara por su propia cuenta, con absoluta libertad, autonomia tecnica y administrativa y no estara sometido a subordinacion con LA ADSCRIBIENTE.');
+    html += cl('Clausula Decima Sexta. Integralidad:', 'El presente contrato regula en su integridad las relaciones juridicas entre las partes y, en consecuencia, deja sin efecto cualquier otro convenio o estipulacion acordada con anterioridad.');
+    html += bloqFirmas(fTrab);
+    return html;
+  }
+
+  // ════════════════════════════════════
+  // APRENDIZAJE
+  // ════════════════════════════════════
+  if (t.indexOf('aprendizaje') >= 0) {
+    html += '<h2 style="margin-bottom:20px">CONTRATO LABORAL DE APRENDIZAJE ESPECIAL A TERMINO FIJO ETAPA PRACTICA</h2>';
+    html += tbl([
+      row('NOMBRE DEL EMPLEADOR:', 'HOGAR SALUD S.A.S', 0),
+      row('DOMICILIO DEL EMPLEADOR:', 'Carrera 56 # 72-129 en Barranquilla', 1),
+      row('REPRESENTADA LEGALMENTE POR:', 'ALVARO JOSE MERCADO CASIJ', 0),
+      row('NIT DE LA EMPRESA:', '900369003-1', 1),
+      row('NOMBRE DEL APRENDIZ E INSTITUCION DE FORMACION:', nombre.toUpperCase(), 0),
+      row('CORREO ELECTRONICO:', emailV, 1),
+      row('DOCUMENTO DE IDENTIDAD:', cedula + '   FECHA DE NACIMIENTO: ' + nacimiento, 0),
+      row('DOMICILIO TRABAJADOR:', direccion, 1),
+      row('CARGO PARA EL CUAL ES CONTRATADO EL APRENDIZ:', cargo.toUpperCase(), 0),
+      row('CIUDAD / PAIS DONDE PRESTARA SUS SERVICIOS:', ciudad + ' / Colombia', 1),
+      row('AUXILIO ECONOMICO:', salario || 'Etapa Practica: 1 S.M.M.L.V + Auxilio de Transporte (2026)', 0),
+      row('PERIODO DE PAGO:', periodo || 'Mensual', 1),
+      row('FECHA DE INICIACION DE LABORES:', 'Etapa Practica: ' + fecha, 0)
+    ]);
+    html += cl('CLAUSULA PRIMERA: OBJETO Y DURACION DEL CONTRATO.-', 'EL APRENDIZ bajo la completa direccion y subordinacion del EMPLEADOR respecto a las funciones de aprendizaje, ademas de los elementos particulares descritos en los literales a, b, c, y d consignados en el articulo 21 de la ley 2466 del 2025, desempenara en forma exclusiva todas las ocupaciones inherentes y complementarias al cargo denominado <strong>' + cargo.toUpperCase() + '</strong>. En ese sentido, El APRENDIZ acepta y declara conocer todas las labores inherentes a su cargo y a su vez accede que podran ser modificadas o adicionadas por su Empleador dentro del marco legal. Las partes acuerdan que la duracion del contrato es de 06 meses correspondiente a la etapa practica de acuerdo con las fechas estipuladas en el cuadro introductorio.');
+    html += cl('CLAUSULA SEGUNDA: PERIODO DE PRUEBA:', 'Entre las partes acuerdan que los primeros 60 dias de ejecucion del contrato de aprendizaje en la etapa productiva se entendera como periodo de prueba. EL EMPLEADOR podra dar por terminado el contrato de trabajo al interior de dicho periodo sin que exista obligacion indemnizatoria en favor de EL APRENDIZ, y con previo aval del Servicio Nacional de Aprendizaje SENA.');
+    html += cl('CLAUSULA TERCERA: SEDE DE TRABAJO:', 'Las labores y funciones contratadas las ejecutara EL APRENDIZ en la sede principal del EMPLEADOR o inmediaciones de la misma ubicadas en locaciones diferentes al domicilio principal de la empresa.');
+    html += cl('CLAUSULA CUARTA: AUXILIO ECONOMICO:', 'EL EMPLEADOR pagara al APRENDIZ en la etapa productiva el equivalente de <strong>' + (salario || '1 S.M.L.M.V ($1.750.905 pesos) + Auxilio de Transporte ($249.095 pesos)') + '</strong>, los cuales se consignaran los dias 30 de cada mes a la cuenta bancaria de ahorros suministrada por EL APRENDIZ. Paragrafo 1: A dichos montos aplican los descuentos y retenciones de ley o que por autorizacion expresa del aprendiz hayan a lugar. Paragrafo 2: Cuando por causa emanada directa o indirectamente de la relacion contractual existan obligaciones de tipo economico a cargo del APRENDIZ y en favor de su EMPLEADOR, este ultimo procedera a efectuar las deducciones a que hubiere lugar en cualquier tiempo, especialmente a la terminacion del presente contrato. Paragrafo 3: EL EMPLEADOR efectuara el reajuste salarial del APRENDIZ en enero de cada ano de acuerdo con el monto del salario minimo y auxilios de ley fijados por el gobierno nacional.');
+    html += cl('CLAUSULA QUINTA: ELEMENTOS DE TRABAJO:', 'EL APRENDIZ recibira la provision de elementos de trabajo tipicas para el optimo desempeno de sus funciones contratadas, tales como, computadora, documentos, material informatico, softwares de instalacion, herramientas tecnologicas de softwares, y el debido entrenamiento y/o capacitacion para llevar a cabo la labor encomendada de manera eficiente en esta modalidad de trabajo.');
+    html += cl('CLAUSULA SEXTA: BENEFICIOS EXTRALEGALES:', 'Las partes acuerdan que todo beneficio, incentivo o auxilio ya sea en especie, en dinero, que reciba EL APRENDIZ por parte de HOGAR SALUD S.A.S y que de una u otra forma exceda el Auxilio de Sostenimiento estipulado en la clausula 4 del presente documento contractual, no constituiran parte del mismo y por consiguiente no seran tenidos en cuenta para efectos del calculo en el pago de aportes parafiscales en salud y pension, liquidacion de prestaciones sociales o liquidacion final de contrato laboral, a la voz del articulo 15 de la ley 50 de 1990.');
+    html += cl('CLAUSULA SEPTIMA: JORNADA LABORAL:', 'EL APRENDIZ se obliga a laborar la jornada legal de 44 horas semanales en los turnos y dentro de las horas senaladas por el EMPLEADOR en aplicacion al articulo 3 de la ley 2101 del 2021, teniendo este ultimo la potestad de hacer ajustes o cambios de horario cuando a su parecer le sea beneficioso, asi mismo por el acuerdo expreso o tacito entre las partes podran repartirse las horas de la jornada ordinaria en la forma prevista en la ley, teniendo en cuenta que los tiempos de descanso entre las secciones de la jornada no se computan dentro de la misma, segun reza el articulo 67 del C. S. del T. Tanto el EMPLEADOR como EL APRENDIZ acuerdan que el domingo sera de descanso.');
+    html += cl('CLAUSULA OCTAVA: OBLIGACIONES DEL APRENDIZ:', 'Ademas de las obligaciones consignadas en la legislacion laboral, EL APRENDIZ se obliga a: 1) Aportar a EL EMPLEADOR toda su capacidad normal de trabajo, en forma exclusiva en el desempeno de las funciones propias del oficio mencionado. Dentro de las funciones del cargo ' + cargo.toUpperCase() + ': Apoyar el reclutamiento, realizar entrevistas, aplicar pruebas y gestionar la contratacion de nuevos colaboradores. Elaborar la nomina, liquidar prestaciones sociales y gestionar los aportes al sistema de seguridad social. Coordinar planes de formacion, induccion y entrenamiento para mejorar las competencias laborales. Actualizar hojas de vida, gestionar permisos, vacaciones y mantener la documentacion del personal. Cumplir con las normas de bioseguridad, seguridad y salud en el trabajo, y las politicas internas de calidad y confidencialidad de la institucion. Asistir a las actividades de formacion teorica y practica programadas por la empresa. Las demas inherentes al cargo dictaminadas por EL EMPLEADOR. 2) No atender durante las horas de trabajo asuntos u ocupaciones distintas. 3) No trabajar por cuenta propia en el mismo oficio, durante la vigencia de este contrato. 4) Guardar absoluta reserva sobre los hechos, documentos fisicos y electronicos en general, sobre todos los asuntos y materia que lleguen a su conocimiento. 14) Abstenerse de desempenar sus labores bajo los efectos de Droga o Alcohol. OBLIGACIONES ESPECIALES: 1. EL APRENDIZ no esta facultado para enviar correos electronicos en forma discriminada a todo el personal de la empresa sin la autorizacion previa de la gerencia general. 2. EL APRENDIZ es responsable del mantenimiento y buen estado de sus equipos, herramientas y utiles.');
+    html += cl('CLAUSULA NOVENA: CONFIDENCIALIDAD Y USO DE SISTEMAS:', '1) EL APRENDIZ mantendra en absoluta reserva y confidencialidad toda informacion no publica que llegue a su conocimiento relacionada con los asuntos y negocios del EMPLEADOR y sus clientes, contratistas y contratantes, informacion corporativa de HOGAR SALUD S.A.S y sociedades relacionadas, informes financieros, base de datos, listas de proveedores, planes y estrategias de mercado etc. EL APRENDIZ se compromete expresamente a guardar en el desempeno de sus funciones y fuera de ellas la discrecion, reserva y sigilo que exige la lealtad que le debe al EMPLEADOR. 2) La cuenta de correo que llegare asignarse al EL APRENDIZ es para uso exclusivo de las labores por las cuales fue contratado y por lo tanto, la informacion que circule por dicho medio sera material clasificado de propiedad del EMPLEADOR. EL APRENDIZ acepta que EL EMPLEADOR revisara su cuenta de correo electronico empresarial si llegase a ser asignada. 3) EL APRENDIZ autoriza al EMPLEADOR para que tenga acceso a toda informacion que contenga el o los computadores o redes de comunicacion que tenga asignados como elemento de trabajo.');
+    html += cl('CLAUSULA DECIMA: OBLIGACIONES DEL EMPLEADOR:', '1) Cancelar el auxilio de sostenimiento, prestaciones sociales, afiliar y cancelar al APRENDIZ los aportes de salud y pension, aportes en ARL de acuerdo a lo pactado y en los tiempos establecidos en el articulo 21 de la ley 2466 del 2025. 2) Entregar toda la informacion, documentacion y elementos de trabajo al EL APRENDIZ para poder desarrollar con normalidad y profesionalismo su labor contratada. 3) Brindarle al EL APRENDIZ las respectivas capacitaciones. 4) Cumplir con las demas obligaciones legales relacionadas al contrato de aprendizaje.');
+    html += cl('CLAUSULA DECIMA PRIMERA: TERMINACION POR MUTUO ACUERDO:', 'El presente contrato laboral se podra dar por terminado por mutuo acuerdo por escrito entre las partes en cualquier momento de su ejecucion, sin que exista la obligacion de pagarle al EL APRENDIZ indemnizacion o compensacion alguna.');
+    html += cl('CLAUSULA DECIMA SEGUNDA: TERMINACION UNILATERAL:', 'EL EMPLEADOR podra dar por terminado unilateralmente y de manera inmediata con justa causa el presente contrato invocando las siguientes causales: 1) Por el incumplimiento de las obligaciones consignadas en el presente documento. 2) Las causas consagradas en el Decreto 1072 del 2015 y leyes concordantes. 3) El incumplimiento de sus obligaciones legales. 4) La revelacion de datos o informaciones no publicas consideradas como secretas o confidenciales. 7) El hecho de que EL APRENDIZ se presente embriagado o bajo los efectos de estupefacientes. 14) La terminacion del presente contrato no da derecho al pago de liquidacion y/o indemnizacion alguna, toda vez que los dineros recibidos por EL APRENDIZ no constituyen salarios.');
+    html += cl('CLAUSULA DECIMA TERCERA: ACUERDO TOTAL:', 'El presente documento contractual sustituye y deja sin efecto cualquier otro contrato o acuerdo verbal o escrito, que se haya suscrito o ejecutado con anterioridad, en relacion con la vinculacion laboral del APRENDIZ.');
+    html += cl('CLAUSULA DECIMA CUARTA: MODIFICACIONES:', 'El presente contrato podra ser modificado en cualquier tiempo por el mutuo consentimiento de las partes. Las modificaciones que de este contrato se hagan, deberan constar por escrito y se integraran a el.');
+    html += cl('CLAUSULA DECIMA QUINTA: MODIFICACIONES DE LAS CONDICIONES LABORALES:', 'EL APRENDIZ acepta desde ahora expresamente todas las modificaciones de sus condiciones laborales determinadas por EL EMPLEADOR, en ejercicio de su poder subordinante, tales como turnos y jornadas de trabajo, el lugar de prestacion del servicio, el cargo u oficio y/o funciones y la forma de remuneracion, siempre que tales modificaciones no afecten su honor, dignidad o sus derechos minimos ni impliquen desmejoras sustanciales o graves perjuicios para el.');
+    html += cl('CLAUSULA DECIMA SEXTA: DESIGNACION DE EPS, FONDO DE PENSIONES Y ARL:', 'EL APRENDIZ manifiesta al EMPLEADOR que para efectos de afiliacion y cotizacion a salud selecciona la EPS _______________, y que tambien se encuentra afiliado al fondo de pensiones __________________. En lo referente a la ARL, el EMPLEADOR afilia y pagara los respectivos aportes a la ADMINISTRADORA SURA.');
+    html += cl('CLAUSULA DECIMA SEPTIMA: INVENCIONES Y DESCUBRIMIENTOS:', 'Las invenciones, desarrollos o descubrimientos realizados por EL APRENDIZ durante la prestacion de sus servicios al EMPLEADOR pertenecen a este ultimo, de conformidad con lo regulado por el articulo 539 del Codigo de Comercio.');
+    html += cl('CLAUSULA DECIMA OCTAVA: DERECHOS DE AUTOR Y PROPIEDAD INTELECTUAL:', 'Los derechos de propiedad del intelectual e industrial que se generen en virtud del presente CONTRATO, le pertenecen a EL EMPLEADOR. EL APRENDIZ no tendra las facultades ni podra realizar actividad alguna de uso, reproduccion, comercializacion, comunicacion publica o transformacion sobre el resultado de sus funciones sin la previa autorizacion expresa de EL EMPLEADOR.');
+    html += cl('CLAUSULA DECIMA NOVENA: LEY APLICABLE:', 'Este contrato estara sujeto a la ley colombiana y debera ser interpretado de buena fe por las partes.');
+    html += cl('CLAUSULA VIGESIMA: MEDIOS DE COMUNICACION:', 'El control de la actividad de EL APRENDIZ por parte de EL EMPLEADOR se hara a traves de medios telefonicos, informaticos o electronicos.');
+    html += bloqFirmas(fTrab);
+    return html;
+  }
+
+  // ════════════════════════════════════
+  // TÉRMINO INDEFINIDO
+  // ════════════════════════════════════
+  if (t.indexOf('indefinido') >= 0) {
+    html += '<h2 style="margin-bottom:20px">CONTRATO DE TRABAJO LABORAL A TERMINO INDEFINIDO</h2>';
+    html += tbl([
+      row('NOMBRE DEL EMPLEADOR:', 'HOGARSALUD IPS SOCIEDAD POR ACCIONES SIMPLIFICADAS', 0),
+      row('DIRECCION:', 'CRA. 56 #72-104 BARRIO EL PRADO', 1),
+      row('NOMBRE DEL EMPLEADO:', nombre.toUpperCase(), 0),
+      row('CEDULA DE CIUDADANIA:', cedula + ' DE ' + ciudad.toUpperCase(), 1),
+      row('DIRECCION EMPLEADO:', direccion, 0),
+      row('TELEFONO /CELULAR:', telefono, 1),
+      row('EMAIL:', emailV, 0),
+      row('LUGAR, FECHA DE NACIMIENTO:', nacimiento, 1),
+      row('CARGO U OFICIO QUE DESEMPENARA EL TRABAJADOR:', cargo.toUpperCase(), 0),
+      row('SALARIO:', '$' + salario, 1),
+      row('HORARIO DE:', '7AM A 12M -2PM A 5PM L A V - SABADOS DE 8AM A 12 PM O DE 9AM A 1 PM', 0),
+      row('FECHA DE INICIACION DE LABORES:', fecha.toUpperCase(), 1),
+      row('CIUDAD DONDE SE HA CONTRATADO EL TRABAJADOR:', ciudad.toUpperCase() + ' - ATLANTICO', 0),
+      row('PERIODOS DE PAGO:', periodo || 'Mensual', 1),
+      row('LABOR CONTRATADA:', labor || 'Las consignadas en el presente contrato, las del manual de competencias y las inherentes al cargo de ' + cargo.toUpperCase(), 0)
+    ]);
+    html += '<p class="pc">Entre el Empleador y el Trabajador, de las condiciones ya dichas, identificados, como aparece al pie de sus firmas, se ha celebrado el presente Contrato Individual de Trabajo, regido ademas por las siguientes clausulas:</p>';
+    html += cl('CLAUSULA PRIMERA - OBJETO:', 'El Empleador contrata los servicios personales del Trabajador y este se obliga: a) A poner al servicio del Empleador toda su capacidad normal de trabajo, en forma exclusiva en el desempeno de las funciones propias del oficio mencionado y en las labores anexas y complementadas del mismo, de conformidad con las ordenes e instrucciones que le imparta El Empleador directamente o a traves de sus representantes. b) A guardar absoluta reserva sobre los hechos, documentos, informaciones y en general, sobre todos los asuntos y materias que lleguen a su conocimiento por causa o con ocasion de su contrato de trabajo. <strong>Paragrafo Primero:</strong> Hace parte integral del presente contrato las funciones detalladas en el manual de competencias del presente cargo. <strong>Paragrafo Segundo:</strong> La descripcion anterior es general y no excluye ni limita para ejecutar labores conexas complementarias, asesorias o similares y en general aquellas que sean necesarias para un mejor resultado en la ejecucion de la causa que dio origen al contrato.');
+    html += cl('CLAUSULA SEGUNDA - REMUNERACION:', 'El Empleador pagara al Trabajador por la prestacion de sus servicios el salario indicado, pagadero en las oportunidades como lo indica el cuadro introductorio sin que ello signifique que unilateralmente el Empleador pueda pagar por periodos menores. <strong>Paragrafo:</strong> El Trabajador autoriza al Empleador para que la retribucion, asi como cualquier otro beneficio, sea prestacional, descanso vacaciones etc. originado en la existencia y/o terminacion del contrato sean consignadas o trasladadas a cuenta que desde ya el Trabajador autoriza al Empleador para que sea abierta a su nombre en una institucion financiera.');
+    html += cl('CLAUSULA TERCERA - TRABAJO NOCTURNO, SUPLEMENTARIO, DOMINICAL Y/O FESTIVO:', 'Para el reconocimiento y pago del trabajo suplementario, nocturno, dominical o festivo, El Empleador o sus representantes deberan haberlo autorizado previamente y por escrito. Cuando la necesidad de este trabajo se presente de manera imprevista o inaplazable, debera ejecutarse y darse cuenta de el por escrito, a la mayor brevedad, al Empleador o sus representantes para su aprobacion. El Empleador, en consecuencia, no reconocera ningun trabajo suplementario, o trabajo nocturno o en dias de descanso legalmente obligatorio que no haya sido autorizado previamente o que, habiendo sido avisado inmediatamente, no haya sido aprobado como queda dicho. Tratandose de trabajadores de Direccion, confianza y Manejo, no habra pago a horas Extras. El Empleador fijara las jornadas laborales de acuerdo a las necesidades del servicio pudiendo variarlas durante la ejecucion del presente contrato.');
+    html += cl('CLAUSULA CUARTA - JORNADA DE TRABAJO:', 'El Trabajador se obliga a laborar la jornada maxima legal en aplicacion a la reduccion gradual horaria consignada en el articulo 3 inciso tres de la ley 2101 del 2021, salvo estipulacion expresa y escrita en contrario, cumpliendo con los turnos y horarios que senale el EMPLEADOR, quien podra cambiarlos o ajustarlos cuando lo estime conveniente. Por el acuerdo expreso o tacito de las partes, podran repartirse total o parcialmente las horas de la jornada ordinaria, teniendo en cuenta que los tiempos de descanso entre las secciones de la jornada no se computan dentro de las misma, segun el Art. 167 ibidem. De igual manera, las partes podran acordar que se preste el servicio en los turnos de jornada flexible contemplados en el Articulo 51 de la Ley 789 de 2002. Horario laboral: De lunes a viernes, de 7:00 a.m. a 12:00 m., con un receso de dos (2) horas para el almuerzo, y de 2:00 p.m. a 5:00 p.m.; y los sabados, de 8:00 a.m. a 12:00 m. o en su defecto de 9:00 am a 1:00 m. <strong>PARAGRAFO 1:</strong> No obstante, EL EMPLEADOR podra, en ejercicio de su facultad subordinante, modificar los horarios de trabajo y los correspondientes periodos de desconexion laboral, incluido el horario de almuerzo del TRABAJADOR, siempre que medie aviso previo por escrito o mediante medios tecnologicos a traves de su representante o funcionario autorizado.');
+    html += cl('CLAUSULA QUINTA - PERIODO DE PRUEBA:', 'Los primeros 60 dias del presente contrato se consideran como periodo de prueba al tenor del art. 78 del Codigo Sustantivo del Trabajo y, por consiguiente, cualquiera de las partes podra terminar el contrato unilateralmente, en cualquier momento, o a discrecionalidad del empleador de acuerdo con su necesidad empresarial o variaciones de su actividad economica durante dicho termino (Art. 80 C.S. del T.)');
+    html += cl('CLAUSULA SEXTA - ACUERDO DE CONFIDENCIALIDAD:', 'El EMPLEADOR mantendra la confidencialidad de banco de informacion de HOGAR SALUD IPS en los siguientes aspectos: 1. Informacion de propiedad intelectual: Esto incluye, pero no se limita a, secretos comerciales, procesos, formulas, patentes, invenciones, disenos, desarrollos, metodos, estrategias, ideas, planes de negocio, y cualquier otra informacion relacionada con la propiedad intelectual de La Empresa. 2. Datos y registros financieros: Toda la informacion financiera de La Empresa, como estados financieros, proyecciones, presupuestos, informes de gastos, cuentas por cobrar y pagar, entre otros. 3. Informacion de clientes y proveedores: Incluyendo, pero no limitado a, datos de contacto, acuerdos comerciales, historial de compras, detalles de servicios contratados, y cualquier otro dato que identifique a los clientes o proveedores de La Empresa. 4. Datos de colaboradores: Esto abarca la informacion personal de los colaboradores de La Empresa, como datos de contacto, hojas de vida, historiales laborales, evaluaciones de desempeno, y cualquier otro dato relacionado con los colaboradores. 5. Informacion operativa y logistica: Cualquier dato o detalle sobre las operaciones internas de La Empresa, planes de crecimiento, procesos internos, informacion, datos de contacto, detalles de historia clinicas y diagnosticos de los pacientes y usuarios, entre otros. <strong>PARAGRAFO PRIMERO - OBLIGACIONES:</strong> No divulgar, compartir, distribuir, revelar o utilizar de ninguna manera la informacion confidencial de La Empresa para beneficio propio o de terceros, ni para cualquier otro proposito que no este relacionado directamente con el cumplimiento de sus responsabilidades. Tomar todas las medidas necesarias para proteger la informacion confidencial y a asegurarse de que esta no caiga en manos de personas no autorizadas, tanto durante el contrato con La Empresa como despues de la finalizacion de este. <strong>PARAGRAFO TERCERO - SANCIONES:</strong> 1. Acciones Disciplinarias o Terminacion de Contrato: la violacion de este acuerdo de confidencialidad puede llevar a medidas disciplinarias que van desde una amonestacion formal hasta la terminacion de contrato. 2. Riesgo Legal para el Colaborador: la empresa podria tener bases legales para demandar al colaborador por infractor en danos y perjuicios causados por la violacion del acuerdo. 3. Limitacion de Oportunidades Futuras: Una violacion de la confidencialidad puede quedar registrada en el sistema de la empresa, lo que podria limitar sus oportunidades laborales futuras y afectar sus referencias.');
+    html += cl('CLAUSULA SEPTIMA - DURACION DEL CONTRATO:', 'La duracion del contrato sera indefinida, mientras subsistan las causas que le dieron origen y la materia del trabajo.');
+    html += cl('CLAUSULA OCTAVA - OBLIGACIONES DEL TRABAJADOR:', 'a. Las establecidas en la Ley Laboral, reglamento interno de trabajo y el cumplimiento de las instrucciones emitidas por el Empleador en transcurso del desarrollo del Contrato Laboral. b. Suscribir el acuerdo de Confidencialidad determinado por El Empleador. c. No ejercer actos de Competencia desleal frente al Empleador. d. Respetar los sitios de trabajo asignados por El Empleador, cumpliendo con las directrices de dichas Empresas. e. Tener una excelente presentacion personal. d. Cumplir con los horarios estipulados por El Empleador para desarrollar las funciones con los CLIENTES y pacientes. f. Demas obligaciones inherentes al presente Contrato Laboral. g. Las funciones del cargo contratado inherentes correspondiente a ' + cargo + ': g1. Verificar en cada atencion, que los datos del cliente sean los correctos, en caso contrario y de contar con la informacion necesaria, proceder al registro del requerimiento correspondiente para la actualizacion de datos. g2. Ser el encargado de entregar informacion al area de facturacion y medios de pagos, previa aprobacion. g3. Emitir una respuesta a los correos de los clientes. g4. Facilitar la comunicacion entre los distintos servicios de la organizacion. g5. Garantizar la calidad de los servicios brindados que ofrece la empresa. h. Las demas funciones consignadas al interior del manual de competencia. <strong>OBLIGACIONES DEL EMPLEADOR:</strong> 1) Cancelar los salarios y prestaciones sociales de acuerdo a lo pactado en el presente documento contractual y en los terminos establecidos en la norma laboral. 2) Entregar toda la informacion, documentacion y elementos de trabajo al TRABAJADOR para poder desarrollar con normalidad y profesionalismo su labor contratada. 3) Brindarle al TRABAJADOR las respectivas capacitaciones para la calidad y desempeno en el servicio contratado, como tambien notificarle al TRABAJADOR acerca de las fechas y horas de programacion de las mismas. 4) Afiliar y pagar al TRABAJADOR los aportes parafiscales en salud y pension. 5) Consignar las Cesantias en los tiempos exigidos por la ley y en el fondo en que el TELETRABAJADOR se encuentre afiliado.');
+    html += cl('CLAUSULA NOVENA - TERMINACION UNILATERAL:', 'Son justas causas para dar por terminado unilateralmente este contrato, por cualquiera de las partes, las que establece la Ley, el reglamento interno de trabajo, el presente contrato y/o las circulares que a lo largo de la ejecucion del presente contrato establezcan conductas no previstas. Expresamente se califican en este acto como faltas graves: A) El incumplimiento de las normas y politicas que tenga la compania para el uso de los sistemas, informatica, software, claves de seguridad, materiales, computadores, utiles de oficina etc. Asi como violacion a lo contenido en las normas de seguridad industrial. B) La utilizacion para fines distintos a los considerados por el Empleador para el cumplimiento de su objeto social de las bases de datos de su propiedad. C) Desatender las actividades de capacitacion programadas por el Empleador asi sea en horario diferente a la ordinaria. D) La mala atencion y desinteres para con los clientes y proveedores. E) En caso de laborar en turnos, efectuar cambios sin la debida autorizacion del jefe inmediato. F) Llegar tarde al sitio de trabajo. G) No cumplir con las normas de seguridad industrial en los sitios de trabajo/ obras. H) Negarse a cumplir con los protocolos y procesos para la prestacion de servicios encomendados. I) Desatender las obligaciones antes mencionadas constituye justa causa para dar por terminado el contrato por parte del Empleador. J) Violar el acuerdo de confidencialidad determinado por la Empresa. K) Por vencimiento del plazo pactado en aplicacion al articulo 46 y 61 literal C del codigo sustantivo del trabajo.');
+    html += cl('CLAUSULA DECIMA - INVENCIONES:', 'Las invenciones realizadas por El Trabajador le pertenecen a la Empresa siempre y cuando estas sean realizadas con ocasion y dentro de la ejecucion del contrato de trabajo, y como parte del cumplimiento de las obligaciones del cargo. Tambien lo son aquellas que se obtienen mediante los datos y medios conocidos o utilizados a razon de la labor desempenada.');
+    html += cl('CLAUSULA UNDECIMA - DERECHOS DE AUTOR:', 'Los derechos patrimoniales sobre las obras, disenos invenciones, investigaciones etc. creadas por el Trabajador en ejercicio de sus funciones o con ocasion ellas pertenecen al Empleador.');
+    html += cl('CLAUSULA UNDECIMA PRIMERA - TRASLADOS:', 'Desde ya el Trabajador acuerda que el Empleador podra trasladarlo desde el lugar, cargo y/o sitio de trabajo de acuerdo con las necesidades del servicio siempre y cuando no se menos cabe el honor, la dignidad o se produzca una desmejora sustancial o grave perjuicio con ocasion a la citada orden. El Empleador esta obligado a asumir los gastos originados en el traslado. Siempre que sea una decision unilateral de la Empresa.');
+    html += cl('CLAUSULA DECIMA SEGUNDA - BENEFICIOS EXTRALEGALES:', 'El Empleador podra reconocer beneficios, primas, prestaciones de naturaleza extra legal, lo que se hace a titulo de mera liberalidad y estos subsistiran hasta que el Empleador decida su modificacion o supresion, atendiendo su capacidad, todos los cuales se otorgan y reconocen, y el trabajador asi lo acuerdan sin que tengan caracter salarial y por lo tanto no tienen efecto prestacional o incidencia en la base de aportes en la seguridad social o parafiscal en especial este acuerdo se refiere a auxilios en dinero o en especie, primas periodicas o de antiguedad o en general beneficios de esa naturaleza los que podran ser modificados o suprimidos por el Empleador de acuerdo con su determinacion unilateral tal como fue otorgado.');
+    html += cl('CLAUSULA DECIMA TERCERA - DESCUENTOS:', 'El Trabajador autoriza para que el Empleador descuente cualquier suma de dinero que se cause dentro de la existencia y terminacion del contrato de trabajo ya sea por concepto de prestamos, alimentacion a bajo costo, bonos de alimentacion, vivienda, utilizacion de medios de comunicacion, aportes bienes dados a cargo y no reintegrados, u otros que se presenten en ejercicio de la labor que desarrolla. Este descuento se podra realizar de la nomina quincenal o mensual o de las prestaciones sociales, indemnizaciones, descansos o cualquier beneficio que resulte con ocasion de la existencia o terminacion del contrato por cualquier motivo.');
+    html += cl('CLAUSULA DECIMA CUARTA - DIRECCION DEL TRABAJADOR:', 'El Trabajador se compromete a informar por escrito al Empleador cualquier cambio de direccion teniendose como suya, para todos los efectos, la ultima direccion registrada en la Empresa.');
+    html += cl('CLAUSULA DECIMA QUINTA - DESIGNACION DE FONDO DE PENSIONES OBLIGATORIAS:', 'EL TRABAJADOR manifiesta al EMPLEADOR que se encuentra afiliado al fondo de pensiones: <strong>PORVENIR</strong> para efectos de realizar los respectivos aportes obligatorios a pensiones. EL TRABAJADOR declara que no se encuentra afiliado a otro fondo de pensiones y que en caso de traslado el mismo sea procedente toda vez el cumplimiento de requisitos legales.');
+    html += cl('CLAUSULA DECIMA SEXTA - EFECTOS:', 'El presente contrato reemplaza en su integridad y deja sin efecto cualquiera otro contrato, verbal o escrito, celebrado entre las partes con anterioridad, pudiendo las partes convenir por escrito modificaciones al mismo, las que formaran parte integrante de este contrato.');
+    html += '<p class="pc" style="margin-top:14px">Para constancia, se firma en la ciudad de ' + ciudad + ' el dia ' + fecha + ', por las partes interesadas.</p>';
+    html += bloqFirmas(fTrab);
+    return html;
+  }
+
+  // ════════════════════════════════════
+  // OBRA O LABOR (default)
+  // ════════════════════════════════════
+  html += '<h2>CONTRATO DE TRABAJO DURACION POR LA</h2>';
+  html += '<h2 style="margin-bottom:20px"> OBRA O LABOR CONTRATADA</h2>';
+  html += tbl([
+    row('NOMBRE DEL EMPLEADOR:', 'HOGARSALUD IPS SOCIEDAD POR ACCIONES SIMPLIFICADAS', 0),
+    row('DIRECCION:', 'Carrera 56 # 72-129', 1),
+    row('NOMBRE DEL EMPLEADO:', nombre.toUpperCase(), 0),
+    row('CEDULA DE CIUDADANIA:', 'CC. ' + cedula, 1),
+    row('DIRECCION:', direccion, 0),
+    row('TELEFONO /CELULAR:', telefono, 1),
+    row('EMAIL:', emailV, 0),
+    row('LUGAR, FECHA DE NACIMIENTO:', nacimiento, 1),
+    row('CARGO U OFICIO QUE DESEMPENARA EL TRABAJADOR:', cargo.toUpperCase(), 0),
+    row('SALARIO:', '$' + salario, 1),
+    row('FECHA DE INICIACION DE LABORES:', fecha, 0),
+    row('CIUDAD DONDE SE HA CONTRATADO EL TRABAJADOR:', ciudad.toUpperCase() + ' - ATLANTICO', 1),
+    row('PERIODOS DE PAGO:', periodo.toUpperCase(), 0),
+    row('LABOR CONTRATADA:', labor, 1)
+  ]);
+  html += '<p class="pc">Entre el empleador y el trabajador, de las condiciones ya dichas identificados como aparece al pie de sus correspondientes firmas se ha celebrado el presente contrato individual de trabajo, regido ademas por las siguientes clausulas: <strong>Primera.</strong> El empleador contrata los servicios personales del trabajador y este se obliga: a) A poner al servicio del empleador toda su capacidad normal de trabajo, en forma exclusiva en el desempeno de las funciones propias del oficio mencionado y las labores anexas y complementarias del mismo, de conformidad con las ordenes e instrucciones que le imparta el empleador o sus representantes, y b) A no prestar directa ni indirectamente servicios laborales a otros empleadores, ni a trabajar por cuenta propia en el mismo oficio, durante la vigencia de este contrato. <strong>Segunda.</strong> El empleador paga al trabajador por la prestacion de sus servicios el salario indicado, pagadero en las oportunidades tambien senaladas arriba. Dentro de este pago se encuentra incluida la remuneracion de los descansos dominicales y festivos de que tratan los capitulos I y II del titulo VII del Codigo Sustantivo del Trabajo. Se aclara y se conviene que en los casos en los que el trabajador devengue comisiones o cualquier otra modalidad de salario variable, el 82.5% de dichos ingresos, constituye remuneracion ordinaria y el 17.5% restante esta designado a remunerar el descanso en los dias dominicales y festivos. <strong>Tercera.</strong> Todo trabajo suplementario o en horas extras y todo trabajo en domingo o festivo en los que legalmente debe concederse el descanso, se remunerara conforme a la Ley. Para el reconocimiento y pago del trabajo suplementario, dominical o festivo el empleador o sus representantes deben autorizarlo previamente por escrito. Cuando la necesidad de este trabajo se presente de manera imprevista o inaplazable, debera ejecutarse y darse cuenta de el por escrito, a la mayor brevedad, al empleador o sus representantes. El empleador, en consecuencia, no reconocera ningun trabajo suplementario o en dias de descanso legalmente obligatorio que no haya sido autorizado previamente o avisado inmediatamente. <strong>Cuarta.</strong> El trabajador se obliga a laborar la jornada ordinaria en los turnos y dentro de las horas senaladas por el empleador, pudiendo hacer este ajustes o cambios de horario cuando lo estime conveniente. Por el acuerdo expreso o tacito de las partes, podran repartirse las horas jornada ordinaria de la forma prevista en el articulo 164 del Codigo Sustantivo del Trabajo, modificado por el articulo 23 de la Ley 50 de 1990, teniendo en cuenta que los tiempos de descanso entre las secciones de la jornada no se computan dentro de la misma. <strong>Quinta.</strong> El presente contrato se celebra por el tiempo que dure la realizacion de la obra (o labor contratada), segun se determino anteriormente.</p>';
+  html += '<p class="pc"><strong>Sexta.</strong> Son justas causas para dar por terminado unilateralmente este contrato por cualquiera de las partes, las enumeradas en el articulo 7o del decreto 2351 de 1965. <strong>Septima.</strong> Las invenciones o descubrimientos realizados por el trabajador contratado para investigar pertenecen al empleador, de conformidad con el articulo 539 del Codigo de Comercio, asi como el articulo 20 y concordantes de la ley 23 de 1982 sobre derechos de autor. En cualquier otro caso el invento pertenece al trabajador, salvo cuando este no haya sido contratado para investigar y realice la invencion mediante datos o medios conocidos o utilizados debido a la labor desempenada, evento en el cual el trabajador tendra derecho a una compensacion que se fijara de acuerdo con el monto del salario, la importancia del invento o descubrimiento, el beneficio que reporte al empleador u otros factores similares. <strong>Octava.</strong> Las partes podran convenir que el trabajo se preste en lugar distinto al inicialmente contratado, siempre que tales traslados no desmejoren las condiciones laborales o de remuneracion del trabajador. Los gastos que se originen con el traslado seran cubiertos por el empleador de conformidad con el numeral 8o del articulo 57 del Codigo Sustantivo del Trabajo. El trabajador se obliga a aceptar los cambios de oficio que decida el empleador dentro de su poder subordinante, siempre que se respeten las condiciones laborales del trabajador y no se le causen perjuicios. Todo ello sin que se afecte el honor, la dignidad y los derechos minimos del trabajador, de conformidad con el articulo 23 del Codigo Sustantivo del Trabajo, modificado por el articulo 1o de la Ley 50 de 1990. <strong>Novena:</strong> Acuerdan las partes que los primeros dos meses de ejecucion del presente contrato se consideran como periodo de prueba. <strong>Decima.</strong> Este contrato ha sido redactado estrictamente de acuerdo con la ley y la jurisprudencia y sera interpretado de buena fe y en consonancia con el Codigo Sustantivo del Trabajo. <strong>Undecima.</strong> El presente contrato reemplaza en su integridad y deja sin efecto alguno cualquiera otro contrato verbal o escrito celebrado por las partes con anterioridad. Las modificaciones que se acuerden al presente contrato se anotaran a continuacion de su texto.</p>';
+  html += '<p class="pc" style="margin-top:14px">Para constancia se firma en dos o mas ejemplares del mismo tenor y valor, en ' + ciudad + ' a los ' + fecha + '.</p>';
+  html += bloqFirmas(fTrab);
+  return html;
+}
+
+// Render initial contract (no signature yet)
+document.getElementById('ctBody').innerHTML = genContrato(null);
+
+// Check if already signed
 if (token && (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE))) {
-  document.getElementById('greetingCard').style.display  = 'none';
-  document.getElementById('contratoCard').style.display  = 'none';
-  document.getElementById('sigLabel').style.display      = 'none';
-  document.getElementById('sigCard').style.display       = 'none';
-  document.getElementById('yaFirmadoCard').style.display = 'block';
-  document.getElementById('progressFill').style.width    = '100%';
+  document.getElementById('ctCard').style.display = 'none';
+  document.getElementById('sigCard').style.display = 'none';
+  document.getElementById('dupCard').style.display = 'block';
 }
-  const [modalGenerar,  setModalGenerar]  = useState(false);
-  const [modalVer,      setModalVer]      = useState(null);
-  const [guardando,     setGuardando]     = useState(false);
-  const [enviando,      setEnviando]      = useState(false);
-  const [busqCedula,    setBusqCedula]    = useState('');
-  const [buscando,      setBuscando]      = useState(false);
 
-  // Modal rechazar (desde vista del documento)
-  const [modalRechazar, setModalRechazar] = useState(false);
-  const [contratoRech,  setContratoRech]  = useState(null);
-  const [motivo,        setMotivo]        = useState('');
-  const [rechazando,    setRechazando]    = useState(false);
+// ── UPLOAD ──
+var firmaB64 = null;
+var fileIn  = document.getElementById('fileIn');
+var upZone  = document.getElementById('upZone');
+var prevZone= document.getElementById('prevZone');
+var prevImg = document.getElementById('prevImg');
+var btnF    = document.getElementById('btnFirmar');
 
-// ── UPLOAD DE IMAGEN ──
-let firmaBase64 = null;
-
-const fileInput   = document.getElementById('fileInput');
-const uploadArea  = document.getElementById('uploadArea');
-const previewArea = document.getElementById('previewArea');
-const previewImg  = document.getElementById('previewImg');
-const btnFirmar   = document.getElementById('btnFirmar');
-
-function cargarArchivo(file) {
+function cargar(file) {
   if (!file) return;
-  if (file.size > 5 * 1024 * 1024) {
-    alert('La imagen es muy grande. Máximo 5MB.');
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    firmaBase64 = e.target.result;
-    previewImg.src = firmaBase64;
-    uploadArea.style.display  = 'none';
-    previewArea.style.display = 'block';
-    btnFirmar.disabled = false;
-    document.getElementById('progressFill').style.width = '66%';
-  const FORM0 = {
-    idDataverse:'',tablaOrigen:'',cedula:'',nombreCompleto:'',
-    tipo:'Obra o Labor',cargo:'',fechaIngreso:'',salario:'',periodoPago:'Mensual',
-    laborContratada:'',email:'',telefono:'',direccion:'',ciudad:'Barranquilla',
-    institucionEducativa:'',fechaFin:'',horario:'',fechaNacimiento:'',fondoPensiones:'',
+  if (file.size > 5 * 1024 * 1024) { alert('Imagen muy grande. Maximo 5MB.'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    firmaB64 = e.target.result;
+    prevImg.src = firmaB64;
+    upZone.style.display = 'none';
+    prevZone.style.display = 'block';
+    btnF.disabled = false;
+    // Show signature on contract preview
+    document.getElementById('ctBody').innerHTML = genContrato(firmaB64);
   };
   reader.readAsDataURL(file);
 }
-  const [form, setForm] = useState(FORM0);
-  const F = (k,v) => setForm(p=>({...p,[k]:v}));
 
-fileInput.addEventListener('change', (e) => cargarArchivo(e.target.files[0]));
+fileIn.addEventListener('change', function(e) { cargar(e.target.files[0]); });
+upZone.addEventListener('dragover',  function(e) { e.preventDefault(); upZone.classList.add('drag'); });
+upZone.addEventListener('dragleave', function()  { upZone.classList.remove('drag'); });
+upZone.addEventListener('drop',      function(e) { e.preventDefault(); upZone.classList.remove('drag'); cargar(e.dataTransfer.files[0]); });
 
-// Drag and drop
-uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('has-file'); });
-uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('has-file'));
-uploadArea.addEventListener('drop', (e) => {
-  e.preventDefault();
-  uploadArea.classList.remove('has-file');
-  cargarArchivo(e.dataTransfer.files[0]);
+document.getElementById('btnCambiar').addEventListener('click', function() {
+  firmaB64 = null;
+  btnF.disabled = true;
+  prevZone.style.display = 'none';
+  upZone.style.display = 'block';
+  fileIn.value = '';
+  document.getElementById('ctBody').innerHTML = genContrato(null);
 });
 
-document.getElementById('btnCambiar').onclick = () => {
-  firmaBase64 = null;
-  btnFirmar.disabled = true;
-  previewArea.style.display = 'none';
-  uploadArea.style.display  = 'block';
-  fileInput.value = '';
-  document.getElementById('progressFill').style.width = '33%';
-};
-  /* ── CARGAR ── */
-  const fetchContratos = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [rA,rX] = await Promise.all([
-        fetch('/api/data/v9.2/cre3c_hs_administrativos',{headers:HDRS}).catch(()=>null),
-        fetch('/api/data/v9.2/cre3c_hs_auxiliareses',   {headers:HDRS}).catch(()=>null),
-      ]);
-      const dA = rA&&rA.ok ? (await rA.json()).value||[] : [];
-      const dX = rX&&rX.ok ? (await rX.json()).value||[] : [];
-      const rC = await fetch('/api/data/v9.2/cr83c_contratoses',{headers:HDRS}).catch(()=>null);
-      const dC = rC&&rC.ok ? (await rC.json()).value||[] : [];
-
-// ── ENVIAR FIRMA ──
-btnFirmar.onclick = async function () {
-  if (!firmaBase64) return;
+// ── SEND SIGNATURE ──
+btnF.addEventListener('click', async function() {
+  if (!firmaB64) return;
   if (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE)) {
-    document.getElementById('sigCard').style.display       = 'none';
-    document.getElementById('yaFirmadoCard').style.display = 'block';
+    document.getElementById('sigCard').style.display = 'none';
+    document.getElementById('dupCard').style.display = 'block';
     return;
   }
-  document.getElementById('btnTexto').style.display   = 'none';
-  document.getElementById('btnSpinner').style.display = 'flex';
+  document.getElementById('btnTxt').style.display = 'none';
+  document.getElementById('btnSpin').style.display = 'flex';
   this.disabled = true;
   try {
-    const res = await fetch(WEBHOOK, {
+    var res = await fetch(WEBHOOK, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token, firma: firmaBase64, ts: new Date().toISOString() })
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({token: token, firma: firmaB64, ts: new Date().toISOString()})
     });
     if (res.ok) {
       try { sessionStorage.setItem(CLAVE, '1'); } catch(e) {}
-      try { localStorage.setItem(CLAVE, '1'); }  catch(e) {}
-      document.getElementById('greetingCard').style.display = 'none';
-      document.getElementById('contratoCard').style.display = 'none';
-      document.getElementById('sigLabel').style.display     = 'none';
-      document.getElementById('sigCard').style.display      = 'none';
-      document.getElementById('exitoCard').style.display    = 'block';
-      document.getElementById('progressFill').style.width   = '100%';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else { throw new Error('HTTP ' + res.status); }
+      try { localStorage.setItem(CLAVE, '1');   } catch(e) {}
+      document.getElementById('ctCard').style.display  = 'none';
+      document.getElementById('sigCard').style.display = 'none';
+      document.getElementById('okCard').style.display  = 'block';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    } else {
+      throw new Error('HTTP ' + res.status);
+    }
   } catch(e) {
-    alert('Error al enviar la firma. Verifica tu conexión e inténtalo de nuevo.');
-    document.getElementById('btnTexto').style.display   = 'flex';
-    document.getElementById('btnSpinner').style.display = 'none';
+    alert('Error al enviar la firma. Verifica tu conexion e intentalo de nuevo.');
+    document.getElementById('btnTxt').style.display = 'flex';
+    document.getElementById('btnSpin').style.display = 'none';
     this.disabled = false;
   }
-};
-      const getInfo = (id, nombre) => {
-        let r = dC.find(c => c._cr83c_trabajador_directo_value===id || c._cr83c_trabajador_indirecto_value===id);
-        if (!r && nombre) r = dC.find(c => c.cr83c_trabajador && c.cr83c_trabajador.toLowerCase().trim()===nombre.toLowerCase().trim());
-        if (!r) return {estado:'Sin Contrato',contratoId:null,firmaTrabajador:null,tokenFirma:null};
-        const v = r.cr83c_estado_del_contrato;
-        let estado = 'Sin Contrato';
-        if (v===947230001) estado='Pendiente Firma';
-        if (v===947230002) estado='Firma Recibida';
-        if (v===947230003) estado='Aprobado';
-        if (v===947230004) estado='Rechazado';
-        return {estado, contratoId:r.cr83c_contratosid, firmaTrabajador:r.cr83c_firmatrabajadorimagen||null, tokenFirma:r.cr83c_url_temporal||null};
-      };
-
-      const mapEmp = (e, origen) => {
-        const nombre = `${e.cre3c_primer_nombre||''} ${e.cre3c_segundo_nombre||''} ${e.cre3c_primer_apellido||''} ${e.cre3c_segundo_apellido||''}`.replace(/\s+/,' ').trim();
-        const id = origen==='directo' ? e.cre3c_hs_administrativoid : e.cre3c_hs_auxiliaresid;
-        const info = getInfo(id, nombre);
-        let tipo = origen==='indirecto' ? 'OPS' : 'Obra o Labor';
-        if (origen==='directo' && e.cre3c_tipo_de_contrato===947230002) tipo='Aprendizaje';
-        if (origen==='directo' && e.cre3c_tipo_de_contrato===947230003) tipo='Término Indefinido';
-        return {
-          id, nombreCompleto:nombre, cedula:String(e.cre3c_numero_de_documento||'').trim(),
-          tipo, cargo:e.cre3c_cargo||'Sin cargo',
-          fechaIngreso:e.cre3c_fecha_de_inicio||e.cr83c_fecha_de_inicio||'',
-          salario:e.cr83c_salario||e.cre3c_salario||'',
-          periodoPago:origen==='indirecto'?'1 vez al mes (mes vencido)':'Mensual',
-          email:e.cre3c_correo_electronico||'', telefono:e.cre3c_numero_de_telefono||'',
-          direccion:e.cre3c_direccion_residencial||'',
-          ciudad:e.cre3c_ciudad_donde_presta_el_servicio||'Barranquilla',
-          origen, laborContratada:'', horario:'', fechaNacimiento:'', fondoPensiones:'',
-          ...info,
-        };
-      };
-
-      const lista = [
-        ...dA.map(e=>mapEmp(e,'directo')),
-        ...dX.map(e=>mapEmp(e,'indirecto')),
-      ].filter(e=>e.cedula!=='').sort((a,b)=>new Date(b.fechaIngreso)-new Date(a.fechaIngreso));
-      setContratos(lista);
-    } catch(err){ console.error(err); }
-    finally { setLoading(false); }
-  }, []);
-  useEffect(()=>{ fetchContratos(); },[fetchContratos]);
-
-  /* ── BUSCAR CÉDULA ── */
-  const handleBuscarCedula = async () => {
-    if (!busqCedula.trim()) return;
-    setBuscando(true);
-    try {
-      const [rA,rX] = await Promise.all([
-        fetch(`/api/data/v9.2/cre3c_hs_administrativos?$filter=cre3c_numero_de_documento eq '${busqCedula}'`,{headers:HDRS}),
-        fetch(`/api/data/v9.2/cre3c_hs_auxiliareses?$filter=cre3c_numero_de_documento eq '${busqCedula}'`,{headers:HDRS}),
-      ]);
-      const dA = await rA.json(), dX = await rX.json();
-      let emp=null, origen='';
-      if (dA.value?.length>0){ emp=dA.value[0]; origen='directo'; }
-      else if (dX.value?.length>0){ emp=dX.value[0]; origen='indirecto'; }
-      if (emp) {
-        let tipo = origen==='indirecto'?'OPS':'Obra o Labor';
-        if (origen==='directo'&&emp.cre3c_tipo_de_contrato===947230002) tipo='Aprendizaje';
-        if (origen==='directo'&&emp.cre3c_tipo_de_contrato===947230003) tipo='Término Indefinido';
-        setForm(p=>({...p,
-          idDataverse: origen==='directo'?emp.cre3c_hs_administrativoid:emp.cre3c_hs_auxiliaresid,
-          tablaOrigen: origen, cedula: emp.cre3c_numero_de_documento||busqCedula,
-          nombreCompleto: `${emp.cre3c_primer_nombre||''} ${emp.cre3c_segundo_nombre||''} ${emp.cre3c_primer_apellido||''} ${emp.cre3c_segundo_apellido||''}`.replace(/\s+/,' ').trim(),
-          cargo: emp.cre3c_cargo||'', salario: emp.cr83c_salario||emp.cre3c_salario||'',
-          fechaIngreso: fmtInput(emp.cre3c_fecha_de_inicio||emp.cr83c_fecha_de_inicio),
-          tipo, email: emp.cre3c_correo_electronico||'', telefono: emp.cre3c_numero_de_telefono||'',
-          direccion: emp.cre3c_direccion_residencial||'',
-          ciudad: emp.cre3c_ciudad_donde_presta_el_servicio||'Barranquilla',
-          institucionEducativa: emp.cre3c_institucion_educativa||'',
-        }));
-      } else {
-        setForm(p=>({...p, cedula:busqCedula, idDataverse:'', tablaOrigen:''}));
-        alert('Empleado no encontrado. Completa los datos manualmente.');
-      }
-    } catch(e){ console.error(e); }
-    finally { setBuscando(false); }
-  };
-
-  /* ── GUARDAR CONTRATO ── */
-  const handleGuardar = async (e) => {
-    e.preventDefault();
-    if (!form.cedula || !form.nombreCompleto){ alert('Completa los datos mínimos.'); return; }
-    setGuardando(true);
-    try {
-      const esOPS = form.tipo==='OPS';
-      const ep = esOPS ? '/api/data/v9.2/cre3c_hs_auxiliareses' : '/api/data/v9.2/cre3c_hs_administrativos';
-      const noms = form.nombreCompleto.trim().split(' ');
-      const payload = {
-        cre3c_numero_de_documento: String(form.cedula),
-        cre3c_primer_nombre: noms[0]||'', cre3c_primer_apellido: noms.slice(1).join(' ')||'',
-        cre3c_cargo: form.cargo, cr83c_salario: String(form.salario),
-        cr83c_fecha_de_inicio: form.fechaIngreso, cre3c_correo_electronico: form.email,
-      };
-      let idEmp = form.idDataverse;
-      if (form.idDataverse) {
-        await fetch(`${ep}(${form.idDataverse})`,{method:'PATCH',headers:HDRS,body:JSON.stringify(payload)});
-      } else {
-        const res = await fetch(ep,{method:'POST',headers:HDRS,body:JSON.stringify(payload)});
-        const loc = res.headers.get('OData-EntityId')||'';
-        const m = loc.match(/\(([^)]+)\)/);
-        if (m) idEmp = m[1];
-      }
-      await fetch('/api/data/v9.2/cr83c_contratoses',{
-        method:'POST',headers:HDRS,
-        body:JSON.stringify({
-          cr83c_trabajador: form.nombreCompleto,
-          cr83c_estado_del_contrato: 947230001,
-          ...(esOPS
-            ? {'cr83c_trabajador_indirecto@odata.bind':`/cre3c_hs_auxiliareses(${idEmp})`}
-            : {'cr83c_trabajador_directo@odata.bind':`/cre3c_hs_administrativos(${idEmp})`}
-          ),
-        }),
-      });
-      await fetchContratos();
-      setForm(FORM0); setBusqCedula(''); setModalGenerar(false);
-      alert('✅ Contrato guardado. Usa el botón "Enviar" para enviar el link de firma al trabajador.');
-    } catch(err){ alert('Error al guardar. Verifica Dataverse.'); }
-    finally { setGuardando(false); }
-  };
-
-  /* ── ENVIAR CONTRATO AL TRABAJADOR ── */
-  const handleEnviar = async (contrato) => {
-    if (!contrato.email){ alert('⚠️ El empleado no tiene email registrado.'); return; }
-    setEnviando(true);
-    try {
-      await fetch(PA_ENVIAR_CONTRATO,{
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
-          empleadoId:contrato.id, origen:contrato.origen,
-          nombreCompleto:contrato.nombreCompleto, cedula:contrato.cedula,
-          cargo:contrato.cargo, tipo:contrato.tipo, email:contrato.email,
-          fechaIngreso:contrato.fechaIngreso, salario:contrato.salario,
-          periodoPago:contrato.periodoPago, laborContratada:contrato.laborContratada||'',
-          ciudad:contrato.ciudad||'Barranquilla',
-        }),
-      });
-      alert(`📧 Contrato enviado a ${contrato.email}`);
-      await fetchContratos();
-    } catch(err){ alert('Error al enviar. Verifica Power Automate.'); }
-    finally { setEnviando(false); }
-  };
-
-  /* ── RECHAZAR (desde modal ver) ── */
-  const handleRechazar = async () => {
-    if (!motivo.trim()){ alert('Escribe el motivo del rechazo.'); return; }
-    setRechazando(true);
-    try {
-      if (contratoRech.contratoId) {
-        await fetch(`/api/data/v9.2/cr83c_contratoses(${contratoRech.contratoId})`,{
-          method:'PATCH',headers:HDRS,body:JSON.stringify({cr83c_estado_del_contrato:947230004}),
-        });
-      }
-      await fetch(PA_RECHAZAR,{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email:contratoRech.email,nombreCompleto:contratoRech.nombreCompleto,cargo:contratoRech.cargo,motivo}),
-      });
-      setModalRechazar(false); setContratoRech(null); setMotivo('');
-      setModalVer(null);
-      alert(`❌ Contrato rechazado. Notificación enviada a ${contratoRech.email}.`);
-      await fetchContratos();
-    } catch(err){ alert('Error al rechazar.'); }
-    finally { setRechazando(false); }
-  };
-
-  /* ── FILTROS ── */
-  const registros = contratos.filter(c=>{
-    const q = busqueda.toLowerCase();
-    return (c.nombreCompleto+c.cedula+c.cargo).toLowerCase().includes(q)
-      && (filtroTipo==='Todos' || c.tipo===filtroTipo)
-      && (filtroEstado==='Todos' || c.estado===filtroEstado);
-  });
-  const totalPags = Math.max(1, Math.ceil(registros.length/POR_PAG));
-  const slice = registros.slice((pagina-1)*POR_PAG, pagina*POR_PAG);
-  const stats = {
-    total: contratos.length,
-    sin:   contratos.filter(c=>c.estado==='Sin Contrato').length,
-    pend:  contratos.filter(c=>c.estado==='Pendiente Firma').length,
-    rec:   contratos.filter(c=>c.estado==='Firma Recibida').length,
-    apr:   contratos.filter(c=>c.estado==='Aprobado').length,
-  };
-
-  /* ─────────────────────────────────────────────
-     RENDER
-  ───────────────────────────────────────────── */
-  return (
-    <div style={{display:'flex',height:'100vh',width:'100%',backgroundColor:C.light,fontFamily:'"Segoe UI",system-ui,sans-serif',overflow:'hidden'}}>
-      <style>{`
-        .nav-i{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;color:${C.gray};transition:all .15s}
-        .nav-i:hover{background:#f8fafc;color:${C.dark}}
-        .nav-i.on{background:${C.cyan};color:#fff}
-        .btn-p{background:${C.grad};color:#fff;border:none;padding:9px 16px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .2s}
-        .btn-p:hover{opacity:.88} .btn-p:disabled{opacity:.45;cursor:not-allowed}
-        .btn-s{background:#f1f5f9;color:${C.dark};border:1px solid ${C.border};padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
-        .btn-s:hover{background:#e2e8f0}
-        .btn-g{background:#16a34a;color:#fff;border:none;padding:7px 13px;border-radius:7px;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
-        .btn-g:hover{opacity:.88}
-        .btn-r{background:${C.red};color:#fff;border:none;padding:7px 13px;border-radius:7px;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
-        .btn-r:hover{opacity:.88}
-        .inp{width:100%;padding:10px 12px;border:1px solid ${C.border};border-radius:8px;font-size:13px;box-sizing:border-box;font-family:inherit;outline:none}
-        .inp:focus{border-color:${C.cyan};box-shadow:0 0 0 3px rgba(0,188,212,.12)}
-        .lbl{font-size:12px;font-weight:700;color:${C.dark};display:block;margin-bottom:4px}
-        .overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:100;display:flex;justify-content:center;align-items:center;backdrop-filter:blur(4px)}
-        .modal{background:#fff;border-radius:16px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.22)}
-        .doc-paper{background:#fff;padding:36px 44px;border:1px solid #ddd;border-radius:4px;box-shadow:0 4px 8px rgba(0,0,0,.08)}
-        /* ✅ GRID ROW — evita corrimiento de columnas */
-        .row-card{background:#fff;border-radius:12px;padding:12px 16px;border:1px solid ${C.border};display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) auto;align-items:center;gap:12px;border-left:4px solid ${C.border};transition:box-shadow .18s}
-        .row-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.07)}
-        .pg-btn{width:32px;height:32px;border-radius:7px;border:1px solid ${C.border};background:#fff;cursor:pointer;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;color:${C.dark}}
-        .pg-btn:hover,.pg-btn.on{background:${C.cyan};color:#fff;border-color:${C.cyan}}
-        @media print{.no-print{display:none!important}.doc-paper{box-shadow:none;border:none;padding:0}}
-      `}</style>
-
-      {/* ── SIDEBAR ── */}
-      <aside style={{width:'240px',minWidth:'240px',background:'#fff',borderRight:`1px solid ${C.border}`,display:'flex',flexDirection:'column',padding:'24px 16px',zIndex:5}}>
-        <div style={{display:'flex',alignItems:'center',gap:'12px',marginBottom:'40px',padding:'0 6px'}}>
-          <div style={{background:C.grad,width:'40px',height:'40px',borderRadius:'12px',display:'flex',justifyContent:'center',alignItems:'center',color:'#fff',fontWeight:900,fontSize:'15px',flexShrink:0}}>HS</div>
-          <div>
-            <div style={{fontWeight:800,fontSize:'15px',color:C.dark,lineHeight:1.2}}>Hogar Salud</div>
-            <div style={{fontSize:'11px',color:C.gray}}>IPS SAS</div>
-          </div>
-        </div>
-        <nav style={{display:'flex',flexDirection:'column',gap:'4px'}}>
-          {NAV.map(n=>(
-            <div key={n.name} className={`nav-i${n.name==='Contratos'?' on':''}`}>{n.ico} {n.name}</div>
-          ))}
-        </nav>
-      </aside>
-
-      {/* ── MAIN ── */}
-      <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden',minWidth:0}}>
-
-        {/* HEADER */}
-        <header style={{height:'68px',minHeight:'68px',background:'#fff',borderBottom:`1px solid ${C.border}`,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 32px',gap:'16px',flexShrink:0}}>
-          <div>
-            <h1 style={{margin:0,fontSize:'17px',fontWeight:800,color:C.dark}}>Gestión de Contratos</h1>
-            <p style={{margin:0,fontSize:'12px',color:C.gray}}>Hogar Salud IPS SAS</p>
-          </div>
-          <div style={{display:'flex',gap:'10px'}}>
-            <button className="btn-s" onClick={fetchContratos} disabled={loading}>{Ico.Refresh} Actualizar</button>
-            <button className="btn-p" onClick={()=>{setForm(FORM0);setBusqCedula('');setModalGenerar(true);}}>
-              {Ico.Plus} Generar Contrato
-            </button>
-          </div>
-        </header>
-
-document.getElementById('progressFill').style.width = '33%';
+});
 </script>
 </body>
 </html>
-        {/* CONTENIDO */}
-        <main style={{flex:1,overflowY:'auto',padding:'24px 32px',background:C.light}}>
-
-          {/* Stats */}
-          <div style={{display:'flex',gap:'12px',marginBottom:'22px',flexWrap:'wrap'}}>
-            {[
-              {l:'Total Personal',   v:stats.total, co:C.cyan,   bg:'#e0f9fb'},
-              {l:'Sin Contrato',     v:stats.sin,   co:C.gray,   bg:'#f1f5f9'},
-              {l:'Pendiente Firma',  v:stats.pend,  co:C.yellow, bg:C.yellowBg},
-              {l:'Firma Recibida 🔔',v:stats.rec,   co:C.orange, bg:C.orangeBg},
-              {l:'Aprobados ✓',      v:stats.apr,   co:C.green,  bg:C.greenBg},
-            ].map(s=>(
-              <div key={s.l} style={{background:'#fff',border:`1px solid ${C.border}`,borderRadius:'14px',padding:'14px 18px',flex:1,minWidth:0,borderTop:`3px solid ${s.co}`}}>
-                <div style={{fontSize:'24px',fontWeight:900,color:s.co}}>{s.v}</div>
-                <div style={{fontSize:'11px',color:C.gray,fontWeight:600,marginTop:'2px'}}>{s.l}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Filtros */}
-          <div style={{display:'flex',gap:'12px',marginBottom:'18px',flexWrap:'wrap',alignItems:'center'}}>
-            <div style={{position:'relative',flex:1,minWidth:'220px'}}>
-              <span style={{position:'absolute',left:'12px',top:'50%',transform:'translateY(-50%)',color:'#94a3b8'}}>{Ico.Search}</span>
-              <input className="inp" style={{paddingLeft:'36px'}} placeholder="Nombre, cédula o cargo..." value={busqueda} onChange={e=>{setBusqueda(e.target.value);setPagina(1);}}/>
-            </div>
-            <select className="inp" style={{minWidth:'180px',flex:'none'}} value={filtroTipo} onChange={e=>{setFiltroTipo(e.target.value);setPagina(1);}}>
-              <option value="Todos">Todos los tipos</option>
-              {TIPOS.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}
-            </select>
-            <select className="inp" style={{minWidth:'170px',flex:'none'}} value={filtroEstado} onChange={e=>{setFiltroEstado(e.target.value);setPagina(1);}}>
-              <option value="Todos">Todos los estados</option>
-              {Object.keys(ESTADO_META).map(k=><option key={k} value={k}>{k}</option>)}
-            </select>
-          </div>
-
-          {/* Lista */}
-          {loading ? (
-            <div style={{textAlign:'center',padding:'70px',color:C.cyan}}>
-              <div style={{fontSize:'32px',marginBottom:'12px'}}>⟳</div>
-              <div style={{fontWeight:700}}>Sincronizando con Dataverse...</div>
-            </div>
-          ) : slice.length===0 ? (
-            <div style={{background:'#fff',border:`1px dashed ${C.border}`,borderRadius:'16px',padding:'60px',textAlign:'center'}}>
-              <div style={{fontSize:'40px',marginBottom:'12px'}}>📭</div>
-              <p style={{color:C.gray,fontSize:'13px'}}>No se encontraron registros con los filtros actuales.</p>
-            </div>
-          ) : (
-            <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
-              {slice.map(c=>{
-                const tc = TIPO_COLOR[c.tipo]||TIPO_COLOR['Obra o Labor'];
-                return (
-                  <div key={c.id} className="row-card" style={{borderLeftColor:c.estado==='Firma Recibida'?C.orange:tc.color}}>
-                    {/* Col 1: Nombre */}
-                    <div style={{minWidth:0}}>
-                      <div style={{fontWeight:800,fontSize:'14px',color:C.dark,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',marginBottom:'3px'}}>{c.nombreCompleto}</div>
-                      <div style={{fontSize:'12px',color:C.gray,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
-                        CC {c.cedula}{c.email ? ` · ${c.email}` : ''}
-                      </div>
-                    </div>
-                    {/* Col 2: Cargo + fecha */}
-                    <div style={{background:C.light,padding:'8px 12px',borderRadius:'8px',border:`1px solid ${C.border}`,minWidth:0}}>
-                      <div style={{fontWeight:700,fontSize:'13px',color:C.dark,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{c.cargo}</div>
-                      <div style={{fontSize:'11px',color:C.gray,marginTop:'2px'}}>{fmtDate(c.fechaIngreso)||'Sin fecha'}</div>
-                    </div>
-                    {/* Col 3: Badges + botones (solo Enviar y Ver) */}
-                    <div style={{display:'flex',alignItems:'center',gap:'6px',flexShrink:0,flexWrap:'wrap',justifyContent:'flex-end'}}>
-                      <TipoBadge tipo={c.tipo}/>
-                      <EstadoBadge estado={c.estado}/>
-                      {/* ✅ SOLO ENVIAR (cuando sin contrato) y VER */}
-                      {c.estado==='Sin Contrato' && (
-                        <button className="btn-g" onClick={()=>handleEnviar(c)} disabled={enviando} title="Enviar link de firma al trabajador">
-                          {Ico.Send} Enviar
-                        </button>
-                      )}
-                      <button className="btn-s" style={{padding:'7px 10px'}} onClick={()=>setModalVer(c)} title="Ver documento">
-                        {Ico.Eye} Ver
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Paginación */}
-          {!loading && totalPags>1 && (
-            <div style={{display:'flex',justifyContent:'center',alignItems:'center',gap:'6px',marginTop:'24px'}}>
-              <button className="pg-btn" onClick={()=>setPagina(p=>Math.max(1,p-1))} disabled={pagina===1}>‹</button>
-              {Array.from({length:Math.min(totalPags,7)},(_,i)=>{
-                let p=i+1;
-                if(totalPags>7){if(pagina<=4)p=i+1;else if(pagina>=totalPags-3)p=totalPags-6+i;else p=pagina-3+i;}
-                return <button key={p} className={`pg-btn${pagina===p?' on':''}`} onClick={()=>setPagina(p)}>{p}</button>;
-              })}
-              <button className="pg-btn" onClick={()=>setPagina(p=>Math.min(totalPags,p+1))} disabled={pagina===totalPags}>›</button>
-              <span style={{fontSize:'12px',color:C.gray,marginLeft:'8px'}}>{registros.length} registros</span>
-            </div>
-          )}
-        </main>
-      </div>
-
-      {/* ══ MODAL GENERAR CONTRATO ══ */}
-      {modalGenerar && (
-        <div className="overlay no-print" onClick={e=>{if(e.target===e.currentTarget)setModalGenerar(false);}}>
-          <div className="modal" style={{maxWidth:'700px',padding:'28px 32px'}}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'20px'}}>
-              <div>
-                <h2 style={{margin:0,fontSize:'18px',fontWeight:800,color:C.dark}}>Generar Nuevo Contrato</h2>
-                <p style={{margin:'4px 0 0',fontSize:'12px',color:C.gray}}>Busca por cédula para autocargar datos de Dataverse. Todos los campos son editables.</p>
-              </div>
-              <button onClick={()=>setModalGenerar(false)} style={{background:'none',border:'none',cursor:'pointer',color:C.gray}}>{Ico.Close}</button>
-            </div>
-
-            {/* Buscador cédula */}
-            <div style={{background:C.light,padding:'14px',borderRadius:'12px',border:`1px solid ${C.border}`,marginBottom:'18px'}}>
-              <label className="lbl">🔍 Buscar empleado por cédula</label>
-              <div style={{display:'flex',gap:'8px',marginTop:'6px'}}>
-                <input className="inp" style={{flex:1}} type="number" value={busqCedula}
-                  onChange={e=>setBusqCedula(e.target.value)}
-                  onKeyDown={e=>{if(e.key==='Enter')handleBuscarCedula();}}
-                  placeholder="Número de documento..."/>
-                <button className="btn-p" onClick={handleBuscarCedula} disabled={buscando} style={{flexShrink:0}}>
-                  {buscando?'...':'Buscar'}
-                </button>
-              </div>
-              {form.idDataverse && <div style={{marginTop:'8px',color:C.green,fontSize:'12px',fontWeight:700}}>✅ Datos cargados desde Dataverse</div>}
-            </div>
-
-            <form onSubmit={handleGuardar}>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'13px',marginBottom:'14px'}}>
-                <div style={{gridColumn:'1/-1'}}>
-                  <label className="lbl">Nombre Completo *</label>
-                  <input required className="inp" value={form.nombreCompleto} onChange={e=>F('nombreCompleto',e.target.value)} placeholder="Nombres y apellidos completos"/>
-                </div>
-                <div>
-                  <label className="lbl">Cédula *</label>
-                  <input required className="inp" value={form.cedula} onChange={e=>F('cedula',e.target.value)} placeholder="Número de documento"/>
-                </div>
-                <div>
-                  <label className="lbl">Tipo de Contrato *</label>
-                  <select required className="inp" value={form.tipo} onChange={e=>F('tipo',e.target.value)}>
-                    {TIPOS.map(t=><option key={t.value} value={t.value}>{t.label}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <label className="lbl">Cargo *</label>
-                  <input required className="inp" value={form.cargo} onChange={e=>F('cargo',e.target.value)} placeholder="Ej. Gestor de Servicios, Médico General"/>
-                </div>
-                <div>
-                  <label className="lbl">Fecha de Inicio *</label>
-                  <input required className="inp" type="date" value={form.fechaIngreso} onChange={e=>F('fechaIngreso',e.target.value)}/>
-                </div>
-                <div>
-                  <label className="lbl">{form.tipo==='Aprendizaje'?'Auxilio Económico':form.tipo==='OPS'?'Remuneración':'Salario'} *</label>
-                  <input required className="inp" value={form.salario} onChange={e=>F('salario',e.target.value)} placeholder="$1.750.905 o Conforme a Tarifas"/>
-                </div>
-                <div>
-                  <label className="lbl">Periodo de Pago *</label>
-                  <input required className="inp" value={form.periodoPago} onChange={e=>F('periodoPago',e.target.value)} placeholder="Mensual, Quincenal..."/>
-                </div>
-                <div>
-                  <label className="lbl">Email *</label>
-                  <input required className="inp" type="email" value={form.email} onChange={e=>F('email',e.target.value)} placeholder="correo@ejemplo.com"/>
-                </div>
-                <div>
-                  <label className="lbl">Teléfono</label>
-                  <input className="inp" value={form.telefono} onChange={e=>F('telefono',e.target.value)} placeholder="300 000 0000"/>
-                </div>
-                <div>
-                  <label className="lbl">Dirección</label>
-                  <input className="inp" value={form.direccion} onChange={e=>F('direccion',e.target.value)} placeholder="Calle / Carrera #..."/>
-                </div>
-                <div>
-                  <label className="lbl">Ciudad</label>
-                  <input className="inp" value={form.ciudad} onChange={e=>F('ciudad',e.target.value)} placeholder="Barranquilla"/>
-                </div>
-                <div>
-                  <label className="lbl">Lugar, fecha de nacimiento</label>
-                  <input className="inp" value={form.fechaNacimiento} onChange={e=>F('fechaNacimiento',e.target.value)} placeholder="Ej. Barranquilla, 15 de marzo de 1990"/>
-                </div>
-
-                {/* Campos por tipo */}
-                {(form.tipo==='Obra o Labor'||form.tipo==='Término Indefinido') && (
-                  <div style={{gridColumn:'1/-1'}}>
-                    <label className="lbl">Labor Contratada</label>
-                    <textarea className="inp" rows="2" style={{resize:'vertical'}} value={form.laborContratada} onChange={e=>F('laborContratada',e.target.value)} placeholder="Las consignadas en el presente contrato y las inherentes al cargo de..."/>
-                  </div>
-                )}
-                {form.tipo==='Término Indefinido' && (
-                  <>
-                    <div>
-                      <label className="lbl">Horario</label>
-                      <input className="inp" value={form.horario} onChange={e=>F('horario',e.target.value)} placeholder="7AM a 12M - 2PM a 5PM L a V"/>
-                    </div>
-                    <div>
-                      <label className="lbl">Fondo de Pensiones</label>
-                      <input className="inp" value={form.fondoPensiones} onChange={e=>F('fondoPensiones',e.target.value)} placeholder="PORVENIR, COLFONDOS..."/>
-                    </div>
-                  </>
-                )}
-                {form.tipo==='Aprendizaje' && (
-                  <>
-                    <div>
-                      <label className="lbl">Institución Educativa</label>
-                      <input className="inp" value={form.institucionEducativa} onChange={e=>F('institucionEducativa',e.target.value)} placeholder="SENA, INCATEC..."/>
-                    </div>
-                    <div>
-                      <label className="lbl">Fecha de Terminación</label>
-                      <input className="inp" type="date" value={form.fechaFin} onChange={e=>F('fechaFin',e.target.value)}/>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div style={{display:'flex',justifyContent:'flex-end',gap:'10px',borderTop:`1px solid ${C.border}`,paddingTop:'14px'}}>
-                <button type="button" className="btn-s" onClick={()=>setModalGenerar(false)}>Cancelar</button>
-                <button type="submit" className="btn-p" disabled={guardando}>
-                  {guardando?'Guardando...':'💾 Guardar Contrato'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ══ MODAL VER DOCUMENTO ══ */}
-      {modalVer && (
-        <div className="overlay" onClick={e=>{if(e.target===e.currentTarget)setModalVer(null);}}>
-          <div className="modal no-print" style={{maxWidth:'880px'}}>
-            <div style={{padding:'18px 26px',borderBottom:`1px solid ${C.border}`,display:'flex',justifyContent:'space-between',alignItems:'center',position:'sticky',top:0,background:'#fff',zIndex:2,borderRadius:'16px 16px 0 0'}}>
-              <div>
-                <div style={{fontWeight:800,fontSize:'15px',color:C.dark}}>
-                  {modalVer.tipo} — Hogar Salud IPS SAS
-                </div>
-                <div style={{fontSize:'12px',color:C.gray,marginTop:'3px',display:'flex',alignItems:'center',gap:'8px'}}>
-                  {modalVer.nombreCompleto} &nbsp;|&nbsp; <EstadoBadge estado={modalVer.estado}/>
-                </div>
-              </div>
-              <div style={{display:'flex',gap:'8px',alignItems:'center'}}>
-                <button className="btn-s" onClick={()=>window.print()}>{Ico.Print} Imprimir</button>
-                {/* Botón Enviar dentro del modal si sin contrato */}
-                {modalVer.estado==='Sin Contrato' && (
-                  <button className="btn-g" onClick={()=>handleEnviar(modalVer)} disabled={enviando}>
-                    {Ico.Send} {enviando?'Enviando...':'Enviar Contrato'}
-                  </button>
-                )}
-                {/* Botón Rechazar si tiene firma recibida */}
-                {modalVer.estado==='Firma Recibida' && (
-                  <button className="btn-r" onClick={()=>{setContratoRech(modalVer);setMotivo('');setModalRechazar(true);}}>
-                    {Ico.X} Rechazar
-                  </button>
-                )}
-                <button onClick={()=>setModalVer(null)} style={{background:'none',border:'none',cursor:'pointer',color:C.gray,padding:'4px'}}>{Ico.Close}</button>
-              </div>
-            </div>
-
-            {modalVer.estado==='Firma Recibida' && (
-              <div style={{background:'#fff7ed',borderBottom:'1px solid #fed7aa',padding:'12px 26px',fontSize:'13px',color:'#92400e'}}>
-                🔔 <strong>Este contrato fue firmado por el trabajador.</strong> Para aprobar, el flujo de Power Automate debe enviar la notificación a Álvaro. Puedes rechazarlo usando el botón de arriba.
-              </div>
-            )}
-
-            <div style={{padding:'24px 28px 32px',background:'#f0f4f8'}}>
-              <div className="doc-paper">
-                {modalVer.tipo==='Obra o Labor'       && <PlantillaObraLabor   c={modalVer} firmaRRHH={modalVer.estado==='Aprobado'?modalVer.firmaRRHH||null:null} firmaTrabajador={modalVer.firmaTrabajador}/>}
-                {modalVer.tipo==='Término Indefinido' && <PlantillaIndefinido  c={modalVer} firmaRRHH={modalVer.estado==='Aprobado'?modalVer.firmaRRHH||null:null} firmaTrabajador={modalVer.firmaTrabajador}/>}
-                {modalVer.tipo==='Aprendizaje'        && <PlantillaAprendizaje c={modalVer} firmaRRHH={modalVer.estado==='Aprobado'?modalVer.firmaRRHH||null:null} firmaTrabajador={modalVer.firmaTrabajador}/>}
-                {modalVer.tipo==='OPS'                && <PlantillaOPS         c={modalVer} firmaRRHH={modalVer.estado==='Aprobado'?modalVer.firmaRRHH||null:null} firmaTrabajador={modalVer.firmaTrabajador}/>}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ══ MODAL RECHAZAR ══ */}
-      {modalRechazar && contratoRech && (
-        <div className="overlay no-print" onClick={e=>{if(e.target===e.currentTarget)setModalRechazar(false);}}>
-          <div className="modal" style={{maxWidth:'460px',padding:'28px 32px'}}>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'18px'}}>
-              <h2 style={{margin:0,fontSize:'18px',fontWeight:800,color:C.red}}>Rechazar Contrato</h2>
-              <button onClick={()=>setModalRechazar(false)} style={{background:'none',border:'none',cursor:'pointer',color:C.gray}}>{Ico.Close}</button>
-            </div>
-            <div style={{background:C.light,borderRadius:'10px',padding:'14px',marginBottom:'16px'}}>
-              <div style={{fontWeight:700,color:C.dark}}>{contratoRech.nombreCompleto}</div>
-              <div style={{fontSize:'12px',color:C.gray,marginTop:'3px'}}>{contratoRech.cargo} · {contratoRech.tipo}</div>
-            </div>
-            <div style={{marginBottom:'16px'}}>
-              <label className="lbl">Motivo del rechazo *</label>
-              <textarea className="inp" rows="4" style={{resize:'vertical'}} value={motivo} onChange={e=>setMotivo(e.target.value)} placeholder="Este mensaje se enviará al trabajador por correo..."/>
-            </div>
-            <div style={{background:C.redBg,border:'1px solid #fca5a5',borderRadius:'8px',padding:'11px',fontSize:'12px',color:C.red,marginBottom:'16px'}}>
-              ⚠️ El estado cambiará a <strong>Rechazado</strong> y se notificará al trabajador.
-            </div>
-            <div style={{display:'flex',gap:'10px',justifyContent:'flex-end'}}>
-              <button className="btn-s" onClick={()=>setModalRechazar(false)}>Cancelar</button>
-              <button className="btn-r" onClick={handleRechazar} disabled={!motivo.trim()||rechazando} style={{padding:'10px 20px',fontSize:'13px',opacity:motivo.trim()?1:0.5}}>
-                {rechazando?'Rechazando...':`${Ico.X} Confirmar Rechazo`}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-    </div>
-  );
-}
