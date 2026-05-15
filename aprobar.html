@@ -143,7 +143,12 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
  *  action = "rechazar"       → Flujo 2 actualiza estado a Rechazado, notifica trabajador
  */
 
+// Flujo 2 — Guardar Firma (solicitar OTP + rechazar)
 var FLUJO2 = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
+// Flujo Aprobar Contrato — verifica OTP, actualiza Dataverse, crea en SharePoint, email al trabajador
+var FLUJO_APROBAR = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/0db3bd1ee5be4312a716e28ba42c80b1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Dn6rU048WoQHpqs_Omdo5jxC5cwHl6AtxnPutk0q9PY';
+// Flujo Rechazar Contrato — pega aquí la URL de tu flujo existente de rechazar
+var FLUJO_RECHAZAR = 'PEGA_AQUI_URL_FLUJO_RECHAZAR';
 
 // Parámetros que llegan por URL (enviados por Flujo 2 cuando notifica a Álvaro)
 var P = new URLSearchParams(location.search);
@@ -263,11 +268,10 @@ btnAprobar.addEventListener('click', async function() {
   this.disabled = true;
 
   try {
-    var res = await fetch(FLUJO2, {
+    var res = await fetch(FLUJO_APROBAR, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        action: 'aprobar',
         otp: cod,
         contratoId: contratoId,
         nombre: nombre,
@@ -280,8 +284,7 @@ btnAprobar.addEventListener('click', async function() {
         fecha: fecha,
         labor: labor,
         ciudad: ciudad,
-        telefono: telefono,
-        token: token
+        telefono: telefono
       })
     });
 
@@ -327,11 +330,10 @@ document.getElementById('btnConfRech').addEventListener('click', async function(
   this.disabled = true;
   this.textContent = 'Procesando...';
   try {
-    var res = await fetch(FLUJO2, {
+    var res = await fetch(FLUJO_RECHAZAR, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        action: 'rechazar',
         contratoId: contratoId,
         nombre: nombre,
         cargo: cargo,
