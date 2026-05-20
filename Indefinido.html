@@ -300,11 +300,11 @@ btnF.addEventListener('click', async function() {
 
   try {
 await fetch(WEBHOOK, {
-método: 'POST',
-cabeceras: {
-'Tipo de contenido': 'aplicación/json'
-},
-cuerpo: JSON.stringify(payload)
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(payload)
 });
  
 
