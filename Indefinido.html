@@ -299,10 +299,11 @@ btnF.addEventListener('click', async function() {
  
 
   try {
-   await fetch(WEBHOOK, {
+await fetch(WEBHOOK, {
 método: 'POST',
+modo: 'no-corso',
 cabeceras: {
-'Tipo de contenido': 'aplicación/json'
+'Tipo de contenido': 'texto/plano'
 },
 cuerpo: JSON.stringify(payload)
 });
