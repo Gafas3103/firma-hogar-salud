@@ -298,13 +298,22 @@ btnF.addEventListener('click', async function() {
  
 
   try {
-await fetch(WEBHOOK, {
+const resp = await fetch(WEBHOOK, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json'
   },
   body: JSON.stringify(payload)
 });
+
+const text = await resp.text();
+
+if (!resp.ok) {
+  console.error('Power Automate respondió error:', resp.status, text);
+  throw new Error('Error HTTP ' + resp.status + ': ' + text);
+}
+
+console.log('Respuesta Power Automate:', text);
  
 
  
