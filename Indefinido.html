@@ -260,91 +260,59 @@ document.getElementById('btnCambiar').addEventListener('click', function() {
 btnF.addEventListener('click', async function() {
   if (!firmaB64) return;
 
-
-
   if (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE)) {
     document.getElementById('sigCard').style.display = 'none';
     document.getElementById('dupCard').style.display = 'block';
     return;
   }
 
-
-
   document.getElementById('btnTxt').style.display = 'none';
   document.getElementById('btnSpin').style.display = 'flex';
   this.disabled = true;
 
-
-
   var payload = {
-    token: token,
-    firma: firmaB64,
+    token: String(token || ''),
+    firma: String(firmaB64 || ''),
     ts: new Date().toISOString(),
-    nombre: nombre,
-    cedula: cedula,
-    cargo: cargo,
-    tipo: tipo,
-    email: emailV,
-    salario: salario,
-    periodo: periodo,
-    fecha: fecha,
-    labor: labor,
-    ciudad: ciudad,
-    telefono: telefono,
-    direccion: direccion,
-    nacimiento: nacimiento
+    nombre: String(nombre || ''),
+    cedula: String(cedula || ''),
+    cargo: String(cargo || ''),
+    tipo: String(tipo || ''),
+    email: String(emailV || ''),
+    salario: String(salario || ''),
+    periodo: String(periodo || ''),
+    fecha: String(fecha || ''),
+    labor: String(labor || ''),
+    ciudad: String(ciudad || ''),
+    telefono: String(telefono || '')
   };
 
-
-
   console.log('Payload enviado:', payload);
-
-
+  console.log('Payload JSON:', JSON.stringify(payload));
 
   try {
-const resp = await fetch(WEBHOOK, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(payload)
-});
-
-const text = await resp.text();
-
-if (!resp.ok) {
-  console.error('Power Automate respondió error:', resp.status, text);
-  throw new Error('Error HTTP ' + resp.status + ': ' + text);
-}
-
-console.log('Respuesta Power Automate:', text);
-
-
-
+    await fetch(WEBHOOK, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify(payload)
+    });
 
     try { sessionStorage.setItem(CLAVE, '1'); } catch(e) {}
     try { localStorage.setItem(CLAVE, '1'); } catch(e) {}
-
-
 
     document.getElementById('ctCard').style.display = 'none';
     document.getElementById('sigCard').style.display = 'none';
     document.getElementById('okCard').style.display = 'block';
 
-
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-
 
   } catch(e) {
     console.error('Error real al enviar firma:', e);
 
-
-
     alert('Error al enviar la firma. Verifica tu conexion e intentalo de nuevo.');
-
-
 
     document.getElementById('btnTxt').style.display = 'flex';
     document.getElementById('btnSpin').style.display = 'none';
