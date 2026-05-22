@@ -23,7 +23,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .ct-body td{border:1px solid #888;padding:5px 8px;font-size:11.5px}
 .ct-body td.lf{font-weight:bold;width:40%}
 .pc{margin-bottom:11px}
-.sig-card{padding:24px}
+.sec{padding:24px}
 .warn{background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;padding:13px 15px;font-size:13px;color:#92400e;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;line-height:1.5}
 .upload-zone{border:2px dashed #cbd5e1;border-radius:10px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfc;position:relative}
 .upload-zone:hover,.upload-zone.drag{border-color:#1e40af;background:#eff6ff}
@@ -39,18 +39,28 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .result.ok{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #86efac}
 .result.dup{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid #93c5fd}
 .result h2{font-size:20px;font-weight:800;margin-bottom:10px}
-.result.ok h2{color:#166534} .result.dup h2{color:#1e40af}
+.result.ok h2{color:#166534}.result.dup h2{color:#1e40af}
 .result p{font-size:13px;line-height:1.7}
-.result.ok p{color:#166534} .result.dup p{color:#1e3a8a}
+.result.ok p{color:#166534}.result.dup p{color:#1e3a8a}
 .steps{display:flex;flex-direction:column;gap:8px;margin-top:14px;text-align:left}
 .stp{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.6);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600}
-.result.ok .stp{color:#166534} .result.dup .stp{color:#1e40af}
+.result.ok .stp{color:#166534}.result.dup .stp{color:#1e40af}
 .sn{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
-.result.ok .sn{background:#bbf7d0;color:#166534} .result.dup .sn{background:#bfdbfe;color:#1e40af}
+.result.ok .sn{background:#bbf7d0;color:#166534}.result.dup .sn{background:#bfdbfe;color:#1e40af}
 footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1.6}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
-@media(max-width:480px){.ct-body{padding:18px 14px}.sig-card{padding:18px 14px}}
+.verify-box{padding:28px 24px}
+.v-title{font-size:16px;font-weight:800;color:#0f172a;margin-bottom:6px}
+.v-sub{font-size:13px;color:#64748b;margin-bottom:20px;line-height:1.6}
+.v-input{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:10px;font-size:18px;font-weight:700;letter-spacing:4px;text-align:center;outline:none;font-family:monospace;transition:border-color .2s;box-sizing:border-box}
+.v-input:focus{border-color:#1e40af;background:#f8faff}
+.v-input.err{border-color:#dc2626;background:#fff5f5}
+.v-err{color:#dc2626;font-size:13px;font-weight:600;text-align:center;margin-top:8px;min-height:20px}
+.btn-verify{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:16px;padding:14px;background:linear-gradient(135deg,#1e40af,#0f2d5a);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(30,64,175,.3)}
+.btn-verify:hover{transform:translateY(-2px)}
+.btn-verify:disabled{opacity:.45;cursor:not-allowed;transform:none;background:#94a3b8}
+@media(max-width:480px){.ct-body{padding:18px 14px}.sec{padding:18px 14px}}
 </style>
 </head>
 <body>
@@ -62,7 +72,18 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
   </div>
 </div>
 <div class="main">
-  <div class="card" id="ctCard">
+
+  <div class="card" id="verifyCard">
+    <div class="verify-box">
+      <div class="v-title">🔒 Verificacion de identidad</div>
+      <div class="v-sub">Para acceder al convenio y firmarlo, confirma tu numero de cedula. Esto garantiza que solo tu puedes firmar este documento.</div>
+      <input type="text" id="cedulaInput" class="v-input" placeholder="Ej: 1234567890" inputmode="numeric" maxlength="12">
+      <div class="v-err" id="errCedula"></div>
+      <button class="btn-verify" id="btnVerificar">🔒 Confirmar y ver contrato</button>
+    </div>
+  </div>
+
+  <div class="card" id="ctCard" style="display:none">
     <div class="ct-hdr">
       <div class="ct-icon">&#x1F4CB;</div>
       <div>
@@ -72,13 +93,14 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
     </div>
     <div class="ct-body" id="ctBody"></div>
   </div>
-  <div class="card" id="sigCard">
-    <div class="sig-card">
+
+  <div class="card" id="sigCard" style="display:none">
+    <div class="sec">
       <div style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:6px">&#x1F4CE; Sube tu firma</div>
-      <div style="font-size:13px;color:#64748b;margin-bottom:18px">Toma una foto de tu firma sobre papel blanco y subela. Al enviarla confirmas que aceptas todos los terminos del contrato.</div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:18px">Toma una foto de tu firma sobre papel blanco y subela.</div>
       <div class="warn">
         <span style="font-size:16px;flex-shrink:0">&#x26A0;&#xFE0F;</span>
-        <span>Al firmar confirmas que eres <strong id="nomAlerta">el trabajador</strong> y aceptas el contrato con plena validez legal.</span>
+        <span>Al firmar confirmas que eres <strong id="nomAlerta">el adscrito</strong> y aceptas el convenio con plena validez legal.</span>
       </div>
       <div class="upload-zone" id="upZone">
         <input type="file" id="fileIn" accept="image/jpeg,image/png,image/jpg,image/webp">
@@ -92,199 +114,173 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
         <button class="btn-change" id="btnCambiar">Cambiar imagen</button>
       </div>
       <button class="btn-sign" id="btnFirmar" disabled>
-        <span id="btnTxt">&#x2705;&nbsp; Enviar Firma y Firmar Contrato</span>
+        <span id="btnTxt">&#x2705;&nbsp; Enviar Firma y Firmar Convenio</span>
         <span id="btnSpin" style="display:none" class="spinner"></span>
       </button>
     </div>
   </div>
+
   <div class="result ok" id="okCard">
     <div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">&#x2705;</div>
     <h2>Firma Enviada!</h2>
-    <p>Tu firma quedo registrada en el sistema de Hogar Salud IPS. Recursos Humanos revisara y aprobara tu contrato.</p>
+    <p>Tu firma quedo registrada. Recursos Humanos revisara y aprobara tu convenio.</p>
     <div class="steps">
       <div class="stp ok"><div class="sn">&#x2713;</div>Enviaste tu firma digitalmente</div>
-      <div class="stp ok"><div class="sn">2</div>RRHH revisara y aprobara tu contrato</div>
+      <div class="stp ok"><div class="sn">2</div>RRHH revisara y aprobara tu convenio</div>
       <div class="stp ok"><div class="sn">3</div>Recibiras el documento aprobado por correo</div>
     </div>
   </div>
   <div class="result dup" id="dupCard">
     <div style="width:64px;height:64px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">&#x1F4CB;</div>
-    <h2>Ya firmaste este contrato</h2>
-    <p>Tu firma ya fue registrada anteriormente. No es necesario volver a enviarla.</p>
+    <h2>Ya firmaste este convenio</h2>
+    <p>Tu firma ya fue registrada anteriormente.</p>
     <div class="steps">
       <div class="stp dup"><div class="sn">&#x2713;</div>Tu firma fue registrada correctamente</div>
-      <div class="stp dup"><div class="sn">2</div>RRHH esta revisando tu contrato</div>
+      <div class="stp dup"><div class="sn">2</div>RRHH esta revisando tu convenio</div>
       <div class="stp dup"><div class="sn">3</div>Recibiras el documento aprobado por correo</div>
     </div>
   </div>
 </div>
 <footer>Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla</footer>
+
 <script>
 var WEBHOOK = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
 
-var P = new URLSearchParams(location.search);
-var token     = P.get('token')    || '';
-var nombre    = P.get('nombre')   || 'Trabajador';
-var cargo     = P.get('cargo')    || '';
-var cedula    = P.get('cedula')   || '';
-var salario   = P.get('salario')  || '';
-var periodo   = P.get('periodo')  || 'Mensual';
-var fecha     = P.get('fecha')    || '';
-var labor     = P.get('labor')    || '';
-var ciudad    = P.get('ciudad')   || 'Barranquilla';
-var telefono  = P.get('telefono') || '';
-var emailV    = P.get('email')    || '';
-var direccion = P.get('direccion')|| '';
-var nacimiento= P.get('nacimiento')|| '';
+var P          = new URLSearchParams(location.search);
+var token      = P.get('token')      || '';
+var nombre     = P.get('nombre')     || 'Trabajador';
+var cargo      = P.get('cargo')      || '';
+var cedula     = P.get('cedula')     || '';
+var salario    = P.get('salario')    || '';
+var periodo    = P.get('periodo')    || 'Mensual';
+var fecha      = P.get('fecha')      || '';
+var labor      = P.get('labor')      || '';
+var ciudad     = P.get('ciudad')     || 'Barranquilla';
+var telefono   = P.get('telefono')   || '';
+/* ✅ TIPO SIN TILDES — actualiza el case del Switch en PA a "OPS" */
+var tipo       = 'OPS';
+var emailV     = P.get('email')      || '';
+var direccion  = P.get('direccion')  || '';
+var nacimiento = P.get('nacimiento') || '';
 var CLAVE = 'hs_firmado_' + token;
 
-document.getElementById('nomAlerta').textContent = nombre;
+var cedulaInput  = document.getElementById('cedulaInput');
+var btnVerificar = document.getElementById('btnVerificar');
+var errCedula    = document.getElementById('errCedula');
+btnVerificar.disabled = true;
 
-function even(i){ return i%2===0 ? '#f2f2f2' : '#fff'; }
-function row(l, v, i) {
-  var bg = even(i);
-  return '<tr><td class="lf" style="border:1px solid #888;padding:5px 8px;background:' + bg + '">' + l + '</td>'
-       + '<td style="border:1px solid #888;padding:5px 8px;background:' + bg + '">' + (v||'') + '</td></tr>';
-}
-function tbl(rows) {
-  return '<table><tbody>' + rows.join('') + '</tbody></table>';
-}
-function firmaBlok(nombreF, cc, empresa, nit, imgSrc, etiqueta) {
-  var img = imgSrc
-    ? '<img src="' + imgSrc + '" style="max-height:52px;max-width:170px;object-fit:contain;display:block;margin:0 auto">'
-    : '<div style="height:52px"></div>';
-  return '<div style="flex:1;min-width:180px;text-align:center">' + img
-    + '<div style="border-top:1px solid #000;padding-top:6px;font-size:11.5px;line-height:1.6">'
-    + '<strong>' + nombreF + '</strong><br>'
-    + (cc      ? 'C.C. ' + cc + '<br>' : '')
-    + (empresa ? empresa + '<br>' : '')
-    + (nit     ? 'Nit. ' + nit + '<br>' : '')
-    + (etiqueta? '<em>' + etiqueta + '</em>' : '')
-    + '</div></div>';
-}
-
-
-function firmas(fTrab) {
-  var izq = firmaBlok('HOGARSALUD IPS SAS', '72.343.183', 'LA ADSCRIBIENTE', '900.369.003-1', '', 'ALVARO JOSE MERCADO CASIJ');
-  var der = firmaBlok(nombre.toUpperCase(), cedula, cargo.toUpperCase(), '', fTrab||'', 'EL ADSCRITO');
-  return '<div style="display:flex;justify-content:space-around;margin-top:60px;gap:40px;flex-wrap:wrap">' + izq + der + '</div>';
-}
-
-
-function renderContrato(fTrab) {
-  var html = '';
-  html += '<h2>CONVENIO DE ADSCRIPCION PARA ASISTENCIA EN SALUD</h2>';
-  html += '<h2 style="margin-bottom:20px">DE PACIENTES A DOMICILIO</h2>';
-  html += '<p class="pc"><strong>DATOS DEL ADSCRIBIENTE:</strong></p>';
-  html += '<p style="margin:0 0 2px"><strong>NOMBRE: "HOGARSALUD IPS SAS"</strong></p>';
-  html += '<p style="margin:0 0 2px"><strong>NIT.: 900.369.003-1</strong></p>';
-  html += '<p style="margin:0 0 2px"><strong>DOMICILIO: Carrera 56 # 72-129</strong></p>';
-  html += '<p style="margin:0 0 2px"><strong>NOMBRE REPRESENTANTE LEGAL: ALVARO JOSE MERCADO CASIJ</strong></p>';
-  html += '<p style="margin:0 0 18px"><strong>IDENTIFICACION: C.C. 72.343.183 de Barranquilla</strong></p>';
-  html += '<p class="pc"><strong>DATOS DEL ADSCRITO:</strong></p>';
-  html += tbl([
-    row('NOMBRE:', nombre.toUpperCase(), 0),
-    row('IDENTIFICACION:', cedula, 1),
-    row('TELEFONO DE CONTACTO:', telefono, 0),
-    row('DIRECCION:', direccion, 1),
-    row('EMAIL:', emailV, 0),
-    row('ESPECIALIDAD:', cargo.toUpperCase(), 1),
-    row('REMUNERACION:', salario || 'CONFORME A TARIFAS', 0),
-    row('PERIODOS DE PAGO:', periodo || '1 Vez al mes previa presentacion Cuenta de Cobro (mes vencido)', 1),
-    row('FECHA DE CONTRATO:', fecha, 0),
-    row('LUGAR DE LABORES:', ciudad || 'Atlantico / Barranquilla', 1),
-  ]);
-  html += '<p class="pc"><strong>ANEXO 1 - NORMATIVIDAD</strong></p>';
-  html += '<p class="pc">Las partes antes descritas, hemos acordado celebrar el presente Convenio de Adscripcion que se regira por las clausulas que se mencionan a continuacion:</p>';
-  html += '<p class="pc"><strong>Clausula Primera. Causa y antecedentes del contrato:</strong> LA ADSCRIBIENTE como I.P.S. de reconocida capacidad en el medio, cuenta con las condiciones necesarias para la prestacion de servicios de salud domiciliaria a favor de particulares, mediante contratacion directa o por medio de entidades publicas o privadas de Seguridad Social, Medicina Prepagada, Cajas de Compensacion y aseguradoras. Por su parte EL ADSCRITO, es un profesional en el area de la salud, en la especialidad o tecnologia que se senala en el recuadro de este contrato, interesado en aprovechar las posibilidades de la adscribiente, para su ejercicio profesional, contribuyendo a la vez al mejoramiento e implementacion de la misma, coparticipando en las labores de desarrollo de su objeto, asi como tambien derivar ingresos economicos que constituyen la remuneracion proveniente del contrato, de acuerdo al numero de pacientes atendidos.</p>';
-  html += '<p class="pc"><strong>Segunda. Objeto:</strong> LA ADSCRIBIENTE se compromete a facilitar los medios de que dispone para la prestacion de servicios de atencion domiciliaria, destinando al adscrito, de acuerdo con los requerimientos generales del servicio, a la prestacion de servicios de atencion medica y paramedica en procedimientos de aplicacion domiciliaria, en los sitios donde sea requerido. El adscrito solo prestara personalmente el servicio cuando sea requerido y la remuneracion procedera de acuerdo con las atenciones efectiva y realmente prestadas de acuerdo con las tarifas convenidas. <strong>PARAGRAFO:</strong> EL ADSCRITO podra aceptar o rechazar libremente los servicios ofrecidos, sin que ello genere sancion o consecuencia alguna.</p>';
-  html += '<p class="pc"><strong>Clausula Tercera. Obligaciones de la adscribiente:</strong> 1) Informar sobre la existencia de los servicios asistenciales domiciliarios de salud a los eventuales usuarios; 2) Mantener en funcionamiento sus dependencias en las horas convenidas; 3) Contar con la dotacion suficiente para la prestacion del servicio domiciliario en salud; 4) Derivar hacia el adscrito, aquellos pacientes que le correspondan; 5) Remitir oportunamente las cuentas de cobro a la entidad de salud; 6) Pagar al adscrito, los servicios profesionales de acuerdo a las tarifas convenidas; 7) Orientar e indicar las politicas a seguir para la prestacion de los servicios; 8) Hacer el mantenimiento preventivo de los equipos del maletin medico (Fonendoscopio, tensiometro, equipo de organos, pulsioximetro, glucometro, martillo, termometro, metro).</p>';
-  html += '<p class="pc"><strong>Clausula Cuarta. Obligaciones del ADSCRITO:</strong> Son obligaciones especificas del adscrito: 1) Prestar el servicio, en forma etica, bajo estrictos principios de Racionalidad Tecnico Cientifica, continuidad, oportunidad, eficiencia, eficacia; 2) Elaborar y llevar las anotaciones pertinentes en las historias clinicas, asi como consignar en ellas los datos e informes que exige la Resolucion 1.995 de julio 8 de 1.999 emanada del Ministerio de Salud; 4) Prestar el servicio personalmente, pues este contrato es Intuito Personal; 5) Afiliarse debidamente a los sistemas de seguridad social, pensiones, salud y accidentes laborales (A.R.L.); 6) Presentar en las condiciones del presente contrato las cuentas de cobro; 7) Contar con un maletin medico con los siguientes equipos (Fonendoscopio, tensiometro, equipo de organos, Pulsioximetro, glucometro, martillo, termometro, metro); 8) Hacer el mantenimiento correctivo de los equipos de su propiedad que utilice en la prestacion de servicios de HogarSalud Ips.</p>';
-  html += '<p class="pc"><strong>Clausula Quinta. Valor de los Servicios:</strong> LA ADSCRIBIENTE pagara, los valores a ella pagados por las entidades y particulares que requieran sus servicios, por concepto de la atencion prestada por EL ADSCRITO, el valor que corresponda a la suma de las cuentas de cobro debidamente presentadas por este de acuerdo con el valor senalado en las tarifas que constan, en documento que forma parte del presente documento.</p>';
-  html += '<p class="pc"><strong>Clausula Sexta. Forma de pago:</strong> Para la efectivizacion del pago, se seguira el siguiente procedimiento: a) El adscrito presentara a la adscribiente despues de haber finalizado las ordenes de servicios realizadas durante el mes en una cuenta y liquidacion por cada orden de servicio, que contendra el nombre del paciente, la orden de servicio firmada por un representante de Direccion Medica, el numero de sesiones valor unitario y total en el periodo liquidado. b) La adscribiente efectuara la correspondiente auditoria de la cuenta-liquidacion dentro de los 5 dias siguientes a la presentacion de la cuenta; c) Si no hubiere objeciones el pago se efectuara el dia 10 del mes siguiente a la correcta presentacion de la cuenta.</p>';
-  html += '<p class="pc"><strong>Clausula Septima. Duracion del Convenio y Finalizacion del mismo en cualquier tiempo:</strong> La duracion del presente convenio estara supeditada a la existencia de necesidades operativas y asistenciales por parte de LA ADSCRIBIENTE, relacionadas con la prestacion de servicios domiciliarios de salud, sin que ello implique obligacion alguna de permanencia, continuidad o asignacion minima de servicios a favor del ADSCRITO. En consecuencia, el presente convenio se mantendra vigente mientras subsistan dichas condiciones y podra ser terminado en cualquier momento, de manera unilateral por cualquiera de las partes, sin necesidad de invocar causa alguna, mediante comunicacion escrita, sin que haya lugar al reconocimiento de indemnizaciones, compensaciones o perjuicios de ninguna naturaleza.</p>';
-  html += '<p class="pc"><strong>Clausula Novena. Libertad Contractual:</strong> La celebracion del presente convenio no significa acuerdo de exclusividad de ninguna indole y por consiguiente LA ADSCRIBIENTE y EL ADSCRITO gozan de absoluta libertad para celebrar convenios similares o equivalentes a los aqui contratados, con terceros.</p>';
-  html += '<p class="pc"><strong>Clausula Decima. Inexistencia de Relacion Laboral:</strong> Entre LA ADSCRIBIENTE y su personal y EL ADSCRITO no se establece relacion alguna de caracter laboral.</p>';
-  html += '<p class="pc"><strong>Clausula Decima Primera. Independencia del adscrito:</strong> EL ADSCRITO actuara por su propia cuenta, con absoluta libertad, autonomia tecnica y administrativa y no estara sometido a subordinacion con LA ADSCRIBIENTE, y sus derechos se limitaran, de acuerdo con la naturaleza del contrato, a exigir el cumplimiento de las obligaciones de LA ADSCRIBIENTE y al pago de los valores estipulados por la prestacion del servicio.</p>';
-  html += '<p class="pc"><strong>Clausula Decima Segunda. Cesion del Contrato:</strong> EL ADSCRITO no podra ceder parcial ni totalmente la ejecucion del presente contrato a un tercero salvo previa autorizacion expresa y escrita de LA ADSCRIBIENTE.</p>';
-  html += '<p class="pc"><strong>Clausula Decima Tercera. Modificaciones:</strong> Toda modificacion que se efectue al presente convenio, se debera realizar de comun acuerdo entre las partes, de lo cual se dejara constancia por escrito.</p>';
-  html += '<p class="pc"><strong>Clausula Decima Cuarta. Controles:</strong> Con la finalidad de asegurar la oportunidad, eticidad, calidad y racionalidad logico-cientifica en la prestacion del servicio por parte de EL ADSCRITO, LA ADSCRIBIENTE podra inspeccionar, verificar y auditar, el servicio, e igualmente, sin que ello se entienda lesion a su autonomia tecnica y profesional, hacer sugerencias y recomendaciones por escrito, para que EL ADSCRITO corrija deficiencias en la prestacion de este.</p>';
-  html += '<p class="pc"><strong>Clausula Decima Quinta. Compromisoria:</strong> Las partes convienen que en el evento en que surja alguna diferencia entre las mismas, por razon o con ocasion del presente contrato, sera sometida al arreglo y decision de un amigable componedor, que se designara de comun acuerdo.</p>';
-  html += '<p class="pc"><strong>Clausula Decima Sexta. Integralidad:</strong> El presente contrato regula en su integridad las relaciones juridicas entre las partes y, en consecuencia, deja sin efecto cualquier otro convenio o estipulacion acordada con anterioridad.</p>';
-  html += firmas(fTrab);
-  return html;
-}
-
-
-document.getElementById('ctBody').innerHTML = renderContrato(null);
 if (token && (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE))) {
-  document.getElementById('ctCard').style.display = 'none';
-  document.getElementById('sigCard').style.display = 'none';
-  document.getElementById('dupCard').style.display = 'block';
+  document.getElementById('verifyCard').style.display = 'none';
+  document.getElementById('dupCard').style.display    = 'block';
 }
-var firmaB64 = null;
-var fileIn   = document.getElementById('fileIn');
-var upZone   = document.getElementById('upZone');
-var prevZone = document.getElementById('prevZone');
-var prevImg  = document.getElementById('prevImg');
-var btnF     = document.getElementById('btnFirmar');
-function cargar(file) {
-  if (!file) return;
-  if (file.size > 5*1024*1024) { alert('Imagen muy grande. Maximo 5MB.'); return; }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    firmaB64 = e.target.result;
-    prevImg.src = firmaB64;
-    upZone.style.display = 'none';
-    prevZone.style.display = 'block';
-    btnF.disabled = false;
-    document.getElementById('ctBody').innerHTML = renderContrato(firmaB64);
-  };
-  reader.readAsDataURL(file);
-}
-fileIn.addEventListener('change', function(e) { cargar(e.target.files[0]); });
-upZone.addEventListener('dragover',  function(e) { e.preventDefault(); upZone.classList.add('drag'); });
-upZone.addEventListener('dragleave', function()  { upZone.classList.remove('drag'); });
-upZone.addEventListener('drop',      function(e) { e.preventDefault(); upZone.classList.remove('drag'); cargar(e.dataTransfer.files[0]); });
-document.getElementById('btnCambiar').addEventListener('click', function() {
-  firmaB64 = null; btnF.disabled = true;
-  prevZone.style.display = 'none'; upZone.style.display = 'block';
-  fileIn.value = '';
-  document.getElementById('ctBody').innerHTML = renderContrato(null);
+cedulaInput.addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g,'');
+  this.classList.remove('err');
+  errCedula.textContent = '';
+  btnVerificar.disabled = this.value.length < 5;
 });
-btnF.addEventListener('click', async function() {
-  if (!firmaB64) return;
-  if (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE)) {
-    document.getElementById('sigCard').style.display = 'none';
-    document.getElementById('dupCard').style.display = 'block'; return;
+btnVerificar.addEventListener('click', function() {
+  var ingresada = cedulaInput.value.trim();
+  var esperada  = cedula.trim().replace(/\D/g,'');
+  if (ingresada === esperada) {
+    document.getElementById('verifyCard').style.display = 'none';
+    document.getElementById('ctCard').style.display     = 'block';
+    document.getElementById('sigCard').style.display    = 'block';
+    document.getElementById('nomAlerta').textContent    = nombre;
+    document.getElementById('ctBody').innerHTML         = renderContrato(null);
+  } else {
+    cedulaInput.classList.add('err');
+    errCedula.textContent = 'Cedula incorrecta. Verifica el numero e intenta de nuevo.';
   }
-  document.getElementById('btnTxt').style.display = 'none';
-  document.getElementById('btnSpin').style.display = 'flex';
-  this.disabled = true;
-  // no-cors: evita bloqueo CORS de Power Automate. La peticion llega aunque la respuesta sea opaca.
-  try {
-    await fetch(WEBHOOK, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {'Content-Type': 'text/plain'},
-      body: JSON.stringify({
-        token:token, firma:firmaB64, ts:new Date().toISOString(),
-        nombre:nombre, cedula:cedula, cargo:cargo, tipo:tipo,
-        email:emailV, salario:salario, periodo:periodo, fecha:fecha,
-        labor:labor, ciudad:ciudad, telefono:telefono
-      })
-    });
-    try { sessionStorage.setItem(CLAVE,'1'); } catch(e) {}
-    try { localStorage.setItem(CLAVE,'1');   } catch(e) {}
-    document.getElementById('ctCard').style.display  = 'none';
-    document.getElementById('sigCard').style.display = 'none';
-    document.getElementById('okCard').style.display  = 'block';
+});
+
+function even(i){return i%2===0?'#f2f2f2':'#fff';}
+function row(l,v,i){var bg=even(i);return'<tr><td class="lf" style="border:1px solid #888;padding:5px 8px;background:'+bg+'">'+l+'</td><td style="border:1px solid #888;padding:5px 8px;background:'+bg+'">'+(v||'')+'</td></tr>';}
+function tbl(rows){return'<table><tbody>'+rows.join('')+'</tbody></table>';}
+function firmaBlok(nombreF,cc,empresa,nit,imgSrc,etiqueta){
+  var img=imgSrc?'<img src="'+imgSrc+'" style="max-height:52px;max-width:170px;object-fit:contain;display:block;margin:0 auto">':'<div style="height:52px"></div>';
+  return'<div style="flex:1;min-width:180px;text-align:center">'+img+'<div style="border-top:1px solid #000;padding-top:6px;font-size:11.5px;line-height:1.6"><strong>'+nombreF+'</strong><br>'+(cc?'C.C. '+cc+'<br>':'')+(empresa?empresa+'<br>':'')+(nit?'Nit. '+nit+'<br>':'')+(etiqueta?'<em>'+etiqueta+'</em>':'')+'</div></div>';
+}
+function firmas(fTrab){
+  var izq=firmaBlok('HOGARSALUD IPS SAS','72.343.183','LA ADSCRIBIENTE','900.369.003-1','','ALVARO JOSE MERCADO CASIJ');
+  var der=firmaBlok(nombre.toUpperCase(),cedula,cargo.toUpperCase(),'',fTrab||'','EL ADSCRITO');
+  return'<div style="display:flex;justify-content:space-around;margin-top:60px;gap:40px;flex-wrap:wrap">'+izq+der+'</div>';
+}
+function renderContrato(fTrab) {
+  var h='';
+  h+='<h2>CONVENIO DE ADSCRIPCION PARA ASISTENCIA EN SALUD</h2>';
+  h+='<h2 style="margin-bottom:20px">DE PACIENTES A DOMICILIO</h2>';
+  h+='<p class="pc"><strong>DATOS DEL ADSCRIBIENTE:</strong></p>';
+  h+='<p style="margin:0 0 2px"><strong>NOMBRE: "HOGARSALUD IPS SAS"</strong></p>';
+  h+='<p style="margin:0 0 2px"><strong>NIT.: 900.369.003-1</strong></p>';
+  h+='<p style="margin:0 0 2px"><strong>DOMICILIO: Carrera 56 # 72-129</strong></p>';
+  h+='<p style="margin:0 0 2px"><strong>NOMBRE REPRESENTANTE LEGAL: ALVARO JOSE MERCADO CASIJ</strong></p>';
+  h+='<p style="margin:0 0 18px"><strong>IDENTIFICACION: C.C. 72.343.183 de Barranquilla</strong></p>';
+  h+='<p class="pc"><strong>DATOS DEL ADSCRITO:</strong></p>';
+  h+=tbl([
+    row('NOMBRE:',nombre.toUpperCase(),0),
+    row('IDENTIFICACION:',cedula,1),
+    row('TELEFONO DE CONTACTO:',telefono,0),
+    row('DIRECCION:',direccion,1),
+    row('EMAIL:',emailV,0),
+    row('ESPECIALIDAD:',cargo.toUpperCase(),1),
+    row('REMUNERACION:',salario||'CONFORME A TARIFAS',0),
+    row('PERIODOS DE PAGO:',periodo||'1 Vez al mes previa presentacion Cuenta de Cobro (mes vencido)',1),
+    row('FECHA DE CONTRATO:',fecha,0),
+    row('LUGAR DE LABORES:',ciudad||'Atlantico / Barranquilla',1),
+  ]);
+  h+='<p class="pc"><strong>ANEXO 1 - NORMATIVIDAD</strong></p>';
+  h+='<p class="pc">Las partes antes descritas, hemos acordado celebrar el presente Convenio de Adscripcion que se regira por las clausulas que se mencionan a continuacion:</p>';
+  h+='<p class="pc"><strong>Clausula Primera. Causa y antecedentes del contrato:</strong> LA ADSCRIBIENTE como I.P.S. de reconocida capacidad en el medio, cuenta con las condiciones necesarias para la prestacion de servicios de salud domiciliaria. Por su parte EL ADSCRITO, es un profesional en el area de la salud, en la especialidad de '+cargo.toUpperCase()+', interesado en aprovechar las posibilidades de la adscribiente para su ejercicio profesional.</p>';
+  h+='<p class="pc"><strong>Segunda. Objeto:</strong> LA ADSCRIBIENTE se compromete a facilitar los medios de que dispone para la prestacion de servicios de atencion domiciliaria, destinando al adscrito a la prestacion de servicios de atencion medica y paramedica en procedimientos de aplicacion domiciliaria. <strong>PARAGRAFO:</strong> EL ADSCRITO podra aceptar o rechazar libremente los servicios ofrecidos, sin que ello genere sancion o consecuencia alguna.</p>';
+  h+='<p class="pc"><strong>Clausula Tercera. Obligaciones de la adscribiente:</strong> 1) Informar sobre los servicios asistenciales domiciliarios; 2) Mantener en funcionamiento sus dependencias; 3) Contar con la dotacion suficiente para el servicio domiciliario; 4) Derivar hacia el adscrito los pacientes que le correspondan; 5) Remitir oportunamente las cuentas de cobro; 6) Pagar los servicios profesionales segun tarifas convenidas; 7) Orientar e indicar las politicas a seguir; 8) Hacer el mantenimiento preventivo de los equipos del maletin medico.</p>';
+  h+='<p class="pc"><strong>Clausula Cuarta. Obligaciones del ADSCRITO:</strong> 1) Prestar el servicio en forma etica bajo estrictos principios de Racionalidad Tecnico Cientifica; 2) Elaborar y llevar las anotaciones pertinentes en las historias clinicas segun la Resolucion 1.995 de 1999; 4) Prestar el servicio personalmente, pues este contrato es Intuito Personal; 5) Afiliarse debidamente a los sistemas de seguridad social, pensiones, salud y ARL; 6) Presentar las cuentas de cobro en las condiciones del presente contrato; 7) Contar con un maletin medico con los equipos requeridos.</p>';
+  h+='<p class="pc"><strong>Clausula Quinta. Valor de los Servicios:</strong> LA ADSCRIBIENTE pagara los valores correspondientes a la suma de las cuentas de cobro debidamente presentadas por EL ADSCRITO de acuerdo con las tarifas convenidas.</p>';
+  h+='<p class="pc"><strong>Clausula Sexta. Forma de pago:</strong> El adscrito presentara su cuenta de cobro mensual con el nombre del paciente, orden de servicio firmada, numero de sesiones, valor unitario y total. La adscribiente auditara la cuenta dentro de los 5 dias siguientes y efectuara el pago el dia 10 del mes siguiente.</p>';
+  h+='<p class="pc"><strong>Clausula Septima. Duracion del Convenio:</strong> La duracion del presente convenio estara supeditada a la existencia de necesidades operativas y asistenciales de LA ADSCRIBIENTE. El convenio podra ser terminado en cualquier momento, de manera unilateral por cualquiera de las partes, mediante comunicacion escrita, sin lugar a indemnizaciones.</p>';
+  h+='<p class="pc"><strong>Clausula Novena. Libertad Contractual:</strong> La celebracion del presente convenio no significa acuerdo de exclusividad y por consiguiente ambas partes gozan de absoluta libertad para celebrar convenios similares con terceros.</p>';
+  h+='<p class="pc"><strong>Clausula Decima. Inexistencia de Relacion Laboral:</strong> Entre LA ADSCRIBIENTE y EL ADSCRITO no se establece relacion alguna de caracter laboral.</p>';
+  h+='<p class="pc"><strong>Clausula Decima Primera. Independencia del adscrito:</strong> EL ADSCRITO actuara por su propia cuenta, con absoluta libertad, autonomia tecnica y administrativa, sin subordinacion con LA ADSCRIBIENTE.</p>';
+  h+='<p class="pc"><strong>Clausula Decima Segunda. Cesion del Contrato:</strong> EL ADSCRITO no podra ceder la ejecucion del presente contrato a un tercero sin previa autorizacion escrita de LA ADSCRIBIENTE.</p>';
+  h+='<p class="pc"><strong>Clausula Decima Tercera. Modificaciones:</strong> Toda modificacion al presente convenio se realizara de comun acuerdo entre las partes, dejando constancia por escrito.</p>';
+  h+='<p class="pc"><strong>Clausula Decima Cuarta. Controles:</strong> LA ADSCRIBIENTE podra inspeccionar, verificar y auditar el servicio, y hacer sugerencias por escrito para que EL ADSCRITO corrija deficiencias, sin que ello se entienda como lesion a su autonomia tecnica.</p>';
+  h+='<p class="pc"><strong>Clausula Decima Quinta. Compromisoria:</strong> Las diferencias que surjan entre las partes seran sometidas a un amigable componedor designado de comun acuerdo.</p>';
+  h+='<p class="pc"><strong>Clausula Decima Sexta. Integralidad:</strong> El presente contrato regula en su integridad las relaciones juridicas entre las partes y deja sin efecto cualquier convenio o estipulacion acordada con anterioridad.</p>';
+  h+=firmas(fTrab);
+  return h;
+}
+
+var firmaB64=null, fileIn=document.getElementById('fileIn'), upZone=document.getElementById('upZone');
+var prevZone=document.getElementById('prevZone'), prevImg=document.getElementById('prevImg'), btnF=document.getElementById('btnFirmar');
+function cargar(file){if(!file)return;if(file.size>5*1024*1024){alert('Imagen muy grande. Maximo 5MB.');return;}var r=new FileReader();r.onload=function(e){firmaB64=e.target.result;prevImg.src=firmaB64;upZone.style.display='none';prevZone.style.display='block';btnF.disabled=false;document.getElementById('ctBody').innerHTML=renderContrato(firmaB64);};r.readAsDataURL(file);}
+fileIn.addEventListener('change',function(e){cargar(e.target.files[0]);});
+upZone.addEventListener('dragover',function(e){e.preventDefault();upZone.classList.add('drag');});
+upZone.addEventListener('dragleave',function(){upZone.classList.remove('drag');});
+upZone.addEventListener('drop',function(e){e.preventDefault();upZone.classList.remove('drag');cargar(e.dataTransfer.files[0]);});
+document.getElementById('btnCambiar').addEventListener('click',function(){firmaB64=null;btnF.disabled=true;prevZone.style.display='none';upZone.style.display='block';fileIn.value='';document.getElementById('ctBody').innerHTML=renderContrato(null);});
+
+btnF.addEventListener('click', async function() {
+  if(!firmaB64)return;
+  if(sessionStorage.getItem(CLAVE)||localStorage.getItem(CLAVE)){document.getElementById('sigCard').style.display='none';document.getElementById('dupCard').style.display='block';return;}
+  document.getElementById('btnTxt').style.display='none';
+  document.getElementById('btnSpin').style.display='flex';
+  this.disabled=true;
+  var payload={token:String(token||''),firma:String(firmaB64||''),ts:new Date().toISOString(),nombre:String(nombre||''),cedula:String(cedula||''),cargo:String(cargo||''),tipo:tipo,email:String(emailV||''),salario:String(salario||''),periodo:String(periodo||''),fecha:String(fecha||''),labor:String(labor||''),ciudad:String(ciudad||''),telefono:String(telefono||'')};
+  try{
+    var resp=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    console.log('Status:',resp.status);
+    try{sessionStorage.setItem(CLAVE,'1');}catch(e){}
+    try{localStorage.setItem(CLAVE,'1');}catch(e){}
+    document.getElementById('ctCard').style.display='none';
+    document.getElementById('sigCard').style.display='none';
+    document.getElementById('okCard').style.display='block';
     window.scrollTo({top:0,behavior:'smooth'});
-  } catch(e) {
+  }catch(e){
+    console.error('Error:',e);
     alert('Error al enviar la firma. Verifica tu conexion e intentalo de nuevo.');
-    document.getElementById('btnTxt').style.display = 'flex';
-    document.getElementById('btnSpin').style.display = 'none';
-    this.disabled = false;
+    document.getElementById('btnTxt').style.display='flex';
+    document.getElementById('btnSpin').style.display='none';
+    this.disabled=false;
   }
 });
 </script>
