@@ -113,7 +113,7 @@ var nom   = P.get('nombre')|| '';
 document.getElementById('refCode').textContent = token.substring(0, 8) + '...';
 
 /* Agregar token al mensaje de WhatsApp para que soporte lo identifique */
-var waBase = 'https://wa.me/573XXXXXXXXX?text=';
+var waBase = 'https://wa.me/573043476030?text=';
 var waMsg  = 'Hola, el enlace de mi contrato no funciona.'
            + (nom ? ' Soy ' + nom + '.' : '')
            + ' Referencia: ' + token.substring(0, 8);
@@ -126,7 +126,7 @@ var emailBody = 'Hola,\n\nEl enlace de mi contrato no funciona.\n'
               + 'Tipo recibido: ' + tipo + '\n\n'
               + 'Por favor enviarme un nuevo enlace.\n\nGracias.';
 document.getElementById('btnEmail').href =
-  'mailto:rrhh@hogarsaludips.com'
+  'mailto:cristian.serrano@pevaar.com'
   + '?subject=' + encodeURIComponent('Enlace de contrato no valido')
   + '&body='    + encodeURIComponent(emailBody);
 </script>
