@@ -132,7 +132,7 @@ var fecha     = P.get('fecha')    || '';
 var labor     = P.get('labor')    || '';
 var ciudad    = P.get('ciudad')   || 'Barranquilla';
 var telefono  = P.get('telefono') || '';
-var tipo      = P.get('tipo')     || 'Contrato';
+var tipo      = P.get('tipo')     || 'Indefinido';
 var emailV    = P.get('email')    || '';
 var direccion = P.get('direccion')|| '';
 var nacimiento= P.get('nacimiento')|| '';
@@ -155,14 +155,10 @@ function firmaBlok(nombreF, cc, empresa, nit, imgSrc, etiqueta) {
     : '<div style="height:52px"></div>';
   return '<div style="flex:1;min-width:180px;text-align:center">' + img
     + '<div style="border-top:1px solid #000;padding-top:6px;font-size:11.5px;line-height:1.6">'
-    + '<strong>' + nombreF + '</strong>
-'
-    + (cc      ? 'C.C. ' + cc + '
-' : '')
-    + (empresa ? empresa + '
-' : '')
-    + (nit     ? 'Nit. ' + nit + '
-' : '')
+    + '<strong>' + nombreF + '</strong><br>'
+    + (cc      ? 'C.C. ' + cc + '<br>' : '')
+    + (empresa ? empresa + '<br>' : '')
+    + (nit     ? 'Nit. ' + nit + '<br>' : '')
     + (etiqueta? '<em>' + etiqueta + '</em>' : '')
     + '</div></div>';
 }
@@ -259,13 +255,10 @@ document.getElementById('btnCambiar').addEventListener('click', function() {
 });
 btnF.addEventListener('click', async function() {
   if (!firmaB64) return;
-
   if (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE)) {
     document.getElementById('sigCard').style.display = 'none';
-    document.getElementById('dupCard').style.display = 'block';
-    return;
+    document.getElementById('dupCard').style.display = 'block'; return;
   }
-
   document.getElementById('btnTxt').style.display = 'none';
   document.getElementById('btnSpin').style.display = 'flex';
   this.disabled = true;
@@ -277,7 +270,7 @@ btnF.addEventListener('click', async function() {
     nombre: String(nombre || ''),
     cedula: String(cedula || ''),
     cargo: String(cargo || ''),
-    tipo: String(tipo || ''),
+    tipo: String(tipo || 'Indefinido'),
     email: String(emailV || ''),
     salario: String(salario || ''),
     periodo: String(periodo || ''),
@@ -287,33 +280,24 @@ btnF.addEventListener('click', async function() {
     telefono: String(telefono || '')
   };
 
-  console.log('Payload enviado:', payload);
-  console.log('Payload JSON:', JSON.stringify(payload));
-
   try {
-    await fetch(WEBHOOK, {
+    var resp = await fetch(WEBHOOK, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'text/plain'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
-    try { sessionStorage.setItem(CLAVE, '1'); } catch(e) {}
-    try { localStorage.setItem(CLAVE, '1'); } catch(e) {}
-
-    document.getElementById('ctCard').style.display = 'none';
+    if (!resp.ok) {
+      console.warn('Respuesta no-ok:', resp.status, resp.statusText);
+    }
+    try { sessionStorage.setItem(CLAVE,'1'); } catch(e) {}
+    try { localStorage.setItem(CLAVE,'1');   } catch(e) {}
+    document.getElementById('ctCard').style.display  = 'none';
     document.getElementById('sigCard').style.display = 'none';
-    document.getElementById('okCard').style.display = 'block';
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
+    document.getElementById('okCard').style.display  = 'block';
+    window.scrollTo({top:0,behavior:'smooth'});
   } catch(e) {
-    console.error('Error real al enviar firma:', e);
-
+    console.error('Error al enviar firma:', e);
     alert('Error al enviar la firma. Verifica tu conexion e intentalo de nuevo.');
-
     document.getElementById('btnTxt').style.display = 'flex';
     document.getElementById('btnSpin').style.display = 'none';
     this.disabled = false;
