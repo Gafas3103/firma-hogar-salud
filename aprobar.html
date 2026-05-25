@@ -24,7 +24,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .otp-in.err{border-color:#dc2626;background:#fff5f5}
 .err-msg{color:#dc2626;font-size:13px;font-weight:600;text-align:center;margin-top:6px}
 .otp-status{font-size:12px;color:#64748b;text-align:center;min-height:18px;margin-bottom:6px}
-.btn-ok{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(22,163,74,.3)}
+.btn-ok{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(22,163,74,.3);font-family:inherit}
 .btn-ok:hover:not(:disabled){transform:translateY(-2px)}
 .btn-ok:disabled{opacity:.4;cursor:not-allowed;transform:none;background:#94a3b8}
 .btn-reenv{background:none;border:1px solid #e2e8f0;color:#64748b;padding:9px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;margin-top:8px;width:100%;font-family:inherit}
@@ -33,6 +33,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .btn-rech{width:100%;margin-top:6px;padding:11px;background:#fff;color:#dc2626;border:2px solid #dc2626;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit}
 .btn-rech:hover{background:#fee2e2}
 .note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;font-size:13px;color:#92400e;margin-top:12px;line-height:1.6;display:flex;gap:10px}
+.countdown{font-size:11px;color:#94a3b8;text-align:center;margin-top:4px;min-height:16px}
 .rech-box{padding:18px}
 .lbl{font-size:12px;font-weight:700;color:#0f172a;display:block;margin-bottom:4px}
 .inp{width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;box-sizing:border-box;outline:none;font-family:inherit}
@@ -47,7 +48,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .result.ok h2{color:#166534}.result.rech h2{color:#dc2626}
 .result p{font-size:13px;line-height:1.7}
 .result.ok p{color:#166534}.result.rech p{color:#dc2626}
-.countdown{font-size:11px;color:#94a3b8;text-align:center;margin-top:4px;min-height:16px}
 footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1.6}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
@@ -66,7 +66,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
   <div class="card" id="panelMain">
     <div class="sec">
       <div class="ttl">🔐 Verificación de identidad</div>
-      <div class="sub" id="otpSub">Solicitando código SMS...</div>
+      <div class="sub" id="otpSub">El código fue enviado al celular de Álvaro Mercado cuando el trabajador firmó. Ingrésalo abajo para aprobar.</div>
 
       <div style="background:#f8fafc;border-radius:9px;padding:12px 16px;margin-bottom:18px;border:1px solid #e2e8f0">
         <div class="irow"><span class="il">Trabajador</span><span class="iv" id="iNom">—</span></div>
@@ -76,9 +76,9 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
         <div class="irow" style="border-bottom:none"><span class="il">Fecha inicio</span><span class="iv" id="iFecha">—</span></div>
       </div>
 
-      <div class="otp-status" id="otpStatus">Enviando código...</div>
+      <div class="otp-status" id="otpStatus">Ingresa el código que llegó por SMS cuando el trabajador firmó.</div>
       <input class="otp-in" id="otpIn" type="text" maxlength="6" placeholder="000000"
-        inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" disabled>
+        inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
       <div class="err-msg" id="errMsg" style="display:none"></div>
 
       <button class="btn-ok" id="btnAprobar" disabled>
@@ -86,7 +86,8 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
         <span id="btnAprSpin" style="display:none" class="spinner"></span>
       </button>
 
-      <button class="btn-reenv" id="btnReenv" disabled>📱 Reenviar SMS</button>
+      <!-- ✅ Reenviar usa el flujo separado — NO reactiva el flujo de guardar firma -->
+      <button class="btn-reenv" id="btnReenv">📱 Reenviar SMS con el código</button>
       <div class="countdown" id="countdown"></div>
 
       <button class="btn-rech" id="btnMostrarRech">✕ &nbsp;Rechazar este contrato</button>
@@ -125,12 +126,17 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
 <footer>Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla</footer>
 
 <script>
-var FLUJO2 = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
+/* ══ FLUJOS ══════════════════════════════════════════════════════════════
+ * FLUJO_APROBAR  — verifica OTP, actualiza Dataverse, SharePoint, email trabajador
+ * FLUJO_RECHAZAR — actualiza estado, notifica trabajador
+ * FLUJO_REENVIAR — solo reenvía SMS con el OTP ya guardado (NO reactiva Guardar Firma)
+ */
 var FLUJO_APROBAR  = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/0db3bd1ee5be4312a716e28ba42c80b1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Dn6rU048WoQHpqs_Omdo5jxC5cwHl6AtxnPutk0q9PY';
 var FLUJO_RECHAZAR = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/618843c38ca141ebb5faa2e86a367f9f/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Al8Des-GNrk10wh7XF04MzuCnmX5WQO61dgAdIUrwyY';
+/* ✅ Nuevo flujo dedicado solo para reenviar el OTP existente — NO genera uno nuevo */
+var FLUJO_REENVIAR = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/85250955096e45dea8755248921081b2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zS6aYuD6bImYkNJIUdb-64rl7OlkAf1ANm_aMEOZMho';
 
 var P          = new URLSearchParams(location.search);
-var token      = P.get('token')      || '';
 var contratoId = P.get('contratoId') || '';
 var nombre     = P.get('nombre')     || '';
 var cedula     = P.get('cedula')     || '';
@@ -150,127 +156,72 @@ document.getElementById('iCargo').textContent = cargo  || '—';
 document.getElementById('iTipo').textContent  = tipo   || '—';
 document.getElementById('iFecha').textContent = fecha  || '—';
 
-// ✅ OTP guardado siempre como string limpio sin espacios
-var otpMemoria  = '';
-var enviandoOTP = false;
+/* ══ COUNTDOWN ═══════════════════════════════════════════════════════════ */
 var countdownInterval = null;
-
-function iniciarCountdown(segundos) {
-  var restantes = segundos;
+function iniciarCountdown(seg) {
+  var restantes = seg;
   var el = document.getElementById('countdown');
-  document.getElementById('btnReenv').disabled = true;
+  var btn = document.getElementById('btnReenv');
+  btn.disabled = true;
   clearInterval(countdownInterval);
   countdownInterval = setInterval(function() {
     restantes--;
     if (restantes <= 0) {
       clearInterval(countdownInterval);
-      el.textContent = '';
-      document.getElementById('btnReenv').disabled = false;
-      enviandoOTP = false;
+      el.textContent  = '';
+      btn.disabled    = false;
     } else {
       el.textContent = 'Puedes reenviar en ' + restantes + 's';
     }
   }, 1000);
 }
 
-async function solicitarOTP() {
-  if (enviandoOTP) return;
-  enviandoOTP = true;
-
-  var statusEl = document.getElementById('otpStatus');
-  var otpIn    = document.getElementById('otpIn');
-
-  statusEl.textContent = 'Enviando código SMS...';
-  statusEl.style.color = '#64748b';
-  document.getElementById('btnReenv').disabled = true;
-  otpIn.disabled = true;
-  otpIn.value    = '';
-  document.getElementById('btnAprobar').disabled = true;
-  document.getElementById('errMsg').style.display = 'none';
-
-  try {
-    var res = await fetch(FLUJO2, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action:     'solicitar_otp',
-        contratoId: contratoId,
-        nombre:     nombre,
-        cargo:      cargo,
-        tipo:       tipo
-      })
-    });
-
-    var data = {};
-    try { data = await res.json(); } catch(e) {}
-
-    if (data.otp) {
-      // ✅ FIX: Convertir a string, trim, eliminar cualquier espacio o salto de línea
-      otpMemoria = String(data.otp).trim().replace(/\D/g, '');
-      statusEl.textContent = 'Código SMS enviado. Ingrésalo abajo.';
-      statusEl.style.color = '#16a34a';
-    } else {
-      otpMemoria = '';
-      statusEl.textContent = 'Código SMS enviado al celular de Álvaro Mercado.';
-      statusEl.style.color = '#16a34a';
-    }
-
-    otpIn.disabled = false;
-    otpIn.focus();
-    document.getElementById('otpSub').textContent =
-      'Ingresa el código de 6 dígitos que llegó al celular de Álvaro Mercado para aprobar el contrato de ' + nombre + '.';
-
-    // ✅ FIX: Countdown de 30s — cuando termina habilita reenviar y resetea enviandoOTP
-    iniciarCountdown(30);
-
-  } catch(err) {
-    console.error('Error OTP:', err);
-    statusEl.textContent = 'Error al enviar SMS. Intenta de nuevo.';
-    statusEl.style.color = '#dc2626';
-    otpIn.disabled  = false;
-    enviandoOTP     = false;
-    document.getElementById('btnReenv').disabled = false;
-    document.getElementById('countdown').textContent = '';
-    clearInterval(countdownInterval);
-  }
-}
-
-// Iniciar al cargar la página
-solicitarOTP();
-
-// ✅ FIX: Reenviar — resetea otpMemoria y llama de nuevo
-document.getElementById('btnReenv').addEventListener('click', function() {
-  otpMemoria  = '';
-  enviandoOTP = false;
-  solicitarOTP();
-});
-
-/* ══ VALIDAR OTP INPUT ══ */
+/* ══ VALIDAR OTP INPUT ═══════════════════════════════════════════════════ */
 var otpIn      = document.getElementById('otpIn');
 var btnAprobar = document.getElementById('btnAprobar');
 
 otpIn.addEventListener('input', function(e) {
-  // ✅ Solo dígitos, máx 6
-  var v = e.target.value.replace(/\D/g, '').slice(0, 6);
+  var v = e.target.value.replace(/\D/g,'').slice(0,6);
   e.target.value = v;
   btnAprobar.disabled = (v.length !== 6);
   document.getElementById('errMsg').style.display = 'none';
   e.target.classList.remove('err');
 });
 
-/* ══ APROBAR ══ */
-btnAprobar.addEventListener('click', async function() {
-  var cod = otpIn.value.replace(/\D/g, '').trim();
-  if (cod.length !== 6) return;
+/* ══ REENVIAR SMS ════════════════════════════════════════════════════════
+ * Llama al flujo separado "HS Reenviar OTP"
+ * Ese flujo busca el OTP ya guardado en Dataverse y reenvía el SMS
+ * NO genera un OTP nuevo — NO toca el contrato — NO envía email a Álvaro
+ */
+document.getElementById('btnReenv').addEventListener('click', async function() {
+  var statusEl = document.getElementById('otpStatus');
+  this.disabled = true;
+  statusEl.textContent = 'Reenviando SMS...';
+  statusEl.style.color = '#64748b';
+  document.getElementById('countdown').textContent = '';
 
-  // ✅ FIX: Comparación estricta string vs string, ambos limpios
-  if (otpMemoria && cod !== otpMemoria) {
-    otpIn.classList.add('err');
-    document.getElementById('errMsg').textContent =
-      'Código incorrecto. Verifica el SMS (código esperado tiene 6 dígitos).';
-    document.getElementById('errMsg').style.display = 'block';
-    return;
+  try {
+    await fetch(FLUJO_REENVIAR, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body:    JSON.stringify({ contratoId: contratoId })
+    });
+    statusEl.textContent = '✅ SMS reenviado. Usa el mismo código que llegó antes.';
+    statusEl.style.color = '#16a34a';
+  } catch(e) {
+    statusEl.textContent = 'Error al reenviar. Intenta de nuevo.';
+    statusEl.style.color = '#dc2626';
   }
+
+  /* Countdown 30s antes de permitir otro reenvío */
+  iniciarCountdown(30);
+});
+
+/* ══ APROBAR ══════════════════════════════════════════════════════════════ */
+btnAprobar.addEventListener('click', async function() {
+  var cod = otpIn.value.replace(/\D/g,'').trim();
+  if (cod.length !== 6) return;
 
   document.getElementById('btnAprTxt').style.display  = 'none';
   document.getElementById('btnAprSpin').style.display = 'inline-block';
@@ -297,19 +248,19 @@ btnAprobar.addEventListener('click', async function() {
       })
     });
 
-    // ✅ FIX: 200 o 502 = mostrar aprobado (la firma se guarda aunque el email falle)
+    /* 200 o 502 = mostrar aprobado (la firma se guarda aunque el email falle) */
     if (res.ok || res.status === 502) {
       document.getElementById('panelMain').style.display = 'none';
       document.getElementById('panelRech').style.display = 'none';
       document.getElementById('resOk').style.display     = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top:0, behavior:'smooth' });
     } else {
       var d = {};
       try { d = await res.json(); } catch(e) {}
       if (d.error === 'otp_invalido') {
         otpIn.classList.add('err');
         document.getElementById('errMsg').textContent =
-          'Código incorrecto según el servidor. Verifica el SMS.';
+          'Código incorrecto. Verifica el SMS e intenta de nuevo.';
         document.getElementById('errMsg').style.display = 'block';
       } else {
         alert('Error al aprobar (HTTP ' + res.status + '). Intenta de nuevo.');
@@ -319,16 +270,16 @@ btnAprobar.addEventListener('click', async function() {
       this.disabled = false;
     }
   } catch(e) {
-    // ✅ Error de red — el flujo probablemente procesó igual
-    console.warn('fetch error:', e);
+    /* Error de red — el flujo probablemente procesó igual */
+    console.warn('fetch aprobar:', e);
     document.getElementById('panelMain').style.display = 'none';
     document.getElementById('panelRech').style.display = 'none';
     document.getElementById('resOk').style.display     = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top:0, behavior:'smooth' });
   }
 });
 
-/* ══ RECHAZAR ══ */
+/* ══ RECHAZAR ════════════════════════════════════════════════════════════ */
 document.getElementById('btnMostrarRech').addEventListener('click', function() {
   document.getElementById('panelRech').style.display = 'block';
   this.style.display = 'none';
@@ -357,7 +308,7 @@ document.getElementById('btnConfRech').addEventListener('click', async function(
     document.getElementById('panelMain').style.display = 'none';
     document.getElementById('panelRech').style.display = 'none';
     document.getElementById('resRech').style.display   = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top:0, behavior:'smooth' });
   } catch(e) {
     alert('Error al rechazar. Intenta de nuevo.');
     this.disabled    = false;
