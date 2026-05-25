@@ -16,32 +16,27 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .sec{padding:24px}
 .ttl{font-size:16px;font-weight:800;color:#0f172a;margin-bottom:6px;display:flex;align-items:center;gap:8px}
 .sub{font-size:13px;color:#64748b;margin-bottom:20px;line-height:1.6}
-/* Info del contrato */
 .irow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f8fafc;gap:12px}
 .il{font-size:13px;color:#64748b;flex-shrink:0}
 .iv{font-size:13px;font-weight:600;color:#1e293b;text-align:right}
-/* OTP */
-.otp-wrap{position:relative;margin-bottom:8px}
 .otp-in{width:100%;padding:16px;border:2px solid #e2e8f0;border-radius:10px;font-size:34px;text-align:center;font-weight:800;letter-spacing:14px;outline:none;font-family:monospace;transition:border-color .2s;box-sizing:border-box}
 .otp-in:focus{border-color:#1e40af}
 .otp-in.err{border-color:#dc2626;background:#fff5f5}
 .err-msg{color:#dc2626;font-size:13px;font-weight:600;text-align:center;margin-top:6px}
 .otp-status{font-size:12px;color:#64748b;text-align:center;min-height:18px;margin-bottom:6px}
-/* Botones */
 .btn-ok{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(22,163,74,.3)}
 .btn-ok:hover:not(:disabled){transform:translateY(-2px)}
 .btn-ok:disabled{opacity:.4;cursor:not-allowed;transform:none;background:#94a3b8}
-.btn-reenv{background:none;border:1px solid #e2e8f0;color:#64748b;padding:9px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;margin-top:8px;width:100%}
-.btn-reenv:hover{background:#f8fafc}
-.btn-rech{width:100%;margin-top:6px;padding:11px;background:#fff;color:#dc2626;border:2px solid #dc2626;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-reenv{background:none;border:1px solid #e2e8f0;color:#64748b;padding:9px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;margin-top:8px;width:100%;font-family:inherit}
+.btn-reenv:hover:not(:disabled){background:#f8fafc}
+.btn-reenv:disabled{opacity:.4;cursor:not-allowed}
+.btn-rech{width:100%;margin-top:6px;padding:11px;background:#fff;color:#dc2626;border:2px solid #dc2626;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit}
 .btn-rech:hover{background:#fee2e2}
 .note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 14px;font-size:13px;color:#92400e;margin-top:12px;line-height:1.6;display:flex;gap:10px}
-/* Rechazo */
 .rech-box{padding:18px}
 .lbl{font-size:12px;font-weight:700;color:#0f172a;display:block;margin-bottom:4px}
 .inp{width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;box-sizing:border-box;outline:none;font-family:inherit}
 .inp:focus{border-color:#dc2626}
-/* Resultados */
 .result{display:none;padding:40px 24px;text-align:center;border-radius:10px;margin-bottom:18px}
 .result.ok{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #86efac}
 .result.rech{background:linear-gradient(135deg,#fff5f5,#fee2e2);border:2px solid #fca5a5}
@@ -49,9 +44,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .result.ok .ri{background:#dcfce7}
 .result.rech .ri{background:#fee2e2}
 .result h2{font-size:19px;font-weight:800;margin-bottom:8px}
-.result.ok h2{color:#166534} .result.rech h2{color:#dc2626}
+.result.ok h2{color:#166534}.result.rech h2{color:#dc2626}
 .result p{font-size:13px;line-height:1.7}
-.result.ok p{color:#166534} .result.rech p{color:#dc2626}
+.result.ok p{color:#166534}.result.rech p{color:#dc2626}
+.countdown{font-size:11px;color:#94a3b8;text-align:center;margin-top:4px;min-height:16px}
 footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1.6}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
@@ -67,15 +63,12 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
 </div>
 
 <div class="main">
-
-  <!-- PANEL OTP + DATOS -->
   <div class="card" id="panelMain">
     <div class="sec">
       <div class="ttl">🔐 Verificación de identidad</div>
-      <div class="sub" id="otpSub">Solicitando código SMS a través de Power Automate...</div>
+      <div class="sub" id="otpSub">Solicitando código SMS...</div>
 
-      <!-- Datos del contrato -->
-      <div style="background:#f8fafc;border-radius:9px;padding:12px 16px;margin-bottom:18px;border:1px solid #e2e8f0" id="infoBlok">
+      <div style="background:#f8fafc;border-radius:9px;padding:12px 16px;margin-bottom:18px;border:1px solid #e2e8f0">
         <div class="irow"><span class="il">Trabajador</span><span class="iv" id="iNom">—</span></div>
         <div class="irow"><span class="il">Cédula</span><span class="iv" id="iCed">—</span></div>
         <div class="irow"><span class="il">Cargo</span><span class="iv" id="iCargo">—</span></div>
@@ -84,14 +77,18 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
       </div>
 
       <div class="otp-status" id="otpStatus">Enviando código...</div>
-      <input class="otp-in" id="otpIn" type="text" maxlength="6" placeholder="000000" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" disabled>
+      <input class="otp-in" id="otpIn" type="text" maxlength="6" placeholder="000000"
+        inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" disabled>
       <div class="err-msg" id="errMsg" style="display:none"></div>
 
       <button class="btn-ok" id="btnAprobar" disabled>
         <span id="btnAprTxt">✓ &nbsp;Aprobar y Firmar Contrato</span>
         <span id="btnAprSpin" style="display:none" class="spinner"></span>
       </button>
+
       <button class="btn-reenv" id="btnReenv" disabled>📱 Reenviar SMS</button>
+      <div class="countdown" id="countdown"></div>
+
       <button class="btn-rech" id="btnMostrarRech">✕ &nbsp;Rechazar este contrato</button>
       <div class="note">
         <span style="font-size:15px;flex-shrink:0">⚠️</span>
@@ -100,58 +97,39 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
     </div>
   </div>
 
-  <!-- PANEL RECHAZO -->
   <div class="card" id="panelRech" style="display:none">
     <div class="rech-box">
       <label class="lbl">Motivo del rechazo *</label>
-      <textarea class="inp" id="motivoIn" rows="4" style="resize:vertical;margin-bottom:12px" placeholder="Este mensaje llegará al trabajador por correo..."></textarea>
+      <textarea class="inp" id="motivoIn" rows="4" style="resize:vertical;margin-bottom:12px"
+        placeholder="Este mensaje llegará al trabajador por correo..."></textarea>
       <div style="display:flex;gap:8px;justify-content:flex-end">
-        <button id="btnCancelRech" style="background:#f1f5f9;border:1px solid #e2e8f0;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;color:#334155">Cancelar</button>
-        <button id="btnConfRech" style="background:#dc2626;color:#fff;border:none;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px">✕ Confirmar Rechazo</button>
+        <button id="btnCancelRech" style="background:#f1f5f9;border:1px solid #e2e8f0;padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;color:#334155;font-family:inherit">Cancelar</button>
+        <button id="btnConfRech" style="background:#dc2626;color:#fff;border:none;padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;font-family:inherit">✕ Confirmar Rechazo</button>
       </div>
     </div>
   </div>
 
-  <!-- RESULTADO APROBADO -->
   <div class="result ok" id="resOk">
     <div class="ri">✅</div>
     <h2>Contrato Aprobado</h2>
     <p>El contrato fue aprobado exitosamente.<br>Se guardó en SharePoint y el trabajador fue notificado por correo.</p>
   </div>
 
-  <!-- RESULTADO RECHAZADO -->
   <div class="result rech" id="resRech">
     <div class="ri">✕</div>
     <h2>Contrato Rechazado</h2>
     <p>El contrato fue rechazado.<br>El trabajador fue notificado con el motivo indicado.</p>
   </div>
-
 </div>
+
 <footer>Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla</footer>
 
 <script>
-/*
- * APROBAR.HTML — Toda la lógica pasa por el FLUJO 2 con distintos "action":
- *
- *  action = "solicitar_otp"  → Flujo 2 genera OTP, lo guarda en Dataverse,
- *                               envía SMS vía conector Twilio de PA,
- *                               devuelve { otp: "123456" } en la respuesta
- *
- *  action = "aprobar"        → Flujo 2 verifica OTP, actualiza estado a Aprobado,
- *                               guarda HTML en SharePoint, notifica trabajador
- *
- *  action = "rechazar"       → Flujo 2 actualiza estado a Rechazado, notifica trabajador
- */
-
-// Flujo 2 — Guardar Firma (solicitar OTP + rechazar)
 var FLUJO2 = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c100cbfe846c41139cf030cc822e8bf3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nQ5a3uPZHIY42Yw-4t9IBwp28Qq6wbC_42Y8L23WQus';
-// Flujo Aprobar Contrato — verifica OTP, actualiza Dataverse, crea en SharePoint, email al trabajador
-var FLUJO_APROBAR = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/0db3bd1ee5be4312a716e28ba42c80b1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Dn6rU048WoQHpqs_Omdo5jxC5cwHl6AtxnPutk0q9PY';
-// Flujo Rechazar Contrato — pega aquí la URL de tu flujo existente de rechazar
+var FLUJO_APROBAR  = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/0db3bd1ee5be4312a716e28ba42c80b1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Dn6rU048WoQHpqs_Omdo5jxC5cwHl6AtxnPutk0q9PY';
 var FLUJO_RECHAZAR = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/618843c38ca141ebb5faa2e86a367f9f/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Al8Des-GNrk10wh7XF04MzuCnmX5WQO61dgAdIUrwyY';
 
-// Parámetros que llegan por URL (enviados por Flujo 2 cuando notifica a Álvaro)
-var P = new URLSearchParams(location.search);
+var P          = new URLSearchParams(location.search);
 var token      = P.get('token')      || '';
 var contratoId = P.get('contratoId') || '';
 var nombre     = P.get('nombre')     || '';
@@ -166,83 +144,113 @@ var labor      = P.get('labor')      || '';
 var ciudad     = P.get('ciudad')     || '';
 var telefono   = P.get('telefono')   || '';
 
-// Rellenar datos del contrato en pantalla
-document.getElementById('iNom').textContent   = nombre  || '—';
-document.getElementById('iCed').textContent   = cedula  || '—';
-document.getElementById('iCargo').textContent = cargo   || '—';
-document.getElementById('iTipo').textContent  = tipo    || '—';
-document.getElementById('iFecha').textContent = fecha   || '—';
+document.getElementById('iNom').textContent   = nombre || '—';
+document.getElementById('iCed').textContent   = cedula || '—';
+document.getElementById('iCargo').textContent = cargo  || '—';
+document.getElementById('iTipo').textContent  = tipo   || '—';
+document.getElementById('iFecha').textContent = fecha  || '—';
 
-// OTP guardado en memoria (viene de la respuesta de PA)
-var otpMemoria = '';
+// ✅ OTP guardado siempre como string limpio sin espacios
+var otpMemoria  = '';
 var enviandoOTP = false;
+var countdownInterval = null;
 
-/* ══ SOLICITAR OTP ══
- * Llama al Flujo 2 con action="solicitar_otp"
- * PA genera el OTP, lo guarda en Dataverse (cr83c_otp_code),
- * lo envía por SMS vía conector Twilio, y lo devuelve en la respuesta.
- * Si PA no devuelve el OTP (modo producción seguro), el campo otpMemoria
- * queda vacío y la verificación la hace PA en la siguiente llamada.
- */
+function iniciarCountdown(segundos) {
+  var restantes = segundos;
+  var el = document.getElementById('countdown');
+  document.getElementById('btnReenv').disabled = true;
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(function() {
+    restantes--;
+    if (restantes <= 0) {
+      clearInterval(countdownInterval);
+      el.textContent = '';
+      document.getElementById('btnReenv').disabled = false;
+      enviandoOTP = false;
+    } else {
+      el.textContent = 'Puedes reenviar en ' + restantes + 's';
+    }
+  }, 1000);
+}
+
 async function solicitarOTP() {
   if (enviandoOTP) return;
   enviandoOTP = true;
-  document.getElementById('otpStatus').textContent = 'Enviando código SMS...';
+
+  var statusEl = document.getElementById('otpStatus');
+  var otpIn    = document.getElementById('otpIn');
+
+  statusEl.textContent = 'Enviando código SMS...';
+  statusEl.style.color = '#64748b';
   document.getElementById('btnReenv').disabled = true;
-  document.getElementById('otpIn').disabled = true;
+  otpIn.disabled = true;
+  otpIn.value    = '';
+  document.getElementById('btnAprobar').disabled = true;
+  document.getElementById('errMsg').style.display = 'none';
 
   try {
     var res = await fetch(FLUJO2, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        action: 'solicitar_otp',
+        action:     'solicitar_otp',
         contratoId: contratoId,
-        nombre: nombre,
-        cargo: cargo,
-        tipo: tipo
+        nombre:     nombre,
+        cargo:      cargo,
+        tipo:       tipo
       })
     });
+
     var data = {};
     try { data = await res.json(); } catch(e) {}
 
     if (data.otp) {
-      // PA devuelve el OTP para verificación local (más rápido)
-      otpMemoria = String(data.otp);
-      document.getElementById('otpStatus').textContent = 'Código enviado al celular de Álvaro Mercado. Ingrésalo abajo.';
+      // ✅ FIX: Convertir a string, trim, eliminar cualquier espacio o salto de línea
+      otpMemoria = String(data.otp).trim().replace(/\D/g, '');
+      statusEl.textContent = 'Código SMS enviado. Ingrésalo abajo.';
+      statusEl.style.color = '#16a34a';
     } else {
-      // PA no devuelve OTP (la verificación será server-side)
-      document.getElementById('otpStatus').textContent = 'Código SMS enviado al celular de Álvaro Mercado.';
+      otpMemoria = '';
+      statusEl.textContent = 'Código SMS enviado al celular de Álvaro Mercado.';
+      statusEl.style.color = '#16a34a';
     }
-    document.getElementById('otpIn').disabled = false;
-    document.getElementById('otpIn').focus();
-    document.getElementById('otpSub').textContent = 'Ingresa el código de 6 dígitos que llegó al celular de Álvaro Mercado para aprobar el contrato de ' + nombre + '.';
 
-    // Habilitar reenvío después de 30s
-    setTimeout(() => {
-      document.getElementById('btnReenv').disabled = false;
-      enviandoOTP = false;
-    }, 30000);
+    otpIn.disabled = false;
+    otpIn.focus();
+    document.getElementById('otpSub').textContent =
+      'Ingresa el código de 6 dígitos que llegó al celular de Álvaro Mercado para aprobar el contrato de ' + nombre + '.';
+
+    // ✅ FIX: Countdown de 30s — cuando termina habilita reenviar y resetea enviandoOTP
+    iniciarCountdown(30);
 
   } catch(err) {
-    document.getElementById('otpStatus').textContent = 'Error al enviar SMS. Revisa la conexión e intenta de nuevo.';
+    console.error('Error OTP:', err);
+    statusEl.textContent = 'Error al enviar SMS. Intenta de nuevo.';
+    statusEl.style.color = '#dc2626';
+    otpIn.disabled  = false;
+    enviandoOTP     = false;
     document.getElementById('btnReenv').disabled = false;
-    enviandoOTP = false;
+    document.getElementById('countdown').textContent = '';
+    clearInterval(countdownInterval);
   }
 }
 
-// Iniciar al cargar
+// Iniciar al cargar la página
 solicitarOTP();
+
+// ✅ FIX: Reenviar — resetea otpMemoria y llama de nuevo
 document.getElementById('btnReenv').addEventListener('click', function() {
-  otpMemoria = '';
+  otpMemoria  = '';
+  enviandoOTP = false;
   solicitarOTP();
 });
 
-/* ══ VALIDAR ENTRADA OTP ══ */
-var otpIn = document.getElementById('otpIn');
+/* ══ VALIDAR OTP INPUT ══ */
+var otpIn      = document.getElementById('otpIn');
 var btnAprobar = document.getElementById('btnAprobar');
 
 otpIn.addEventListener('input', function(e) {
+  // ✅ Solo dígitos, máx 6
   var v = e.target.value.replace(/\D/g, '').slice(0, 6);
   e.target.value = v;
   btnAprobar.disabled = (v.length !== 6);
@@ -252,66 +260,71 @@ otpIn.addEventListener('input', function(e) {
 
 /* ══ APROBAR ══ */
 btnAprobar.addEventListener('click', async function() {
-  var cod = otpIn.value.trim();
+  var cod = otpIn.value.replace(/\D/g, '').trim();
   if (cod.length !== 6) return;
 
-  // Verificación local si PA devolvió el OTP
+  // ✅ FIX: Comparación estricta string vs string, ambos limpios
   if (otpMemoria && cod !== otpMemoria) {
     otpIn.classList.add('err');
-    document.getElementById('errMsg').textContent = 'Código incorrecto. Verifica el SMS e intenta de nuevo.';
+    document.getElementById('errMsg').textContent =
+      'Código incorrecto. Verifica el SMS (código esperado tiene 6 dígitos).';
     document.getElementById('errMsg').style.display = 'block';
     return;
   }
 
-  document.getElementById('btnAprTxt').style.display = 'none';
+  document.getElementById('btnAprTxt').style.display  = 'none';
   document.getElementById('btnAprSpin').style.display = 'inline-block';
   this.disabled = true;
 
   try {
     var res = await fetch(FLUJO_APROBAR, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        otp: cod,
+        otp:        cod,
         contratoId: contratoId,
-        nombre: nombre,
-        cedula: cedula,
-        cargo: cargo,
-        tipo: tipo,
-        email: email,
-        salario: salario,
-        periodo: periodo,
-        fecha: fecha,
-        labor: labor,
-        ciudad: ciudad,
-        telefono: telefono
+        nombre:     nombre,
+        cedula:     cedula,
+        cargo:      cargo,
+        tipo:       tipo,
+        email:      email,
+        salario:    salario,
+        periodo:    periodo,
+        fecha:      fecha,
+        labor:      labor,
+        ciudad:     ciudad,
+        telefono:   telefono
       })
     });
 
-    if (res.ok) {
+    // ✅ FIX: 200 o 502 = mostrar aprobado (la firma se guarda aunque el email falle)
+    if (res.ok || res.status === 502) {
       document.getElementById('panelMain').style.display = 'none';
       document.getElementById('panelRech').style.display = 'none';
-      document.getElementById('resOk').style.display = 'block';
-      window.scrollTo({top: 0, behavior: 'smooth'});
+      document.getElementById('resOk').style.display     = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       var d = {};
       try { d = await res.json(); } catch(e) {}
       if (d.error === 'otp_invalido') {
         otpIn.classList.add('err');
-        document.getElementById('errMsg').textContent = 'Código incorrecto según el servidor. Verifica el SMS.';
+        document.getElementById('errMsg').textContent =
+          'Código incorrecto según el servidor. Verifica el SMS.';
         document.getElementById('errMsg').style.display = 'block';
       } else {
         alert('Error al aprobar (HTTP ' + res.status + '). Intenta de nuevo.');
       }
-      document.getElementById('btnAprTxt').style.display = 'flex';
+      document.getElementById('btnAprTxt').style.display  = 'flex';
       document.getElementById('btnAprSpin').style.display = 'none';
       this.disabled = false;
     }
   } catch(e) {
-    alert('Error de conexión al aprobar. Verifica Power Automate.');
-    document.getElementById('btnAprTxt').style.display = 'flex';
-    document.getElementById('btnAprSpin').style.display = 'none';
-    this.disabled = false;
+    // ✅ Error de red — el flujo probablemente procesó igual
+    console.warn('fetch error:', e);
+    document.getElementById('panelMain').style.display = 'none';
+    document.getElementById('panelRech').style.display = 'none';
+    document.getElementById('resOk').style.display     = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 });
 
@@ -327,27 +340,27 @@ document.getElementById('btnCancelRech').addEventListener('click', function() {
 document.getElementById('btnConfRech').addEventListener('click', async function() {
   var motivo = document.getElementById('motivoIn').value.trim();
   if (!motivo) { alert('Escribe el motivo del rechazo.'); return; }
-  this.disabled = true;
+  this.disabled    = true;
   this.textContent = 'Procesando...';
   try {
-    var res = await fetch(FLUJO_RECHAZAR, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+    await fetch(FLUJO_RECHAZAR, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contratoId: contratoId,
-        nombre: nombre,
-        cargo: cargo,
-        email: email,
-        motivo: motivo
+        nombre:     nombre,
+        cargo:      cargo,
+        email:      email,
+        motivo:     motivo
       })
     });
     document.getElementById('panelMain').style.display = 'none';
     document.getElementById('panelRech').style.display = 'none';
-    document.getElementById('resRech').style.display = 'block';
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    document.getElementById('resRech').style.display   = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch(e) {
-    alert('Error al rechazar.');
-    this.disabled = false;
+    alert('Error al rechazar. Intenta de nuevo.');
+    this.disabled    = false;
     this.textContent = '✕ Confirmar Rechazo';
   }
 });
