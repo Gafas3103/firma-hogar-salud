@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aprobar Contrato — Hogar Salud IPS NUEVO COMMIT</title>
+<title>Aprobar Contrato — Hogar Salud IPS</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh}
@@ -24,6 +24,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .otp-in.err{border-color:#dc2626;background:#fff5f5}
 .err-msg{color:#dc2626;font-size:13px;font-weight:600;text-align:center;margin-top:6px}
 .otp-status{font-size:12px;color:#64748b;text-align:center;min-height:18px;margin-bottom:6px}
+/* Upload firma */
+.upload-zone{border:2px dashed #cbd5e1;border-radius:10px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfc;position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:#1e40af;background:#eff6ff}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.prev-zone{display:none;border:2px solid #16a34a;border-radius:10px;padding:14px;text-align:center;background:#f0fdf4}
+.prev-zone img{max-height:80px;max-width:100%;object-fit:contain;border-radius:6px}
+.prev-label{font-size:13px;color:#16a34a;font-weight:700;margin-top:8px}
+.btn-change-sig{margin-top:7px;background:none;border:1px solid #e2e8f0;color:#64748b;padding:5px 12px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit}
+/* Botones */
 .btn-ok{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 12px rgba(22,163,74,.3);font-family:inherit}
 .btn-ok:hover:not(:disabled){transform:translateY(-2px)}
 .btn-ok:disabled{opacity:.4;cursor:not-allowed;transform:none;background:#94a3b8}
@@ -48,6 +57,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh
 .result.ok h2{color:#166534}.result.rech h2{color:#dc2626}
 .result p{font-size:13px;line-height:1.7}
 .result.ok p{color:#166534}.result.rech p{color:#dc2626}
+.sig-warn{background:#eff6ff;border:1px solid #93c5fd;border-radius:9px;padding:11px 14px;font-size:13px;color:#1e40af;margin-bottom:16px;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
 footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1.6}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
@@ -66,8 +76,9 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
   <div class="card" id="panelMain">
     <div class="sec">
       <div class="ttl">🔐 Verificación de identidad</div>
-      <div class="sub" id="otpSub">El código fue enviado al celular de Álvaro Mercado cuando el trabajador firmó. Ingrésalo abajo para aprobar.</div>
+      <div class="sub" id="otpSub">Ingresa el código que llegó al celular cuando el trabajador firmó. Luego sube tu firma para aprobar el contrato.</div>
 
+      <!-- Info del contrato -->
       <div style="background:#f8fafc;border-radius:9px;padding:12px 16px;margin-bottom:18px;border:1px solid #e2e8f0">
         <div class="irow"><span class="il">Trabajador</span><span class="iv" id="iNom">—</span></div>
         <div class="irow"><span class="il">Cédula</span><span class="iv" id="iCed">—</span></div>
@@ -76,24 +87,43 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
         <div class="irow" style="border-bottom:none"><span class="il">Fecha inicio</span><span class="iv" id="iFecha">—</span></div>
       </div>
 
-      <div class="otp-status" id="otpStatus">Ingresa el código que llegó por SMS cuando el trabajador firmó.</div>
+      <!-- OTP -->
+      <div style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:8px">Paso 1 — Código SMS</div>
+      <div class="otp-status" id="otpStatus">Ingresa el código de 6 dígitos que llegó al celular.</div>
       <input class="otp-in" id="otpIn" type="text" maxlength="6" placeholder="000000"
         inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
       <div class="err-msg" id="errMsg" style="display:none"></div>
+      <button class="btn-reenv" id="btnReenv">📱 Reenviar SMS</button>
+      <div class="countdown" id="countdown"></div>
 
+      <!-- FIRMA DE ÁLVARO -->
+      <div style="margin-top:20px;margin-bottom:8px;font-size:13px;font-weight:700;color:#0f172a">Paso 2 — Tu firma</div>
+      <div class="sig-warn">
+        <span style="font-size:15px;flex-shrink:0">✍️</span>
+        <span>Sube una foto de tu firma sobre papel blanco. Quedará vinculada permanentemente a este contrato como evidencia de tu aprobación.</span>
+      </div>
+      <div class="upload-zone" id="sigUpZone">
+        <input type="file" id="sigFileIn" accept="image/jpeg,image/png,image/jpg,image/webp">
+        <span style="font-size:32px;display:block;margin-bottom:8px">📷</span>
+        <div style="font-size:14px;font-weight:700;color:#0f172a;margin-bottom:4px">Toca aquí para subir tu firma</div>
+        <div style="font-size:12px;color:#64748b">Foto sobre papel blanco · JPG o PNG · Max 5MB</div>
+      </div>
+      <div class="prev-zone" id="sigPrevZone">
+        <img id="sigPrevImg" src="" alt="Tu firma">
+        <div class="prev-label">✅ Firma cargada correctamente</div>
+        <button class="btn-change-sig" id="btnCambiarSig">Cambiar imagen</button>
+      </div>
+
+      <!-- BOTÓN APROBAR -->
       <button class="btn-ok" id="btnAprobar" disabled>
         <span id="btnAprTxt">✓ &nbsp;Aprobar y Firmar Contrato</span>
         <span id="btnAprSpin" style="display:none" class="spinner"></span>
       </button>
 
-      <!-- ✅ Reenviar usa el flujo separado — NO reactiva el flujo de guardar firma -->
-      <button class="btn-reenv" id="btnReenv">📱 Reenviar SMS con el código</button>
-      <div class="countdown" id="countdown"></div>
-
       <button class="btn-rech" id="btnMostrarRech">✕ &nbsp;Rechazar este contrato</button>
       <div class="note">
         <span style="font-size:15px;flex-shrink:0">⚠️</span>
-        <span>Al aprobar el contrato quedará firmado digitalmente por ambas partes, se guardará en SharePoint y se notificará al trabajador por correo.</span>
+        <span>Al aprobar, el contrato quedará firmado digitalmente por ambas partes, se guardará en SharePoint y se notificará al trabajador por correo.</span>
       </div>
     </div>
   </div>
@@ -113,7 +143,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
   <div class="result ok" id="resOk">
     <div class="ri">✅</div>
     <h2>Contrato Aprobado</h2>
-    <p>El contrato fue aprobado exitosamente.<br>Se guardó en SharePoint y el trabajador fue notificado por correo.</p>
+    <p>El contrato fue aprobado y firmado por ambas partes.<br>Se guardó en SharePoint y el trabajador fue notificado por correo.</p>
   </div>
 
   <div class="result rech" id="resRech">
@@ -126,14 +156,8 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
 <footer>Hogar Salud IPS SAS &bull; NIT 900.369.003-1 &bull; Carrera 56 # 72-129, Barranquilla</footer>
 
 <script>
-/* ══ FLUJOS ══════════════════════════════════════════════════════════════
- * FLUJO_APROBAR  — verifica OTP, actualiza Dataverse, SharePoint, email trabajador
- * FLUJO_RECHAZAR — actualiza estado, notifica trabajador
- * FLUJO_REENVIAR — solo reenvía SMS con el OTP ya guardado (NO reactiva Guardar Firma)
- */
 var FLUJO_APROBAR  = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/0db3bd1ee5be4312a716e28ba42c80b1/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Dn6rU048WoQHpqs_Omdo5jxC5cwHl6AtxnPutk0q9PY';
 var FLUJO_RECHAZAR = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/618843c38ca141ebb5faa2e86a367f9f/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Al8Des-GNrk10wh7XF04MzuCnmX5WQO61dgAdIUrwyY';
-/* ✅ Nuevo flujo dedicado solo para reenviar el OTP existente — NO genera uno nuevo */
 var FLUJO_REENVIAR = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/85250955096e45dea8755248921081b2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zS6aYuD6bImYkNJIUdb-64rl7OlkAf1ANm_aMEOZMho';
 
 var P          = new URLSearchParams(location.search);
@@ -156,11 +180,63 @@ document.getElementById('iCargo').textContent = cargo  || '—';
 document.getElementById('iTipo').textContent  = tipo   || '—';
 document.getElementById('iFecha').textContent = fecha  || '—';
 
-/* ══ COUNTDOWN ═══════════════════════════════════════════════════════════ */
+/* ══ FIRMA DE ÁLVARO ═════════════════════════════════════════════════ */
+var firmaRRHH = null;
+var sigFileIn   = document.getElementById('sigFileIn');
+var sigUpZone   = document.getElementById('sigUpZone');
+var sigPrevZone = document.getElementById('sigPrevZone');
+var sigPrevImg  = document.getElementById('sigPrevImg');
+
+function cargarFirmaRRHH(file) {
+  if (!file) return;
+  if (file.size > 5*1024*1024) { alert('Imagen muy grande. Máximo 5MB.'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    firmaRRHH = e.target.result;
+    sigPrevImg.src = firmaRRHH;
+    sigUpZone.style.display   = 'none';
+    sigPrevZone.style.display = 'block';
+    verificarListoParaAprobar();
+  };
+  reader.readAsDataURL(file);
+}
+
+sigFileIn.addEventListener('change', function(e) { cargarFirmaRRHH(e.target.files[0]); });
+sigUpZone.addEventListener('dragover',  function(e) { e.preventDefault(); sigUpZone.classList.add('drag'); });
+sigUpZone.addEventListener('dragleave', function()  { sigUpZone.classList.remove('drag'); });
+sigUpZone.addEventListener('drop', function(e) { e.preventDefault(); sigUpZone.classList.remove('drag'); cargarFirmaRRHH(e.dataTransfer.files[0]); });
+document.getElementById('btnCambiarSig').addEventListener('click', function() {
+  firmaRRHH = null;
+  sigPrevZone.style.display = 'none';
+  sigUpZone.style.display   = 'block';
+  sigFileIn.value = '';
+  verificarListoParaAprobar();
+});
+
+/* ══ VALIDAR OTP ═════════════════════════════════════════════════════ */
+var otpIn      = document.getElementById('otpIn');
+var btnAprobar = document.getElementById('btnAprobar');
+
+function verificarListoParaAprobar() {
+  /* Habilitar el botón solo cuando OTP tiene 6 dígitos Y firma subida */
+  var otpOk  = otpIn.value.replace(/\D/g,'').length === 6;
+  var sigOk  = firmaRRHH !== null;
+  btnAprobar.disabled = !(otpOk && sigOk);
+}
+
+otpIn.addEventListener('input', function(e) {
+  var v = e.target.value.replace(/\D/g,'').slice(0,6);
+  e.target.value = v;
+  document.getElementById('errMsg').style.display = 'none';
+  e.target.classList.remove('err');
+  verificarListoParaAprobar();
+});
+
+/* ══ COUNTDOWN / REENVIAR ════════════════════════════════════════════ */
 var countdownInterval = null;
 function iniciarCountdown(seg) {
   var restantes = seg;
-  var el = document.getElementById('countdown');
+  var el  = document.getElementById('countdown');
   var btn = document.getElementById('btnReenv');
   btn.disabled = true;
   clearInterval(countdownInterval);
@@ -176,36 +252,15 @@ function iniciarCountdown(seg) {
   }, 1000);
 }
 
-/* ══ VALIDAR OTP INPUT ═══════════════════════════════════════════════════ */
-var otpIn      = document.getElementById('otpIn');
-var btnAprobar = document.getElementById('btnAprobar');
-
-otpIn.addEventListener('input', function(e) {
-  var v = e.target.value.replace(/\D/g,'').slice(0,6);
-  e.target.value = v;
-  btnAprobar.disabled = (v.length !== 6);
-  document.getElementById('errMsg').style.display = 'none';
-  e.target.classList.remove('err');
-});
-
-/* ══ REENVIAR SMS ════════════════════════════════════════════════════════
- * Llama al flujo separado "HS Reenviar OTP"
- * Ese flujo busca el OTP ya guardado en Dataverse y reenvía el SMS
- * NO genera un OTP nuevo — NO toca el contrato — NO envía email a Álvaro
- */
 document.getElementById('btnReenv').addEventListener('click', async function() {
   var statusEl = document.getElementById('otpStatus');
   this.disabled = true;
   statusEl.textContent = 'Reenviando SMS...';
   statusEl.style.color = '#64748b';
-  document.getElementById('countdown').textContent = '';
-
   try {
-    await fetch(FLUJO_REENVIAR, {
-      method:  'POST',
-      mode:    'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body:    JSON.stringify({ contratoId: contratoId })
+    await fetch(FLUJO_REENVIAR + '&contratoId=' + encodeURIComponent(contratoId), {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' }, body: '{}'
     });
     statusEl.textContent = '✅ SMS reenviado. Usa el mismo código que llegó antes.';
     statusEl.style.color = '#16a34a';
@@ -213,15 +268,13 @@ document.getElementById('btnReenv').addEventListener('click', async function() {
     statusEl.textContent = 'Error al reenviar. Intenta de nuevo.';
     statusEl.style.color = '#dc2626';
   }
-
-  /* Countdown 30s antes de permitir otro reenvío */
   iniciarCountdown(30);
 });
 
-/* ══ APROBAR ══════════════════════════════════════════════════════════════ */
+/* ══ APROBAR ═════════════════════════════════════════════════════════ */
 btnAprobar.addEventListener('click', async function() {
   var cod = otpIn.value.replace(/\D/g,'').trim();
-  if (cod.length !== 6) return;
+  if (cod.length !== 6 || !firmaRRHH) return;
 
   document.getElementById('btnAprTxt').style.display  = 'none';
   document.getElementById('btnAprSpin').style.display = 'inline-block';
@@ -232,23 +285,24 @@ btnAprobar.addEventListener('click', async function() {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        otp:        cod,
-        contratoId: contratoId,
-        nombre:     nombre,
-        cedula:     cedula,
-        cargo:      cargo,
-        tipo:       tipo,
-        email:      email,
-        salario:    salario,
-        periodo:    periodo,
-        fecha:      fecha,
-        labor:      labor,
-        ciudad:     ciudad,
-        telefono:   telefono
+        otp:          cod,
+        contratoId:   contratoId,
+        nombre:       nombre,
+        cedula:       cedula,
+        cargo:        cargo,
+        tipo:         tipo,
+        email:        email,
+        salario:      salario,
+        periodo:      periodo,
+        fecha:        fecha,
+        labor:        labor,
+        ciudad:       ciudad,
+        telefono:     telefono,
+        /* ✅ Firma de Álvaro — se guarda en cr83c_rrhhfirma */
+        firmaRRHH:    firmaRRHH
       })
     });
 
-    /* 200 o 502 = mostrar aprobado (la firma se guarda aunque el email falle) */
     if (res.ok || res.status === 502) {
       document.getElementById('panelMain').style.display = 'none';
       document.getElementById('panelRech').style.display = 'none';
@@ -256,11 +310,10 @@ btnAprobar.addEventListener('click', async function() {
       window.scrollTo({ top:0, behavior:'smooth' });
     } else {
       var d = {};
-      try { d = await res.json(); } catch(e) {}
+      try { d = await res.json(); } catch(e2) {}
       if (d.error === 'otp_invalido') {
         otpIn.classList.add('err');
-        document.getElementById('errMsg').textContent =
-          'Código incorrecto. Verifica el SMS e intenta de nuevo.';
+        document.getElementById('errMsg').textContent = 'Código incorrecto. Verifica el SMS e intenta de nuevo.';
         document.getElementById('errMsg').style.display = 'block';
       } else {
         alert('Error al aprobar (HTTP ' + res.status + '). Intenta de nuevo.');
@@ -268,10 +321,11 @@ btnAprobar.addEventListener('click', async function() {
       document.getElementById('btnAprTxt').style.display  = 'flex';
       document.getElementById('btnAprSpin').style.display = 'none';
       this.disabled = false;
+      verificarListoParaAprobar();
     }
   } catch(e) {
-    /* Error de red — el flujo probablemente procesó igual */
-    console.warn('fetch aprobar:', e);
+    /* Error de red — el flujo probablemente procesó */
+    console.warn('fetch error:', e);
     document.getElementById('panelMain').style.display = 'none';
     document.getElementById('panelRech').style.display = 'none';
     document.getElementById('resOk').style.display     = 'block';
@@ -279,7 +333,7 @@ btnAprobar.addEventListener('click', async function() {
   }
 });
 
-/* ══ RECHAZAR ════════════════════════════════════════════════════════════ */
+/* ══ RECHAZAR ════════════════════════════════════════════════════════ */
 document.getElementById('btnMostrarRech').addEventListener('click', function() {
   document.getElementById('panelRech').style.display = 'block';
   this.style.display = 'none';
@@ -297,13 +351,7 @@ document.getElementById('btnConfRech').addEventListener('click', async function(
     await fetch(FLUJO_RECHAZAR, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contratoId: contratoId,
-        nombre:     nombre,
-        cargo:      cargo,
-        email:      email,
-        motivo:     motivo
-      })
+      body: JSON.stringify({ contratoId, nombre, cargo, email, motivo })
     });
     document.getElementById('panelMain').style.display = 'none';
     document.getElementById('panelRech').style.display = 'none';
