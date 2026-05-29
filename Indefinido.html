@@ -214,7 +214,7 @@ var fondoPensiones = P.get('fondoPensiones') || 'PORVENIR';
 var CLAVE = 'hs_firmado_' + token;
 
 /* ======= PASO 1: VERIFICAR OTP ========================================= */
-var FLUJO_VALIDAR_OTP  = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/89a70954ef424bae865c1d2d63ae44a7/triggers/manual/paths/invoke?api-version=1';
+var FLUJO_VALIDAR_OTP  = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/89a70954ef424bae865c1d2d63ae44a7/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=w6rj0k8qjASKFntukvK0tX2E_hSj5HhjXM4d0iuxx4U';
 var FLUJO_REENVIAR_OTP = 'PEGAR_URL_FLUJO_REENVIAR_OTP_TRABAJADOR_AQUI';
 
 var otpInput     = document.getElementById('otpInput');
