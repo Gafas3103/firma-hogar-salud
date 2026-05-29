@@ -202,7 +202,7 @@ var nacimiento = P.get('nacimiento') || '';
 var CLAVE = 'hs_firmado_' + token;
 
 var FLUJO_VALIDAR_OTP  = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/89a70954ef424bae865c1d2d63ae44a7/triggers/manual/paths/invoke?api-version=1';
-var FLUJO_REENVIAR_OTP = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/85250955096e45dea8755248921081b2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zS6aYuD6';
+var FLUJO_REENVIAR_OTP = 'PEGAR_URL_FLUJO_REENVIAR_OTP_TRABAJADOR_AQUI';
 
 var otpInput     = document.getElementById('otpInput');
 var btnVerificar = document.getElementById('btnVerificar');
@@ -215,10 +215,16 @@ if (token && (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE))) {
 }
 
 otpInput.addEventListener('input', function() {
-  this.value = this.value.replace(/[^0-9]/g,'').substring(0,6);
+  var clean = this.value.replace(/[^0-9]/g,'');
+  if (clean.length > 6) clean = clean.substring(0,6);
+  this.value = clean;
   this.classList.remove('err','ok');
   errOtp.textContent = '';
-  btnVerificar.disabled = this.value.length < 6;
+  btnVerificar.disabled = (clean.length < 6);
+});
+otpInput.addEventListener('keyup', function() {
+  var clean = this.value.replace(/[^0-9]/g,'').substring(0,6);
+  btnVerificar.disabled = (clean.length < 6);
 });
 
 btnVerificar.addEventListener('click', async function() {
@@ -312,6 +318,7 @@ function renderContrato(fTrab) {
   h+='<p class="pc"><strong>Clausula Decima Cuarta. Controles:</strong> LA ADSCRIBIENTE podra inspeccionar, verificar y auditar el servicio, y hacer sugerencias por escrito para que EL ADSCRITO corrija deficiencias, sin que ello se entienda como lesion a su autonomia tecnica.</p>';
   h+='<p class="pc"><strong>Clausula Decima Quinta. Compromisoria:</strong> Las diferencias que surjan entre las partes seran sometidas a un amigable componedor designado de comun acuerdo.</p>';
   h+='<p class="pc"><strong>Clausula Decima Sexta. Integralidad:</strong> El presente contrato regula en su integridad las relaciones juridicas entre las partes y deja sin efecto cualquier convenio o estipulacion acordada con anterioridad.</p>';
+  h+='';
   h+='<p class="pc"><strong>CLAUSULA DE VALIDEZ LEGAL POR VERIFICACION DIGITAL:</strong> Las partes declaran que el presente contrato fue firmado mediante un proceso de verificacion de identidad digital. El trabajador recibio un codigo de verificacion unico (OTP) en su correo electronico y celular registrados, y al ingresar dicho codigo confirmo de manera fehaciente su identidad y su voluntad de aceptar el contrato. Este mecanismo de autenticacion tiene plena validez legal conforme a la Ley 527 de 1999 (Comercio Electronico) y la Ley 1273 de 2009, y constituye evidencia suficiente del consentimiento libre e informado del trabajador. En consecuencia, el presente contrato tiene la misma validez y efectos juridicos que un documento fisico firmado de manera manuscrita.</p>';
   h+=firmas(fTrab);
   return h;
