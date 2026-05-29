@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Contrato Obra o Labor — Hogar Salud IPS SAS COMMIT</title>
+<title>Contrato Obra o Labor — Hogar Salud IPS SAS</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#f1f5f9;min-height:100vh}
@@ -313,8 +313,9 @@ function renderContrato(fTrab) {
   h += '<p class="pc"><strong>CLAUSULA DECIMA - DESCUENTOS:</strong> El Trabajador autoriza al Empleador para descontar sumas causadas durante la vigencia o terminacion del contrato por prestamos, comunicaciones u otros conceptos.</p>';
   h += '<p class="pc"><strong>CLAUSULA UNDECIMA - FONDO DE PENSIONES:</strong> EL TRABAJADOR manifiesta estar afiliado al fondo de pensiones: <strong>' + fondoPensiones + '</strong>.</p>';
   h += '<p class="pc"><strong>CLAUSULA DUODECIMA - EFECTOS:</strong> El presente contrato reemplaza en su integridad cualquier contrato anterior, verbal o escrito.</p>';
-  h += '<p class="pc"><strong>CLAUSULA DE VALIDEZ LEGAL POR VERIFICACION DIGITAL:</strong> Las partes declaran que el presente contrato fue firmado mediante un proceso de verificacion de identidad digital. El trabajador recibio un codigo de verificacion unico (OTP) en su correo electronico y celular registrados, y al ingresar dicho codigo confirmo de manera fehaciente su identidad y su voluntad de aceptar el contrato. Este mecanismo de autenticacion tiene plena validez legal conforme a la Ley 527 de 1999 (Comercio Electronico) y la Ley 1273 de 2009, y constituye evidencia suficiente del consentimiento libre e informado del trabajador. En consecuencia, el presente contrato tiene la misma validez y efectos juridicos que un documento fisico firmado de manera manuscrita.</p>
-  <p class="pc" style="margin-top:14px">Para constancia, se firma en la ciudad de ' + ciudad + ' el dia ' + fecha + ', por las partes interesadas.</p>';
+  h += '';
+
+  h += '<p class="pc"><strong>CLAUSULA DE VALIDEZ LEGAL POR VERIFICACION DIGITAL:</strong> Las partes declaran que el presente contrato fue firmado mediante un proceso de verificacion de identidad digital. El trabajador recibio un codigo de verificacion unico (OTP) en su correo electronico y celular registrados, y al ingresar dicho codigo confirmo de manera fehaciente su identidad y su voluntad de aceptar el contrato. Este mecanismo de autenticacion tiene plena validez legal conforme a la Ley 527 de 1999 (Comercio Electronico) y la Ley 1273 de 2009, y constituye evidencia suficiente del consentimiento libre e informado del trabajador. En consecuencia, el presente contrato tiene la misma validez y efectos juridicos que un documento fisico firmado de manera manuscrita.</p>';
   h += firmas(fTrab);
   return h;
 }
