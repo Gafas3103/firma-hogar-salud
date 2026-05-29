@@ -62,6 +62,25 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
 .btn-verify:hover{transform:translateY(-2px)}
 .btn-verify:disabled{opacity:.45;cursor:not-allowed;transform:none;background:#94a3b8}
 @media(max-width:480px){.ct-body{padding:18px 14px}.sec{padding:18px 14px}}
+
+.tabs{display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:18px}
+.tab{flex:1;padding:11px;text-align:center;font-size:13px;font-weight:700;cursor:pointer;color:#64748b;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s}
+.tab.on{color:#1e40af;border-bottom-color:#1e40af}
+.canvas-wrap{position:relative;border:2px solid #e2e8f0;border-radius:10px;overflow:hidden;background:#fff;touch-action:none}
+canvas{display:block;width:100%;cursor:crosshair}
+.canvas-tools{display:flex;gap:8px;margin-top:10px;align-items:center}
+.btn-clear{background:#f1f5f9;color:#64748b;border:1px solid #e2e8f0;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700}
+.btn-clear:hover{background:#e2e8f0}
+.canvas-hint{font-size:11px;color:#94a3b8;margin-left:auto}
+
+.otp-input{width:100%;padding:16px;border:2px solid #e2e8f0;border-radius:10px;font-size:28px;font-weight:800;letter-spacing:10px;text-align:center;outline:none;font-family:monospace;transition:border-color .2s;box-sizing:border-box;background:#fff}
+.otp-input:focus{border-color:#1e40af;background:#f8faff}
+.otp-input.err{border-color:#dc2626;background:#fff5f5}
+.otp-input.ok{border-color:#16a34a;background:#f0fdf4}
+.otp-methods{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.otp-method{flex:1;padding:10px;border:1px solid #e2e8f0;border-radius:8px;text-align:center;font-size:12px;font-weight:600;color:#64748b;background:#f8fafc}
+.btn-resend{background:none;border:1px solid #e2e8f0;color:#1e40af;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;margin-top:10px;width:100%}
+.btn-resend:disabled{color:#94a3b8;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -74,14 +93,19 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
 </div>
 <div class="main">
 
-  <!-- PASO 1: Verificar identidad -->
+  <!-- PASO 1: Verificar OTP -->
   <div class="card" id="verifyCard">
     <div class="verify-box">
-      <div class="v-title">🔒 Verificacion de identidad</div>
-      <div class="v-sub">Para acceder al contrato y firmarlo, confirma tu numero de cedula. Esto garantiza que solo tu puedes firmar este documento.</div>
-      <input type="text" id="cedulaInput" class="v-input" placeholder="Ej: 1234567890" inputmode="numeric" maxlength="12">
-      <div class="v-err" id="errCedula"></div>
-      <button class="btn-verify" id="btnVerificar">🔒 Confirmar y ver contrato</button>
+      <div class="v-title">&#x1F511; Codigo de verificacion</div>
+      <div class="v-sub">Te enviamos un codigo de 6 digitos a tu correo electronico y a tu celular registrado. Ingresalo para acceder y firmar tu contrato.</div>
+      <div class="otp-methods">
+        <div class="otp-method">&#x1F4E7; Correo electronico</div>
+        <div class="otp-method">&#x1F4F1; Mensaje de texto (SMS)</div>
+      </div>
+      <input type="text" id="otpInput" class="otp-input" placeholder="000000" inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+      <div class="v-err" id="errOtp"></div>
+      <button class="btn-verify" id="btnVerificar" disabled>&#x1F511; Verificar y ver contrato</button>
+      <button class="btn-resend" id="btnReenviar">&#x1F504; Reenviar codigo</button>
     </div>
   </div>
 
@@ -97,25 +121,44 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
     <div class="ct-body" id="ctBody"></div>
   </div>
 
+  
   <!-- PASO 3: Firma -->
   <div class="card" id="sigCard" style="display:none">
     <div class="sec">
-      <div style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:6px">&#x1F4CE; Sube tu firma</div>
-      <div style="font-size:13px;color:#64748b;margin-bottom:18px">Toma una foto de tu firma sobre papel blanco y subela. Al enviarla confirmas que aceptas todos los terminos del contrato.</div>
+      <div style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:6px">&#x270D;&#xFE0F; Firma el contrato</div>
+      <div style="font-size:13px;color:#64748b;margin-bottom:14px">Dibuja tu firma o sube una foto de ella. Al enviarla confirmas que aceptas todos los terminos del contrato.</div>
       <div class="warn">
         <span style="font-size:16px;flex-shrink:0">&#x26A0;&#xFE0F;</span>
         <span>Al firmar confirmas que eres <strong id="nomAlerta">el trabajador</strong> y aceptas el contrato con plena validez legal.</span>
       </div>
-      <div class="upload-zone" id="upZone">
-        <input type="file" id="fileIn" accept="image/jpeg,image/png,image/jpg,image/webp">
-        <span style="font-size:36px;display:block;margin-bottom:10px">&#x1F4F7;</span>
-        <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px">Toca aqui para subir tu firma</div>
-        <div style="font-size:12px;color:#64748b">Foto de tu firma en papel blanco &bull; JPG o PNG &bull; Max 5MB</div>
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab on" id="tabDraw" onclick="switchTab('draw')">&#x270D; Dibujar firma</div>
+        <div class="tab" id="tabUp" onclick="switchTab('upload')">&#x1F4F7; Subir imagen</div>
       </div>
-      <div class="prev-zone" id="prevZone">
-        <img id="prevImg" src="" alt="Tu firma">
-        <div class="prev-label">&#x2705; Imagen cargada correctamente</div>
-        <button class="btn-change" id="btnCambiar">Cambiar imagen</button>
+      <!-- Panel dibujar -->
+      <div id="panelDraw">
+        <div class="canvas-wrap" id="canvasWrap">
+          <canvas id="sigCanvas" height="180"></canvas>
+        </div>
+        <div class="canvas-tools">
+          <button class="btn-clear" onclick="clearCanvas()">&#x1F5D1; Borrar</button>
+          <span class="canvas-hint">Firma con el dedo o el mouse</span>
+        </div>
+      </div>
+      <!-- Panel subir -->
+      <div id="panelUp" style="display:none">
+        <div class="upload-zone" id="upZone">
+          <input type="file" id="fileIn" accept="image/jpeg,image/png,image/jpg,image/webp">
+          <span style="font-size:36px;display:block;margin-bottom:10px">&#x1F4F7;</span>
+          <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:4px">Toca aqui para subir tu firma</div>
+          <div style="font-size:12px;color:#64748b">Foto de tu firma en papel blanco &bull; JPG o PNG &bull; Max 5MB</div>
+        </div>
+        <div class="prev-zone" id="prevZone">
+          <img id="prevImg" src="" alt="Tu firma">
+          <div class="prev-label">&#x2705; Imagen cargada correctamente</div>
+          <button class="btn-change" id="btnCambiar">Cambiar imagen</button>
+        </div>
       </div>
       <button class="btn-sign" id="btnFirmar" disabled>
         <span id="btnTxt">&#x2705;&nbsp; Enviar Firma y Firmar Contrato</span>
@@ -124,7 +167,7 @@ footer{text-align:center;padding:20px;font-size:11px;color:#94a3b8;line-height:1
     </div>
   </div>
 
-  <div class="result ok" id="okCard">
+<div class="result ok" id="okCard">
     <div style="width:64px;height:64px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px">&#x2705;</div>
     <h2>Firma Enviada!</h2>
     <p>Tu firma quedo registrada. Recursos Humanos revisara y aprobara tu contrato.</p>
@@ -170,40 +213,78 @@ var horario    = P.get('horario')     || '7AM A 12M - 2PM A 5PM L A V - SABADOS 
 var fondoPensiones = P.get('fondoPensiones') || 'PORVENIR';
 var CLAVE = 'hs_firmado_' + token;
 
-/* ══ PASO 1: VERIFICAR CEDULA ══════════════════════════════════════════ */
-var cedulaInput  = document.getElementById('cedulaInput');
-var btnVerificar = document.getElementById('btnVerificar');
-var errCedula    = document.getElementById('errCedula');
+/* ======= PASO 1: VERIFICAR OTP ========================================= */
+var FLUJO_VALIDAR_OTP  = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/89a70954ef424bae865c1d2d63ae44a7/triggers/manual/paths/invoke?api-version=1';
+var FLUJO_REENVIAR_OTP = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/85250955096e45dea8755248921081b2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zS6aYuD6';
 
-/* Si ya firmo, mostrar directamente */
+var otpInput     = document.getElementById('otpInput');
+var btnVerificar = document.getElementById('btnVerificar');
+var errOtp       = document.getElementById('errOtp');
+var btnReenviar  = document.getElementById('btnReenviar');
+
 if (token && (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE))) {
   document.getElementById('verifyCard').style.display = 'none';
   document.getElementById('dupCard').style.display    = 'block';
 }
 
-cedulaInput.addEventListener('input', function() {
-  this.value = this.value.replace(/\D/g,'');
-  this.classList.remove('err');
-  errCedula.textContent = '';
-  btnVerificar.disabled = this.value.length < 5;
+otpInput.addEventListener('input', function() {
+  this.value = this.value.replace(/[^0-9]/g,'').substring(0,6);
+  this.classList.remove('err','ok');
+  errOtp.textContent = '';
+  btnVerificar.disabled = this.value.length < 6;
 });
 
-btnVerificar.disabled = true;
-
-btnVerificar.addEventListener('click', function() {
-  var ingresada = cedulaInput.value.trim();
-  var esperada  = cedula.trim().replace(/\D/g,'');
-  if (ingresada === esperada) {
-    /* ✅ Cedula correcta — mostrar contrato */
-    document.getElementById('verifyCard').style.display = 'none';
-    document.getElementById('ctCard').style.display     = 'block';
-    document.getElementById('sigCard').style.display    = 'block';
-    document.getElementById('nomAlerta').textContent    = nombre;
-    document.getElementById('ctBody').innerHTML         = renderContrato(null);
-  } else {
-    cedulaInput.classList.add('err');
-    errCedula.textContent = 'Cedula incorrecta. Verifica el numero e intenta de nuevo.';
+btnVerificar.addEventListener('click', async function() {
+  var otp = otpInput.value.trim();
+  if (otp.length < 6) return;
+  btnVerificar.disabled = true;
+  btnVerificar.textContent = 'Verificando...';
+  errOtp.textContent = '';
+  errOtp.style.color = '#dc2626';
+  try {
+    var resp = await fetch(FLUJO_VALIDAR_OTP, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({contratoId: token, otp: otp})
+    });
+    if (resp.ok || resp.status === 200) {
+      otpInput.classList.add('ok');
+      document.getElementById('verifyCard').style.display = 'none';
+      document.getElementById('ctCard').style.display     = 'block';
+      document.getElementById('sigCard').style.display    = 'block';
+      document.getElementById('nomAlerta').textContent    = nombre;
+      document.getElementById('ctBody').innerHTML         = renderContrato(null);
+    } else {
+      otpInput.classList.add('err');
+      errOtp.textContent = 'Codigo incorrecto. Verifica el codigo e intenta de nuevo.';
+      btnVerificar.disabled = false;
+      btnVerificar.textContent = 'Verificar y ver contrato';
+    }
+  } catch(e) {
+    errOtp.textContent = 'Error de conexion. Intenta de nuevo.';
+    btnVerificar.disabled = false;
+    btnVerificar.textContent = 'Verificar y ver contrato';
   }
+});
+
+var resendTimer = 0;
+function startResendTimer() {
+  resendTimer = 30; btnReenviar.disabled = true;
+  var iv = setInterval(function(){
+    resendTimer--;
+    btnReenviar.textContent = "Reenviar codigo (" + resendTimer + "s)";
+    if (resendTimer <= 0) { clearInterval(iv); btnReenviar.disabled = false; btnReenviar.textContent = "Reenviar codigo"; }
+  }, 1000);
+}
+btnReenviar.addEventListener('click', async function() {
+  if (!token) return;
+  btnReenviar.disabled = true;
+  try {
+    await fetch(FLUJO_REENVIAR_OTP + '&contratoId=' + encodeURIComponent(token), {method:'GET'});
+    errOtp.textContent = 'Codigo reenviado a tu correo y celular.';
+    errOtp.style.color = '#16a34a';
+  } catch(e) {}
+  startResendTimer();
 });
 
 /* ══ CONTRATO ═══════════════════════════════════════════════════════════ */
@@ -270,7 +351,8 @@ function renderContrato(fTrab) {
   h += '<p class="pc"><strong>CLAUSULA DECIMA CUARTA - DIRECCION DEL TRABAJADOR:</strong> El Trabajador se compromete a informar por escrito cualquier cambio de direccion.</p>';
   h += '<p class="pc"><strong>CLAUSULA DECIMA QUINTA - DESIGNACION DE FONDO DE PENSIONES OBLIGATORIAS:</strong> EL TRABAJADOR manifiesta estar afiliado al fondo de pensiones: <strong>' + fondoPensiones + '</strong>.</p>';
   h += '<p class="pc"><strong>CLAUSULA DECIMA SEXTA - EFECTOS:</strong> El presente contrato reemplaza en su integridad cualquier contrato anterior, verbal o escrito.</p>';
-  h += '<p class="pc" style="margin-top:14px">Para constancia, se firma en la ciudad de ' + ciudad + ' el dia ' + fecha + ', por las partes interesadas.</p>';
+  h += '<p class="pc"><strong>CLAUSULA DE VALIDEZ LEGAL POR VERIFICACION DIGITAL:</strong> Las partes declaran que el presente contrato fue firmado mediante un proceso de verificacion de identidad digital. El trabajador recibio un codigo de verificacion unico (OTP) en su correo electronico y celular registrados, y al ingresar dicho codigo confirmo de manera fehaciente su identidad y su voluntad de aceptar el contrato. Este mecanismo de autenticacion tiene plena validez legal conforme a la Ley 527 de 1999 (Comercio Electronico) y la Ley 1273 de 2009, y constituye evidencia suficiente del consentimiento libre e informado del trabajador. En consecuencia, el presente contrato tiene la misma validez y efectos juridicos que un documento fisico firmado de manera manuscrita.</p>
+  <p class="pc" style="margin-top:14px">Para constancia, se firma en la ciudad de ' + ciudad + ' el dia ' + fecha + ', por las partes interesadas.</p>';
   h += firmas(fTrab);
   return h;
 }
