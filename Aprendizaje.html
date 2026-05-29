@@ -203,7 +203,7 @@ var institucion = P.get('institucion') || '';
 var CLAVE = 'hs_firmado_' + token;
 
 var FLUJO_VALIDAR_OTP  = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/89a70954ef424bae865c1d2d63ae44a7/triggers/manual/paths/invoke?api-version=1';
-var FLUJO_REENVIAR_OTP = 'https://bb401a6a5927ea58b7ad98868a898c.14.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/85250955096e45dea8755248921081b2/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zS6aYuD6';
+var FLUJO_REENVIAR_OTP = 'PEGAR_URL_FLUJO_REENVIAR_OTP_TRABAJADOR_AQUI';
 
 var otpInput     = document.getElementById('otpInput');
 var btnVerificar = document.getElementById('btnVerificar');
@@ -216,10 +216,16 @@ if (token && (sessionStorage.getItem(CLAVE) || localStorage.getItem(CLAVE))) {
 }
 
 otpInput.addEventListener('input', function() {
-  this.value = this.value.replace(/[^0-9]/g,'').substring(0,6);
+  var clean = this.value.replace(/[^0-9]/g,'');
+  if (clean.length > 6) clean = clean.substring(0,6);
+  this.value = clean;
   this.classList.remove('err','ok');
   errOtp.textContent = '';
-  btnVerificar.disabled = this.value.length < 6;
+  btnVerificar.disabled = (clean.length < 6);
+});
+otpInput.addEventListener('keyup', function() {
+  var clean = this.value.replace(/[^0-9]/g,'').substring(0,6);
+  btnVerificar.disabled = (clean.length < 6);
 });
 
 btnVerificar.addEventListener('click', async function() {
@@ -305,6 +311,7 @@ function renderContrato(fTrab) {
   h+='<p class="pc"><strong>CLAUSULA DECIMA SEGUNDA: TERMINACION UNILATERAL:</strong> EL EMPLEADOR podra dar por terminado unilateralmente e inmediatamente el contrato por: incumplimiento de obligaciones, causas del Decreto 1072 del 2015, revelacion de informacion confidencial, presentarse bajo efectos de sustancias, entre otras. La terminacion no da derecho al pago de liquidacion ni indemnizacion alguna, toda vez que los dineros recibidos no constituyen salarios.</p>';
   h+='<p class="pc"><strong>CLAUSULA DECIMA SEPTIMA: INVENCIONES, DERECHOS DE AUTOR Y PROPIEDAD INTELECTUAL:</strong> Las invenciones, desarrollos, descubrimientos y derechos de propiedad intelectual e industrial que se generen en virtud del presente CONTRATO, le pertenecen a EL EMPLEADOR, de conformidad con el articulo 539 del Codigo de Comercio.</p>';
   h+='<p class="pc"><strong>CLAUSULA DECIMA NOVENA: LEY APLICABLE:</strong> Este contrato estara sujeto a la ley colombiana y debera ser interpretado de buena fe por las partes.</p>';
+  h+='';
   h+='<p class="pc"><strong>CLAUSULA DE VALIDEZ LEGAL POR VERIFICACION DIGITAL:</strong> Las partes declaran que el presente contrato fue firmado mediante un proceso de verificacion de identidad digital. El trabajador recibio un codigo de verificacion unico (OTP) en su correo electronico y celular registrados, y al ingresar dicho codigo confirmo de manera fehaciente su identidad y su voluntad de aceptar el contrato. Este mecanismo de autenticacion tiene plena validez legal conforme a la Ley 527 de 1999 (Comercio Electronico) y la Ley 1273 de 2009, y constituye evidencia suficiente del consentimiento libre e informado del trabajador. En consecuencia, el presente contrato tiene la misma validez y efectos juridicos que un documento fisico firmado de manera manuscrita.</p>';
   h+=firmas(fTrab);
   return h;
